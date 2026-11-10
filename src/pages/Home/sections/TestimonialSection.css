@@ -1,0 +1,117 @@
+/* =============================================================================
+   SHERWOOD ALUMNI TESTIMONIAL STYLES
+   ============================================================================= */
+
+.sherwood-testimonial {
+  padding: var(--space-16) var(--space-6);
+  background-color: var(--color-bg-canvas);
+}
+
+.sherwood-testimonial__container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.sherwood-testimonial__card {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: var(--space-10);
+  align-items: center;
+  background: linear-gradient(135deg, var(--color-primary-deep) 0%, var(--color-primary-dark) 100%);
+  color: #ffffff;
+  border-radius: var(--radius-xl);
+  padding: var(--space-10) var(--space-12);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(197, 155, 39, 0.3);
+}
+
+.sherwood-testimonial__person {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-3);
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
+  padding-right: var(--space-8);
+}
+
+.sherwood-testimonial__avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: var(--radius-pill);
+  object-fit: cover;
+  border: 3px solid var(--color-gold);
+  box-shadow: var(--shadow-gold);
+}
+
+.sherwood-testimonial__identity h3 {
+  font-family: var(--font-serif);
+  font-size: var(--text-xl);
+  color: #ffffff;
+  margin: 0 0 4px;
+}
+
+.sherwood-testimonial__identity p {
+  font-size: var(--text-xs);
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0 0 var(--space-2);
+}
+
+.sherwood-testimonial__school-tag {
+  display: inline-block;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-gold-light);
+  background: rgba(197, 155, 39, 0.2);
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(197, 155, 39, 0.4);
+}
+
+.sherwood-testimonial__body {
+  position: relative;
+}
+
+.sherwood-testimonial__quote-mark {
+  position: absolute;
+  top: -30px;
+  left: -20px;
+  font-family: var(--font-serif);
+  font-size: 5rem;
+  color: rgba(197, 155, 39, 0.25);
+  line-height: 1;
+  pointer-events: none;
+}
+
+.sherwood-testimonial__quote {
+  font-family: var(--font-serif);
+  font-size: clamp(1.1rem, 1.4vw, 1.35rem);
+  line-height: var(--leading-relaxed);
+  color: rgba(255, 255, 255, 0.95);
+  font-style: italic;
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* Responsive */
+@media (max-width: 850px) {
+  .sherwood-testimonial__card {
+    grid-template-columns: 1fr;
+    padding: var(--space-6);
+    gap: var(--space-6);
+  }
+
+  .sherwood-testimonial__person {
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    padding-right: 0;
+    padding-bottom: var(--space-6);
+  }
+
+  .sherwood-testimonial {
+    padding: var(--space-10) var(--space-4);
+  }
+}

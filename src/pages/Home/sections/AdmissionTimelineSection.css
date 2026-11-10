@@ -1,0 +1,133 @@
+/* =============================================================================
+   SHERWOOD ADMISSION TIMELINE STYLES
+   ============================================================================= */
+
+.sherwood-timeline {
+  padding: var(--space-20) var(--space-6);
+  background-color: var(--color-bg-canvas);
+}
+
+.sherwood-timeline__container {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.sherwood-timeline__header {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto var(--space-16);
+}
+
+.sherwood-timeline__title {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 3.2vw, 3rem);
+  color: var(--color-charcoal-900);
+  margin-top: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.sherwood-timeline__subtitle {
+  font-size: var(--text-base);
+  color: var(--color-charcoal-600);
+  line-height: var(--leading-relaxed);
+  margin: 0;
+}
+
+.sherwood-timeline__track {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--space-4);
+  position: relative;
+  margin-bottom: var(--space-12);
+}
+
+.sherwood-timeline__step {
+  display: flex;
+  flex-direction: column;
+}
+
+.sherwood-timeline__step-marker {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--space-4);
+}
+
+.sherwood-timeline__step-num {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-pill);
+  background: var(--color-primary);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-serif);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  box-shadow: var(--shadow-sm);
+  flex-shrink: 0;
+  z-index: 2;
+}
+
+.sherwood-timeline__line {
+  position: absolute;
+  left: 44px;
+  right: -20px;
+  height: 2px;
+  background-color: var(--color-border-default);
+  z-index: 1;
+}
+
+.sherwood-timeline__step-title {
+  font-family: var(--font-serif);
+  font-size: var(--text-base);
+  color: var(--color-charcoal-900);
+  margin-bottom: var(--space-2);
+}
+
+.sherwood-timeline__step-desc {
+  font-size: var(--text-xs);
+  color: var(--color-charcoal-600);
+  line-height: var(--leading-normal);
+  margin: 0;
+}
+
+.sherwood-timeline__footer {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .sherwood-timeline__track {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  .sherwood-timeline__step {
+    flex-direction: row;
+    gap: var(--space-4);
+  }
+
+  .sherwood-timeline__step-marker {
+    margin-bottom: 0;
+  }
+
+  .sherwood-timeline__line {
+    top: 44px;
+    bottom: -30px;
+    left: 21px;
+    right: auto;
+    width: 2px;
+    height: auto;
+  }
+
+  .sherwood-timeline {
+    padding: var(--space-12) var(--space-4);
+  }
+}

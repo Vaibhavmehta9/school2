@@ -1,0 +1,129 @@
+/* =============================================================================
+   SHERWOOD PRINCIPAL'S DESK STYLES
+   ============================================================================= */
+
+.sherwood-principal {
+  padding: var(--space-20) var(--space-6);
+  background-color: var(--color-bg-surface-warm);
+}
+
+.sherwood-principal__container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.sherwood-principal__card {
+  display: grid;
+  grid-template-columns: 0.9fr 1.3fr;
+  gap: var(--space-12);
+  align-items: center;
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-xl);
+  padding: var(--space-10);
+  box-shadow: var(--shadow-md);
+}
+
+.sherwood-principal__portrait-wrap {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  background-color: var(--color-bg-muted);
+}
+
+.sherwood-principal__portrait {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+
+.sherwood-principal__portrait-badge {
+  position: absolute;
+  bottom: var(--space-3);
+  left: var(--space-3);
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(8px);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-xs);
+  color: #ffffff;
+}
+
+.sherwood-principal__portrait-badge strong {
+  display: block;
+  font-size: var(--text-sm);
+  color: var(--color-gold-light);
+}
+
+.sherwood-principal__portrait-badge small {
+  display: block;
+  font-size: var(--text-xs);
+  color: var(--color-charcoal-400);
+}
+
+.sherwood-principal__content {
+  display: flex;
+  flex-direction: column;
+}
+
+.sherwood-principal__title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.8rem, 2.5vw, 2.4rem);
+  color: var(--color-charcoal-900);
+  margin-top: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.sherwood-principal__quote {
+  font-family: var(--font-serif);
+  font-size: var(--text-lg);
+  font-style: italic;
+  color: var(--color-primary-dark);
+  border-left: 3px solid var(--color-gold);
+  padding-left: var(--space-4);
+  margin: 0 0 var(--space-4);
+  line-height: var(--leading-relaxed);
+}
+
+.sherwood-principal__paragraph {
+  font-size: var(--text-sm);
+  color: var(--color-charcoal-700);
+  line-height: var(--leading-relaxed);
+  margin-bottom: var(--space-4);
+}
+
+.sherwood-principal__signature-block {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--space-4);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+.sherwood-principal__sign-info strong {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: var(--text-base);
+  color: var(--color-charcoal-900);
+}
+
+.sherwood-principal__sign-info small {
+  display: block;
+  font-size: var(--text-xs);
+  color: var(--color-charcoal-500);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .sherwood-principal__card {
+    grid-template-columns: 1fr;
+    padding: var(--space-6);
+    gap: var(--space-6);
+  }
+
+  .sherwood-principal {
+    padding: var(--space-12) var(--space-4);
+  }
+}
