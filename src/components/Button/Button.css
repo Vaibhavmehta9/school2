@@ -1,0 +1,182 @@
+/* =============================================================================
+   SHERWOOD COLLEGE BUTTON STYLES
+   ============================================================================= */
+
+.sherwood-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.02em;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.sherwood-btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.sherwood-btn:disabled,
+.sherwood-btn[aria-disabled="true"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  pointer-events: none;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+/* --- Sizes --- */
+.sherwood-btn--sm {
+  padding: 6px 14px;
+  font-size: var(--text-xs); /* 12px */
+  border-radius: var(--radius-xs);
+  min-height: 32px;
+}
+
+.sherwood-btn--md {
+  padding: 10px 20px;
+  font-size: var(--text-sm); /* 14px */
+  border-radius: var(--radius-sm);
+  min-height: 42px;
+}
+
+.sherwood-btn--lg {
+  padding: 14px 28px;
+  font-size: var(--text-base); /* 16px */
+  border-radius: var(--radius-md);
+  min-height: 50px;
+}
+
+/* --- Variants --- */
+
+/* Primary: Heritage Green */
+.sherwood-btn--primary {
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
+  box-shadow: var(--shadow-sm);
+}
+
+.sherwood-btn--primary:hover:not(:disabled) {
+  background-color: var(--color-primary-dark);
+  box-shadow: var(--shadow-green);
+  color: var(--color-text-inverse);
+}
+
+/* Gold: Antique Gold CTA (Dark text for AA contrast) */
+.sherwood-btn--gold {
+  background-color: var(--color-gold);
+  color: var(--color-gold-text);
+  box-shadow: var(--shadow-sm);
+  font-weight: var(--weight-bold);
+}
+
+.sherwood-btn--gold:hover:not(:disabled) {
+  background-color: var(--color-gold-light);
+  box-shadow: var(--shadow-gold);
+  color: var(--color-gold-text);
+}
+
+/* Secondary: Subtle Warm Neutral */
+.sherwood-btn--secondary {
+  background-color: var(--color-bg-surface-warm);
+  color: var(--color-charcoal-800);
+  border-color: var(--color-border-subtle);
+}
+
+.sherwood-btn--secondary:hover:not(:disabled) {
+  background-color: var(--color-bg-muted);
+  border-color: var(--color-border-default);
+  color: var(--color-charcoal-900);
+}
+
+/* Outline Green */
+.sherwood-btn--outline {
+  background-color: transparent;
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.sherwood-btn--outline:hover:not(:disabled) {
+  background-color: var(--color-primary-tint);
+  border-color: var(--color-primary-dark);
+  color: var(--color-primary-dark);
+}
+
+/* Outline Gold */
+.sherwood-btn--outline-gold {
+  background-color: transparent;
+  color: var(--color-gold-dark);
+  border-color: var(--color-gold);
+}
+
+.sherwood-btn--outline-gold:hover:not(:disabled) {
+  background-color: var(--color-gold-tint);
+  border-color: var(--color-gold-dark);
+  color: var(--color-gold-text);
+}
+
+/* Text / Link Style */
+.sherwood-btn--text {
+  background-color: transparent;
+  color: var(--color-primary);
+  padding-left: var(--space-2);
+  padding-right: var(--space-2);
+  min-height: auto;
+}
+
+.sherwood-btn--text:hover:not(:disabled) {
+  color: var(--color-primary-dark);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* --- Spinner --- */
+.sherwood-btn__spinner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1em;
+  height: 1em;
+  animation: sherwood-btn-spin 0.75s linear infinite;
+}
+
+.sherwood-btn__spinner svg {
+  width: 100%;
+  height: 100%;
+}
+
+.sherwood-btn__spinner-track {
+  opacity: 0.25;
+}
+
+.sherwood-btn__spinner-head {
+  opacity: 0.9;
+}
+
+@keyframes sherwood-btn-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.sherwood-btn__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -1,0 +1,96 @@
+/* =============================================================================
+   SHERWOOD COLLEGE CARD STYLES
+   ============================================================================= */
+
+.sherwood-card {
+  position: relative;
+  background-color: var(--color-bg-surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-subtle);
+  color: var(--color-text-primary);
+  box-sizing: border-box;
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out);
+}
+
+/* --- Padding Variations --- */
+.sherwood-card--pad-none {
+  padding: 0;
+}
+
+.sherwood-card--pad-sm {
+  padding: var(--space-4);
+}
+
+.sherwood-card--pad-md {
+  padding: var(--space-6);
+}
+
+.sherwood-card--pad-lg {
+  padding: var(--space-8);
+}
+
+/* --- Card Variants --- */
+
+/* Default */
+.sherwood-card--default {
+  box-shadow: var(--shadow-sm);
+}
+
+/* Interactive (Hover lift & deepened shadow) */
+.sherwood-card--interactive {
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+}
+
+.sherwood-card--interactive:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-border-default);
+}
+
+/* Elevated */
+.sherwood-card--elevated {
+  box-shadow: var(--shadow-lg);
+  border-color: transparent;
+}
+
+/* Outlined */
+.sherwood-card--outlined {
+  background-color: transparent;
+  border-color: var(--color-border-default);
+  box-shadow: none;
+}
+
+/* Gold Accent */
+.sherwood-card--gold-accent {
+  box-shadow: var(--shadow-sm);
+  border-top: 3px solid var(--color-gold);
+}
+
+.sherwood-card--gold-accent:hover {
+  box-shadow: var(--shadow-md);
+}
+
+/* --- Sub-elements --- */
+.sherwood-card__header {
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--color-border-subtle);
+  margin-bottom: var(--space-4);
+}
+
+.sherwood-card__body {
+  position: relative;
+}
+
+.sherwood-card__footer {
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border-subtle);
+  margin-top: var(--space-4);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-3);
+}
