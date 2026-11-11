@@ -1,0 +1,429 @@
+{
+  "demo_data": true,
+  "school_name": "Sherwood College, Nainital",
+  "last_updated": "2026-11-11",
+  "disclaimer": "Demo data: please confirm details with the admissions office.",
+  "campus_coordinates": {
+    "latitude": 29.3803,
+    "longitude": 79.4534,
+    "altitude_ft": 6800,
+    "location": "Ayarpatta Hill, Nainital, Uttarakhand 263002"
+  },
+  "entries": [
+    {
+      "id": "about_school_overview",
+      "category": "About the school",
+      "questions": [
+        "Tell me about Sherwood College",
+        "Where is the school located?",
+        "What is the history and background of Sherwood College?",
+        "Sherwood College ke baare mein batayein",
+        "School kahan situated hai?",
+        "Kaisa school hai Sherwood?"
+      ],
+      "answer": "Sherwood College is a prestigious co-educational residential school founded in **1869**, located at an altitude of over **6,800 feet** on Ayarpatta Hill in Nainital, Uttarakhand.\n\nKey highlights:\n- **Legacy**: Over 150 years of academic excellence and character building\n- **Campus**: 70-acre serene hill campus nestled amidst lush pine forests\n- **Environment**: Fully residential community fostering leadership, discipline, sportsmanship, and cultural depth\n- **Motto**: *Mereat Quisque Palmam* (\"Let each one merit his prize\")",
+      "last_updated": "2026-11-11"
+    },
+    {
+      "id": "about_board_affiliation",
+      "category": "About the school",
+      "questions": [
+        "Which board is the school affiliated with?",
+        "Is Sherwood CBSE or ICSE?",
+        "Board of education",
+        "Kaunsa board follow karta hai school?",
+        "ICSE hai ya CBSE?"
+      ],
+      "answer": "Sherwood College is affiliated with the **Council for the Indian School Certificate Examinations (CISCE)**, New Delhi. Students prepare for:\n- **ICSE** (Indian Certificate of Secondary Education) at the end of Class 10\n- **ISC** (Indian School Certificate) at the end of Class 12 across Science, Commerce, and Humanities streams.",
+      "last_updated": "2026-11-11"
+    },
+    {
+      "id": "admission_classes_offered",
+      "category": "Admission process and dates",
+      "questions": [
+        "Which classes are open for admission?",
+        "Can I apply for Class 10 or 12?",
+        "Is admission open for Class 6?",
+        "Kaunsi class ke liye admission hota hai?",
+        "Kya Class 10 mein admission mil sakta hai?",
+        "Class 11 admission available?"
+      ],
+      "answer": "For the **2027–28 academic session**, admissions are offered only for **Classes 3, 4, 5, 6, 7, 8, 9, and 11**.\n\n*Important Notes:*\n- Admissions are **NOT offered for Classes 10 and 12** under any circumstances.\n- For Class 11, admission is subject to stream availability (Science, Commerce, or Humanities) and performance in entrance evaluation.",
+      "last_updated": "2026-11-11"
+    },
+    {
+      "id": "admission_workflow_steps",
+      "category": "Admission process and dates",
+      "questions": [
+        "How do I apply for admission?",
+        "What is the step-by-step admission process?",
+        "How to register online?",
+        "Admission lene ka process kya hai?",
+        "Application kaise submit karein?",
+        "Admission workflow"
+      ],
+      "answer": "The admission process for Sherwood College follows these key steps:\n1. **Online Registration**: Fill out the online registration form on the official portal (`/admission-details`).\n2. **Entrance Test**: Registered candidates take the online entrance test in English and Mathematics (syllabus and date sent via email).\n3. **Principal's Interaction**: Qualifying candidates attend an interaction with the Principal and panel.\n4. **Offer Letter**: Selected candidates receive an official offer letter via email.\n5. **Document Verification & Fee Payment**: Submit required certificates and complete Term 1 fee payment to confirm enrollment.",
+      "last_updated": "2026-11-11"
+    },
+    {
+      "id": "admission_dates_and_deadlines",
+      "category": "Admission process and dates",
+      "questions": [
+        "What is the last date to apply for admission?",
+        "When do 2027-28 admissions close?",
+        "Important admission dates",
+        "Admission ki aakhiri tareekh kya hai?",
+        "Forms kab tak bhar sakte hain?"
+      ],
+      "answer": "Admissions close as and when seats are filled for each grade. [FILL: exact registration opening dates, entrance test schedules, and final application deadlines for the 2027-28 session]",
+      "last_updated": "2026-11-11"
+    },
+    {
+      "id": "eligibility_age_criteria",
+      "category": "Eligibility and age criteria",
+      "questions": [
+        "What is the age criteria for admission?",
+        "What are the birth year cutoffs for 2027-28?",
+        "Age limit for Class 6",
+        "Age limit for Class 3",
+        "Bacche ki umar kitni honi chahiye?",
+        "Birth year eligibility kya hai?"
+      ],
+      "answer": "For the **2027–28 academic session**, the permitted birth years by grade are:\n\n| Class Applying For | Eligible Birth Years |\n| :--- | :--- |\n| **Class 3** | 2018 or 2019 |\n| **Class 4** | 2017 or 2018 |\n| **Class 5** | 2016 or 2017 |\n| **Class 6** | 2015 or 2016 |\n| **Class 7** | 2014 or 2015 |\n| **Class 8** | 2013 or 2014 |\n| **Class 9** | 2012 or 2013 |\n| **Class 11** | 2010 or 2011 |\n\n*Admissions are not accepted outside these permitted birth cohorts.*",
+      "last_updated": "2026-11-11"
+    },
+    {
+      "id": "documents_required_checklist",
+      "category": "Documents required",
+      "questions": [
+        "What documents are required for admission?",
+        "List of documents to submit",
+        "Documents checklist for registration",
+        "Kaun kaun se documents chahiye admission ke liye?",
+        "Kagaz kya lagenge?",
+        "Is Transfer Certificate mandatory?"
+      ],
+      "answer": "Parents must have the following documents ready for admission:\n\n1. **Aadhaar Card** of the student\n2. **Birth Certificate** issued by the Municipal Corporation / Nagar Nigam\n3. **Recent Academic Marksheet / Report Card** from the current school\n4. **Student PEN (Permanent Education Number)**\n5. **Transfer Certificate (TC)**: The original counter-signed Transfer Certificate must be submitted to the school office upon confirmed admission.\n\n[FILL: specify number of passport photographs and medical fitness certificate requirements]",
+      "last_updated": "2026-11-11"
+    },
+    {
+      "id": "entrance_test_pattern",
+      "category": "Entrance test / interaction",
+      "questions": [
+        "What is the entrance test format?",
+        "What subjects are tested in the entrance exam?",
+        "How is the entrance exam conducted?",
+        "Entrance test ka syllabus aur format kya hai?",
+        "Paper online hota hai ya offline?",
+        "Test kitne ghante ka hota hai?"
+      ],
+      "answer": "The Sherwood College entrance test is conducted **online**:\n- **Subjects Tested**: English and Mathematics\n- **Duration**: 1 hour for English, 1 hour for Mathematics\n- **Syllabus & Schedule**: Detailed syllabus, sample test links, and exact date/time are emailed to registered parents after completing registration on the portal.\n- **Next Stage**: Students qualifying the written papers proceed to the Principal's Interaction.",
+      "last_updated": "2026-11-11"
+    },
+    {
+      "id": "entrance_principal_interaction",
+      "category": "Entrance test / interaction",
+      "questions": [
+        "What happens in the Principal interaction?",
+        "Interview with the Principal",
+        "How is the student evaluated in the interview?",
+        "Principal interaction mein kya puchte hain?",
+        "Interview panel kaisa hota hai?"
+      ],
+      "answer": "Candidates who qualify the online entrance test attend an interaction with the **Principal and a senior faculty panel**.\n- The interaction assesses communication confidence, general awareness, reading habits, and overall alignment with boarding school values.\n- For Class 11 applicants, subject aptitude and chosen stream compatibility are also reviewed.\n- Final selection offer letters are issued based on the combined assessment.",
+      "last_updated": "2026-11-11"
+    },
+    {
+      "id": "fees_annual_overview",
+      "category": "FEES",
+      "questions": [
+        "What is the total annual fee?",
+        "How much does Sherwood College cost per year?",
+        "Total annual charges",
+        "Saalana fees kitni hai?",
+        "Total kharcha kitna aayega?",
+        "School fees structure"
+      ],
+      "answer": "The total annual charges at Sherwood College, including tuition and boarding components, are approximately **₹7.5 Lakh to ₹8.0 Lakh**.\n\n| Term | Due Period | Approximate Amount |\n| :--- | :--- | :--- |\n| **Term 1** | At the time of confirmed admission | ₹5,00,000 |\n| **Term 2** | Billed in June | ₹2,50,000 – ₹3,00,000 |\n| **Total Annual Charges** | Academic session | **₹7,50,000 – ₹8,00,000** |\n\n*Note: Mid-term withdrawals are non-refundable. The school does not offer scholarships or fee concessions.*",
+      "last_updated": "2026-11-11"
+    },
+    {
+      "id": "fees_admission_one_time",
+      "category": "FEES",
+      "questions": [
+        "What is the one-time admission fee?",
+        "Registration fee amount",
+        "Is there a separate admission fee?",
+        "One time admission charges kitne hain?",
+        "Registration charges kya hain?"
+      ],
+      "answer": "[FILL: specify exact one-time non-refundable admission fee and registration processing fee amount]",
+      "last_updated": "2026-11-11"
+    },
+    {
+      "id": "fees_tuition_breakdown",
+      "category": "FEES",
+      "questions": [
+        "What is the tuition fee per class?",
+        "Tuition fee breakdown for junior and senior classes",
+        "Class-wise tuition fee",
+        "Padhai ki fees alag se kitni hai?",
+        "Tuition charges kitne hain?"
+      ],
+      "answer": "[FILL: detailed class-wise tuition fee breakdown across Classes 3-12]",
+      "last_updated": "2026-11-11"
+    },
+    {
+      "id": "fees_boarding_hostel",
+      "category": "FEES",
+      "questions": [
+        "What are the hostel and boarding charges?",
+        "Food and lodging fees",
+        "Hostel fee breakdown",
+        "Hostel aur khane ke charges kitne hain?",
+        "Boarding fees kitni lagti hai?"
+      ],
+      "answer": "Boarding, dormitory accommodation, laundry, and meals are included within the comprehensive annual charges of approximately **₹7.5 Lakh to ₹8.0 Lakh**.\n\n[FILL: itemized breakdown of boarding, food/mess, and laundry fee components]",
+      "last_updated": "2026-11-11"
+    },
+    {
+      "id": "fees_caution_deposit",
+      "category": "FEES",
+      "questions": [
+        "Is there a refundable caution deposit / security deposit?",
+        "Caution money amount",
+        "Security deposit details",
+        "Caution deposit kitna jama hota hai?",
+        "Kya security money refundable hai?"
+      ],
+      "answer": "[FILL: refundable caution/security deposit amount and refund terms upon leaving school]",
+      "last_updated": "2026-11-11"
+    },
+    {
+      "id": "fees_payment_modes",
+      "category": "FEES",
+      "questions": [
+        "What are the accepted payment modes for school fees?",
+        "Can I pay fees online via Net Banking or UPI?",
+        "Demand draft payment",
+        "Fees kaise pay kar sakte hain?",
+        "Payment options kya hain?"
+      ],
+      "answer": "[FILL: officially accepted payment modes e.g., Net Banking, NEFT/RTGS, Credit/Debit card portal, Demand Draft details]",
+      "last_updated": "2026-11-11"
+    },
+    {
+      "id": "fees_refund_policy",
+      "category": "FEES",
+      "questions": [
+        "What is the fee refund policy?",
+        "Can I get a refund if I withdraw my child mid-term?",
+        "Withdrawal refund rules",
+        "Agar admission cancel karein toh refund milega?",
+        "Fees wapas hoti hai kya?"
+      ],
+      "answer": "The school adheres to a strict financial policy:\n- **Mid-term withdrawals are non-refundable** under all circumstances.\n- Once a seat is accepted and term fees are deposited, fee amounts are non-transferable and non-refundable.",
+      "last_updated": "2026-11-11"
+    },
+    {
+      "id": "fees_concessions_discounts",
+      "category": "FEES",
+      "questions": [
+        "Is there any sibling discount or alumni concession?",
+        "Defence personnel fee concession",
+        "Any fee relaxation or discount?",
+        "Kya bhai-behan ke liye discount milta hai?",
+        "Army/Defence quota discount hai kya?"
+      ],
+      "answer": "Sherwood College **does not offer sibling discounts, alumni concessions, or defence quota fee reductions**. All students are admitted under the uniform fee schedule.",
+      "last_updated": "2026-11-11"
+    },
+    {
+      "id": "boarding_hostel_life",
+      "category": "Boarding and hostel",
+      "questions": [
+        "How is boarding and hostel life organized?",
+        "Dormitory facilities and house system",
+        "How are students looked after in hostels?",
+        "Hostel ka system kaisa hai?",
+        "Bacche kaise rehte hain boarding mein?",
+        "Dormitory arrangement"
+      ],
+      "answer": "Boarding at Sherwood College is organized on a **house system** with comfortable, hygienic dormitory-style living:\n- **Pastoral Staffing**: Every house has a dedicated **Matron** and **Warden** who oversee daily welfare, health, and hygiene.\n- **Mentorship**: Senior faculty members serve as **House Masters** and **House Tutors**, providing continuous academic and personal mentorship.\n- **Support**: Dedicated laundry and housekeeping staff are assigned to every house.\n- **Community**: Fosters lifelong camaraderie, self-reliance, and collaborative discipline.",
+      "last_updated": "2026-11-11"
+    },
+    {
+      "id": "boarding_meals_dining",
+      "category": "Boarding and hostel",
+      "questions": [
+        "What kind of food is served in the mess?",
+        "Is vegetarian and non-vegetarian food provided?",
+        "Can parents send outside food or tuck?",
+        "Mess ka khana kaisa hota hai?",
+        "Veg aur non-veg dono milta hai?",
+        "Outside food allow hai?"
+      ],
+      "answer": "The dining hall serves balanced, nutritious meals prepared under strict hygienic supervision:\n- **Menu**: Both **vegetarian and non-vegetarian** options are prepared daily.\n- **Dietary Care**: Wholesome meals, fresh dairy, and fruits are provided to meet growing adolescents' nutritional needs.\n- **Strict Rule**: **Outside food and tuck parcels are strictly prohibited** on campus to maintain discipline and dietary health.",
+      "last_updated": "2026-11-11"
+    },
+    {
+      "id": "facilities_medical_healthcare",
+      "category": "Facilities",
+      "questions": [
+        "What medical facilities are available on campus?",
+        "Is there a resident doctor?",
+        "What happens in a medical emergency?",
+        "Medical suvidha kaisi hai school mein?",
+        "Doctor campus mein rehte hain kya?",
+        "Emergency hospital tie-up"
+      ],
+      "answer": "Sherwood College maintains comprehensive 24/7 on-campus healthcare infrastructure:\n- **Resident Doctor**: A qualified medical doctor resides on campus available 24/7.\n- **Nursing Staff**: Two full-time trained staff nurses manage the school infirmary.\n- **Ambulance**: A fully equipped ambulance is stationed on campus at all times.\n- **Visiting Specialists**: Pediatricians and medical specialists attend the infirmary on alternate days.\n- **Hospital Affiliation**: For advanced medical emergencies, the school is affiliated with **B. D. Pandey District Hospital** in Nainital and multi-specialty tertiary hospitals in Haldwani.\n- **Mental Wellness**: A resident child psychologist and mental-wellness counsellor provide pastoral guidance.",
+      "last_updated": "2026-11-11"
+    },
+    {
+      "id": "facilities_sports_cocurricular",
+      "category": "Facilities",
+      "questions": [
+        "What sports and extra-curricular facilities exist?",
+        "Sports facilities at Sherwood",
+        "What games can students play?",
+        "Sports aur activities kya kya hain?",
+        "Khel kood ki facilities kaisi hain?"
+      ],
+      "answer": "Sports and outdoor leadership are core pillars of the Sherwood experience:\n- **Major Sports**: Cricket, football, hockey, basketball, badminton, tennis, swimming, athletics, and cross-country.\n- **Inter-House Competitions**: Regular inter-house tournaments foster spirited, healthy competition.\n- **Co-Curricular**: Active debate societies, dramatics, Western and Indian music ensembles, visual arts, and outdoor trekking expeditions.\n- **Philosophy**: All students are encouraged and required to participate actively in daily physical training and sports.",
+      "last_updated": "2026-11-11"
+    },
+    {
+      "id": "academics_coaching_policy",
+      "category": "Academics and curriculum",
+      "questions": [
+        "Does the school provide competitive coaching for JEE, NEET, or SAT?",
+        "Is there coaching for CLAT or CUET?",
+        "Competitive exam preparation",
+        "Kya JEE ya NEET ki coaching milti hai campus mein?",
+        "Competitive entrance exams ki tayyari"
+      ],
+      "answer": "Sherwood College **does NOT provide on-campus competitive coaching** for examinations such as JEE, NEET, SAT, CUET, or CLAT.\n\nThe school's focus is on thorough CISCE board curriculum mastery, intellectual curiosity, analytical thinking, and well-rounded character building.",
+      "last_updated": "2026-11-11"
+    },
+    {
+      "id": "academics_languages_offered",
+      "category": "Academics and curriculum",
+      "questions": [
+        "Are foreign languages taught?",
+        "Can my child study French or German?",
+        "Language options available",
+        "Kya foreign language sikhate hain?",
+        "Kaunsi bhashayein padhai jaati hain?"
+      ],
+      "answer": "Foreign languages (such as French, German, or Spanish) are **NOT offered** at Sherwood College. The languages taught in the curriculum are **English and Hindi**.",
+      "last_updated": "2026-11-11"
+    },
+    {
+      "id": "transport_facilities",
+      "category": "Transport",
+      "questions": [
+        "Is school transport available?",
+        "How do students travel to and from campus during vacations?",
+        "Airport and railway station escort service",
+        "Transport ki kya suvidha hai?",
+        "Vacation mein bacche kaise aate-jaate hain?"
+      ],
+      "answer": "[FILL: school transport facilities for local Nainital students and escort services to Kathgodam railway station / Pantnagar airport during term breaks]",
+      "last_updated": "2026-11-11"
+    },
+    {
+      "id": "school_timings_daily_routine",
+      "category": "School timings",
+      "questions": [
+        "What is the daily routine of a boarding student?",
+        "What are the school timings?",
+        "Wake up time and lights out schedule",
+        "Daily routine kaisa hota hai bacchon ka?",
+        "Subah kitne baje uthte hain aur raat ko lights out kab hota hai?"
+      ],
+      "answer": "Boarding students follow a disciplined, structured daily regimen that balances classes, prep, sports, and rest:\n- **Morning**: Rising bell, physical conditioning/morning assembly, breakfast.\n- **Academic Sessions**: Academic classes and laboratory practicals.\n- **Afternoon**: Lunch, quiet hour/remedial support, followed by afternoon sports and games.\n- **Evening**: Evening wash, supervised prep (study hours), and dinner.\n- **Night**: House meetings and lights out.\n\n[FILL: exact daily bell schedule with specific wake-up, assembly, class period, prep, and lights out timings]",
+      "last_updated": "2026-11-11"
+    },
+    {
+      "id": "uniform_and_books",
+      "category": "Uniform and books",
+      "questions": [
+        "Where do we get the school uniform and books?",
+        "What is the clothing list for boarders?",
+        "Uniform cost and vendors",
+        "Uniform aur kitabein kahan se milengi?",
+        "Kapdon ki list kab milti hai?"
+      ],
+      "answer": "Upon confirmed admission, parents receive an official **clothing checklist and medical dossier** detailing all required uniform items, casual wear, and personal necessities.\n\n[FILL: authorized school uniform vendor details, textbook store distribution dates, and estimated cost of clothing pack]",
+      "last_updated": "2026-11-11"
+    },
+    {
+      "id": "safety_anti_ragging_discipline",
+      "category": "Safety and discipline",
+      "questions": [
+        "What is the anti-ragging policy?",
+        "How safe is the campus for children?",
+        "Disciplinary actions for bullying",
+        "Ragging aur bullying ke khilaf kya rules hain?",
+        "Campus kitna safe hai bacchon ke liye?"
+      ],
+      "answer": "Sherwood College enforces a **strict zero-tolerance policy against bullying and ragging**:\n- Any student found engaging in bullying, physical intimidation, or harassment is liable to **immediate suspension or expulsion**.\n- The campus is under 24/7 security surveillance with round-the-clock guards and monitoring.\n- House Masters, Wardens, Matrons, and senior prefects actively foster a supportive, familial atmosphere.",
+      "last_updated": "2026-11-11"
+    },
+    {
+      "id": "mobile_phone_gadget_policy",
+      "category": "Mobile phone policy",
+      "questions": [
+        "Are mobile phones allowed on campus?",
+        "Can students keep a smartphone or smartwatch?",
+        "Laptop policy for students",
+        "Kya mobile phone allowed hai school mein?",
+        "Smart watch ya laptop rakh sakte hain?",
+        "Gadget policy kya hai?"
+      ],
+      "answer": "Sherwood College has a **strict total gadget ban**:\n- **Prohibited Devices**: Smartphones, basic keypad mobile phones, laptops, smartwatches, and internet-enabled gaming devices are strictly prohibited.\n- **Calling Policy**: Parent calling is restricted to **15 minutes per week** through official school telephone lines at scheduled house timings.\n- Any contraband gadget found on campus is confiscated immediately.",
+      "last_updated": "2026-11-11"
+    },
+    {
+      "id": "visitation_leave_guardian_policy",
+      "category": "Contact and campus visit",
+      "questions": [
+        "What is the leave / exeat policy for boarders?",
+        "Who can be a Local Guardian?",
+        "Can parents visit students on weekends?",
+        "Bacche ko leave kab milti hai?",
+        "Local guardian kahan ka hona chahiye?",
+        "Parents kab milne aa sakte hain?"
+      ],
+      "answer": "- **Leave (Exeat)**: One overnight leave per term is permitted, subject to institutional discretion and academic schedule.\n- **Local Guardian (LG)**: A student's appointed Local Guardian **must reside within Nainital district**.\n- **Campus Visits**: Prospective parents must book campus visits in advance through the admissions office. Enrolled parents coordinate visits exclusively through their child's House Master.",
+      "last_updated": "2026-11-11"
+    },
+    {
+      "id": "contact_admissions_office",
+      "category": "Contact and campus visit",
+      "questions": [
+        "How can I contact the admissions office?",
+        "What is the admissions phone number and email?",
+        "Admissions office address",
+        "Admissions desk se kaise baat karein?",
+        "Phone number kya hai admission enquiry ka?"
+      ],
+      "answer": "You can reach the Sherwood College Admissions Office via:\n- **Address**: Sherwood College, Ayarpatta Hill, Nainital, Uttarakhand 263002\n- **Online Portal**: Submit an inquiry or start your application directly at `/admission-details`\n\n[FILL: confirmed official admissions phone number and confirmed official admissions email address]",
+      "last_updated": "2026-11-11"
+    },
+    {
+      "id": "scholarships_financial_aid",
+      "category": "Scholarships",
+      "questions": [
+        "Does the school offer scholarships or financial aid?",
+        "Merit scholarship for sports or academics",
+        "Fee waiver programs",
+        "Kya scholarship milti hai Sherwood mein?",
+        "Fees mein koi concession ya financial aid hai?"
+      ],
+      "answer": "Sherwood College **does not offer scholarship programmes, financial aid schemes, or merit-based fee waivers**. All students are enrolled under the standard institutional fee structure.",
+      "last_updated": "2026-11-11"
+    }
+  ]
+}
