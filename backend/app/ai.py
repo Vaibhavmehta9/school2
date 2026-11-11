@@ -11,7 +11,12 @@ from typing import Any
 from dotenv import load_dotenv
 from openai import APIConnectionError, APIStatusError, APITimeoutError, AuthenticationError, OpenAI, RateLimitError
 
-from .school_knowledge import AUDIENCE_INSTRUCTIONS, OFFICIAL_CONTACT_FALLBACK, SYSTEM_PROMPT
+from .school_knowledge import (
+    AUDIENCE_INSTRUCTIONS,
+    OFFICIAL_CONTACT_FALLBACK,
+    SYSTEM_PROMPT,
+    build_system_prompt,
+)
 
 # This reads backend/.env for local development without overriding real server variables.
 load_dotenv(Path(__file__).resolve().parents[1] / ".env")
@@ -79,10 +84,14 @@ def configured_model() -> str:
     return os.getenv("OPENAI_MODEL", "gpt-5")
 
 
-def generate_ai_reply(message: str, history: list[dict[str, Any]] | None = None, audience: str = "guest") -> str:
+def generate_ai_reply(
+    message: str,
+    history: list[dict[str, Any]] | None = None,
+    audience: str = "guest",
+    extra_context: str | None = None,
+) -> str:
     """Send a safe, school-specific prompt to OpenAI and return plain assistant text."""
-    audience_rule = AUDIENCE_INSTRUCTIONS.get(audience, AUDIENCE_INSTRUCTIONS["guest"])
-    instructions = f"{SYSTEM_PROMPT}\n\nAUDIENCE CONTEXT:\n{audience_rule}"
+    instructions = build_system_prompt(audience=audience, extra_context=extra_context, query=message)
     prompt_input = format_user_prompt_with_history(message, history)
 
     try:
@@ -108,11 +117,13 @@ def generate_ai_reply(message: str, history: list[dict[str, Any]] | None = None,
 
 
 def stream_ai_reply(
-    message: str, history: list[dict[str, Any]] | None = None, audience: str = "guest"
+    message: str,
+    history: list[dict[str, Any]] | None = None,
+    audience: str = "guest",
+    extra_context: str | None = None,
 ) -> Generator[str, None, None]:
     """Stream chunks from the OpenAI Responses API for Server-Sent Events."""
-    audience_rule = AUDIENCE_INSTRUCTIONS.get(audience, AUDIENCE_INSTRUCTIONS["guest"])
-    instructions = f"{SYSTEM_PROMPT}\n\nAUDIENCE CONTEXT:\n{audience_rule}"
+    instructions = build_system_prompt(audience=audience, extra_context=extra_context, query=message)
     prompt_input = format_user_prompt_with_history(message, history)
 
     try:

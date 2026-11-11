@@ -1,4 +1,6 @@
-import { getSchoolInformationAnswer } from "./schoolInformation";
+// The backend AI service (backend/data/school_faq.json) serves as the single source of truth.
+// Offline shortcuts previously hardcoded in the frontend bundle are bypassed to ensure
+// real-time consistency with backend FAQ edits.
 import { API_ROUTES } from "../constants/routes";
 
 export async function getAdminUsers(accessToken) {
@@ -224,12 +226,6 @@ export async function askSchoolAI(input, options = {}) {
   const history = (typeof input === "object" ? input?.history : options?.history) || [];
   const accessToken = (typeof input === "object" ? input?.accessToken : options?.accessToken) || null;
 
-  // Offline / instant exact match shortcut only when there is no prior conversation history
-  if (history.length === 0) {
-    const instant = getSchoolInformationAnswer(message);
-    if (instant) return instant;
-  }
-
   const headers = { "Content-Type": "application/json" };
   if (accessToken) headers.Authorization = `Bearer ${accessToken}`;
 
@@ -251,15 +247,6 @@ export async function askSchoolAI(input, options = {}) {
 }
 
 export async function streamSchoolAI({ message, history = [], accessToken = null, signal, onChunk, onFinish, onError }) {
-  if (history.length === 0) {
-    const instant = getSchoolInformationAnswer(message);
-    if (instant) {
-      if (onChunk) onChunk(instant, instant);
-      if (onFinish) onFinish(instant);
-      return instant;
-    }
-  }
-
   const headers = { "Content-Type": "application/json" };
   if (accessToken) headers.Authorization = `Bearer ${accessToken}`;
 

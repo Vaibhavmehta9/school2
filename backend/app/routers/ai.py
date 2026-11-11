@@ -24,6 +24,7 @@ from ..ai import (
     stream_ai_reply,
 )
 from ..dependencies import resolve_verified_audience
+from ..faq_service import find_matching_entry
 from ..schemas import AIRequest
 
 logger = logging.getLogger("ai_assistant")
@@ -88,12 +89,20 @@ def _raise_ai_http_error(error: Exception) -> None:
     ) from error
 
 
-def _log_ai_metric(audience: str, latency_ms: float, error_type: str | None = None) -> None:
+def _log_ai_metric(
+    audience: str,
+    latency_ms: float,
+    source: str = "faq",
+    matched_faq_ids: list[str] | None = None,
+    error_type: str | None = None,
+) -> None:
     """Log privacy-safe metrics only (no personal data or message content)."""
     logger.info(
         json.dumps({
             "timestamp": int(time()),
             "audience": audience,
+            "source": source,
+            "matched_faq_ids": matched_faq_ids or [],
             "latency_ms": round(latency_ms, 2),
             "error_type": error_type,
         })
@@ -115,9 +124,15 @@ def chat(
     verified_audience = resolve_verified_audience(authorization)
     start_time = monotonic()
     error_type: str | None = None
+    source = "faq"
+    matched_faq_ids: list[str] = []
 
     try:
         user_message = payload.get_user_text()
+        matched_entry, score = find_matching_entry(user_message)
+        if matched_entry and score >= 0.6:
+            matched_faq_ids = [matched_entry["id"]]
+
         history_dicts = [item.model_dump() for item in payload.history]
         answer = generate_ai_reply(user_message, history=history_dicts, audience=verified_audience)
         return {"answer": answer, "model": configured_model()}
@@ -132,7 +147,7 @@ def chat(
         ) from error
     finally:
         latency_ms = (monotonic() - start_time) * 1000
-        _log_ai_metric(verified_audience, latency_ms, error_type)
+        _log_ai_metric(verified_audience, latency_ms, source=source, matched_faq_ids=matched_faq_ids, error_type=error_type)
 
 
 @router.post("/chat/stream")
@@ -149,8 +164,12 @@ async def chat_stream(
     # Derive audience strictly from verified credentials; client value is ignored
     verified_audience = resolve_verified_audience(authorization)
     user_message = payload.get_user_text()
+    matched_entry, score = find_matching_entry(user_message)
+    matched_faq_ids: list[str] = [matched_entry["id"]] if (matched_entry and score >= 0.6) else []
+
     history_dicts = [item.model_dump() for item in payload.history]
     start_time = monotonic()
+    source = "faq"
 
     async def sse_event_generator() -> AsyncGenerator[str, None]:
         error_type: str | None = None
@@ -188,7 +207,7 @@ async def chat_stream(
             yield f"data: {json.dumps({'error': 'An unexpected error occurred.'})}\n\n"
         finally:
             latency_ms = (monotonic() - start_time) * 1000
-            _log_ai_metric(verified_audience, latency_ms, error_type)
+            _log_ai_metric(verified_audience, latency_ms, source=source, matched_faq_ids=matched_faq_ids, error_type=error_type)
 
     return StreamingResponse(
         sse_event_generator(),

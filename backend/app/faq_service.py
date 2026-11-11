@@ -218,3 +218,4 @@ def find_matching_entry(query: str) -> tuple[dict[str, Any] | None, float]:
                 best_entry = entry
 
     return best_entry, round(best_score, 2)
+

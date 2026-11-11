@@ -66,3 +66,4 @@ def test_demo_flag_status():
     """Verify top-level demo_data flag is accessible."""
     demo = get_demo_flag()
     assert isinstance(demo, bool)
+
