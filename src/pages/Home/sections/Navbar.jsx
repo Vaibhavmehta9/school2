@@ -127,3 +127,4 @@ Navbar.propTypes = {
   user: PropTypes.object,
   signOut: PropTypes.func.isRequired,
 };
+

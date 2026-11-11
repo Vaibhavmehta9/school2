@@ -1,4 +1,5 @@
 import { useState } from "react";
+import ChatPanel from "../components/ChatPanel/ChatPanel";
 import "./StudentPortalModule.css";
 
 const subjectCards = [["English", "Neha Sharma", "93%", "A", "1"], ["Mathematics", "Amit Verma", "78%", "B+", "2"], ["Science", "Rahul Mehta", "98%", "A+", "0"], ["Hindi", "Priya Kapoor", "69%", "B", "1"], ["Computer", "Arjun Singh", "96%", "A", "0"], ["Social Science", "Kavita Rao", "89%", "A", "1"]];
@@ -56,13 +57,21 @@ function LeavePage({ setNotice }) {
   return <><ModuleHeader section="Leave Request" action={null} /><section className="student-module-grid leave-module-grid"><form className="student-card leave-form" onSubmit={(event) => { event.preventDefault(); setSubmitted(true); setNotice("Leave request submitted for teacher approval."); }}><h2>Apply for leave</h2><label>Leave type<select defaultValue="Medical leave"><option>Medical leave</option><option>Personal leave</option><option>School event</option></select></label><div><label>From date<input type="date" required /></label><label>To date<input type="date" required /></label></div><label>Reason<textarea placeholder="Tell your class teacher why you need leave..." required /></label><label>Attachment<input type="file" /></label><button type="submit">Submit leave request →</button></form><article className="student-card leave-history"><p>RECENT REQUESTS</p><h2>Leave history</h2>{[["Medical leave", "10 Jun · 1 day", "Approved", "green"], ["Personal leave", "24 May · 2 days", "Approved", "green"], ["School event", "03 May · 1 day", "Rejected", "red"]].map(([type, dates, status, tone]) => <div key={dates}><span><b>{type}</b><small>{dates}</small></span><em className={tone}>{status}</em></div>)}{submitted && <small className="leave-success">Your newest request is pending approval.</small>}</article></section></>;
 }
 
-function AiPage({ onAskAI }) { return <><ModuleHeader section="AI Assistant" action={null} /><section className="student-card ai-module"><i>✧</i><h2>Your personal study partner</h2><p>Ask for a chapter explanation, create revision MCQs, get homework help or identify your weak subjects.</p><div>{["Explain photosynthesis", "Create 10 maths MCQs", "Help with English homework", "Show my weak subjects"].map((prompt) => <button key={prompt} onClick={onAskAI}>{prompt}</button>)}</div><button onClick={onAskAI}>Open AI Study Assistant →</button></section></>;
+function AiPage({ session }) {
+  return (
+    <>
+      <ModuleHeader section="AI Assistant" action={null} />
+      <section className="student-card ai-module" style={{ padding: "12px" }}>
+        <ChatPanel variant="embedded" accessToken={session?.accessToken} role="student" />
+      </section>
+    </>
+  );
 }
 
 function ProfilePage() { return <><ModuleHeader section="My Profile" action={<button className="student-module-button">Edit profile</button>} /><section className="student-module-grid profile-module-grid"><article className="student-card profile-summary"><i>RK</i><h2>Rahul Kumar</h2><span>Class 8-A · Roll No. 24</span><small>Student ID · SIS-8A-024</small></article><article className="student-card profile-details"><h2>School information</h2><div><span>Class teacher</span><b>Neha Sharma</b></div><div><span>House</span><b>Green House</b></div><div><span>Academic session</span><b>2027–28</b></div><div><span>Parent contact</span><b>+91 98765 43210</b></div></article></section></>;
 }
 
-export default function StudentPortalModule({ section, setNotice, onAskAI }) {
+export default function StudentPortalModule({ section, setNotice, onAskAI: _onAskAI, session }) {
   if (section === "Attendance") return <AttendancePage />;
   if (section === "My Subjects") return <SubjectsPage setNotice={setNotice} />;
   if (section === "Timetable") return <TimetablePage />;
@@ -73,6 +82,6 @@ export default function StudentPortalModule({ section, setNotice, onAskAI }) {
   if (section === "Announcements") return <AnnouncementsPage />;
   if (section === "Fees") return <FeesPage setNotice={setNotice} />;
   if (section === "Leave Request") return <LeavePage setNotice={setNotice} />;
-  if (section === "AI Assistant") return <AiPage onAskAI={onAskAI} />;
+  if (section === "AI Assistant") return <AiPage session={session} />;
   return <ProfilePage />;
 }

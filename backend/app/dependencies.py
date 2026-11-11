@@ -143,3 +143,21 @@ def require_roles(*roles: str):
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="You do not have permission for this action.")
         return user
     return dependency
+
+
+def resolve_verified_audience(authorization: str | None) -> str:
+    """Derive verified audience from verified Cognito token or local session.
+    
+    Never decodes or trusts unverified tokens. If authorization is absent,
+    expired, or invalid, gracefully defaults to 'guest'.
+    """
+    if not authorization or not authorization.startswith("Bearer "):
+        return "guest"
+    try:
+        user = authenticate(authorization)
+        role = user.get("role", "guest")
+        if role in ("admin", "teacher", "parent", "student"):
+            return role
+        return "guest"
+    except Exception:
+        return "guest"

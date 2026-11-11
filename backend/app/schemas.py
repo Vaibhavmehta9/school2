@@ -1,6 +1,6 @@
 from typing import Any, Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 
 class RegisterRequest(BaseModel):
@@ -120,9 +120,26 @@ class AnnouncementRequest(BaseModel):
     channels: list[Literal["app", "email", "sms"]] = Field(default=["app"])
 
 
+class ChatMessage(BaseModel):
+    role: Literal["user", "assistant"]
+    content: str = Field(min_length=1, max_length=1500)
+
+
 class AIRequest(BaseModel):
-    prompt: str = Field(min_length=3, max_length=3000)
-    audience: Literal["guest", "parent", "teacher", "admin"] = "guest"
+    message: str | None = Field(default=None, min_length=1, max_length=1000)
+    prompt: str | None = Field(default=None, min_length=1, max_length=3000)
+    history: list[ChatMessage] = Field(default_factory=list, max_length=6)
+    audience: Literal["guest", "parent", "teacher", "admin", "student"] = "guest"
+
+    @model_validator(mode="after")
+    def validate_content(self) -> "AIRequest":
+        resolved = (self.message if self.message is not None else self.prompt) or ""
+        if not resolved.strip():
+            raise ValueError("Either 'message' or 'prompt' must contain non-empty text.")
+        return self
+
+    def get_user_text(self) -> str:
+        return ((self.message if self.message is not None else self.prompt) or "").strip()
 
 
 class OTPRequest(BaseModel):

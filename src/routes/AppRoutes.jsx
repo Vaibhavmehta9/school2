@@ -12,6 +12,7 @@ import TeacherPortal from "../pages/Teacher_Portal/Teacher_Portal";
 import TrackApplication from "../pages/Track_Application/Track_Application";
 import AdmissionDetails from "../pages/AdmissionDetails";
 import Dashboard from "../pages/Dashboard";
+import Home from "../pages/Home";
 import Login from "../pages/Login";
 import NewUserDashboard from "../pages/NewUserDashboard";
 import Register from "../pages/Register";
@@ -28,7 +29,8 @@ const parent = ["parent"];
 export default function AppRoutes() {
   return (
     <Routes>
-      <Route path={ROUTES.home} element={<DirectCognitoEntry />} />
+      <Route path={ROUTES.home} element={<Home />} />
+      <Route path="/cognito-entry" element={<DirectCognitoEntry />} />
       <Route path={ROUTES.login} element={<Login />} />
       <Route path="/apply" element={<Register />} />
       <Route path={ROUTES.register} element={<Register />} />

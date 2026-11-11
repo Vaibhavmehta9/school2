@@ -105,3 +105,4 @@ export function fadeInUp(element, vars = {}) {
 }
 
 export { gsap, ScrollTrigger, Lenis };
+

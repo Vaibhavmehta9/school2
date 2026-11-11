@@ -42,6 +42,7 @@ export const API_ROUTES = {
   vendorDashboard: `${API_BASE_URL}/vendor/dashboard`,
   applicationDecision: (applicationId) => `${API_BASE_URL}/applications/${encodeURIComponent(applicationId)}/decision`,
   aiChat: `${API_BASE_URL}/ai/chat`,
+  aiChatStream: `${API_BASE_URL}/ai/chat/stream`,
   otp: (action) => `${API_BASE_URL}/auth/otp/${action}`,
 };
 

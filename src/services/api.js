@@ -1,4 +1,4 @@
-import { getSchoolInformationAnswer, schoolInformationContext } from "./schoolInformation";
+import { getSchoolInformationAnswer } from "./schoolInformation";
 import { API_ROUTES } from "../constants/routes";
 
 export async function getAdminUsers(accessToken) {
@@ -207,21 +207,134 @@ export async function decideAdminAdmission(accessToken, applicationId, decision,
   return data;
 }
 
-export async function askSchoolAI(prompt, audience = "guest") {
-  const schoolInformationAnswer = getSchoolInformationAnswer(prompt);
-  if (schoolInformationAnswer) return schoolInformationAnswer;
+export function formatErrorDetail(detail, fallback = "AI service is temporarily unavailable. Please try again shortly.") {
+  if (!detail) return fallback;
+  if (typeof detail === "string") return detail;
+  if (Array.isArray(detail)) {
+    return detail.map((err) => (typeof err === "object" && err?.msg ? `${err.loc ? err.loc.filter((l) => l !== "body").join(".") + ": " : ""}${err.msg}` : String(err))).join("; ") || fallback;
+  }
+  if (typeof detail === "object") {
+    return detail.message || detail.msg || JSON.stringify(detail);
+  }
+  return String(detail);
+}
+
+export async function askSchoolAI(input, options = {}) {
+  const message = typeof input === "string" ? input : input?.message || input?.prompt || "";
+  const history = (typeof input === "object" ? input?.history : options?.history) || [];
+  const accessToken = (typeof input === "object" ? input?.accessToken : options?.accessToken) || null;
+
+  // Offline / instant exact match shortcut only when there is no prior conversation history
+  if (history.length === 0) {
+    const instant = getSchoolInformationAnswer(message);
+    if (instant) return instant;
+  }
+
+  const headers = { "Content-Type": "application/json" };
+  if (accessToken) headers.Authorization = `Bearer ${accessToken}`;
 
   const response = await fetch(API_ROUTES.aiChat, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers,
     body: JSON.stringify({
-      prompt: `${schoolInformationContext}\n\nUse only this official school information when it answers the question. If the information is not available, say that the admissions team can confirm it.\n\nParent question: ${prompt}`,
-      audience,
+      message: message.trim(),
+      history: history.slice(-6).map((turn) => ({ role: turn.role, content: turn.content || turn.text || "" })),
     }),
   });
   const data = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(data.detail || "AI service is temporarily unavailable. Please try again shortly.");
+  if (!response.ok) {
+    const error = new Error(formatErrorDetail(data.detail));
+    error.status = response.status;
+    throw error;
+  }
   return data.answer;
+}
+
+export async function streamSchoolAI({ message, history = [], accessToken = null, signal, onChunk, onFinish, onError }) {
+  if (history.length === 0) {
+    const instant = getSchoolInformationAnswer(message);
+    if (instant) {
+      if (onChunk) onChunk(instant, instant);
+      if (onFinish) onFinish(instant);
+      return instant;
+    }
+  }
+
+  const headers = { "Content-Type": "application/json" };
+  if (accessToken) headers.Authorization = `Bearer ${accessToken}`;
+
+  let response;
+  try {
+    response = await fetch(API_ROUTES.aiChatStream, {
+      method: "POST",
+      headers,
+      signal,
+      body: JSON.stringify({
+        message: message.trim(),
+        history: history.slice(-6).map((turn) => ({ role: turn.role, content: turn.content || turn.text || "" })),
+      }),
+    });
+  } catch {
+    if (signal?.aborted) return "";
+    const error = new Error("Could not connect to the school assistant. Please check your network connection.");
+    error.isNetwork = true;
+    if (onError) onError(error);
+    throw error;
+  }
+
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}));
+    const error = new Error(formatErrorDetail(data.detail));
+    error.status = response.status;
+    if (onError) onError(error);
+    throw error;
+  }
+
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = "";
+  let fullAnswer = "";
+
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split("\n\n");
+      buffer = lines.pop() || "";
+
+      for (const block of lines) {
+        const line = block.trim();
+        if (!line.startsWith("data:")) continue;
+        const payload = line.replace(/^data:\s*/, "").trim();
+        if (payload === "[DONE]") {
+          if (onFinish) onFinish(fullAnswer);
+          return fullAnswer;
+        }
+        try {
+          const parsed = JSON.parse(payload);
+          if (parsed.error) {
+            const err = new Error(parsed.error);
+            if (onError) onError(err);
+            throw err;
+          }
+          if (parsed.chunk) {
+            fullAnswer += parsed.chunk;
+            if (onChunk) onChunk(parsed.chunk, fullAnswer);
+          }
+        } catch (parseErr) {
+          if (payload.includes("error")) throw parseErr;
+        }
+      }
+    }
+  } catch (streamErr) {
+    if (signal?.aborted) return fullAnswer;
+    if (onError) onError(streamErr);
+    throw streamErr;
+  }
+
+  if (onFinish) onFinish(fullAnswer);
+  return fullAnswer;
 }
 
 async function otpRequest(path, payload) {

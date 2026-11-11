@@ -70,3 +70,4 @@ Card.Footer.propTypes = {
   children: PropTypes.node.isRequired,
   className: PropTypes.string,
 };
+

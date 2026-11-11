@@ -160,3 +160,4 @@ HeroSection.propTypes = {
   onOpenCampusFilm: PropTypes.func.isRequired,
   onOpenAdmissionCode: PropTypes.func.isRequired,
 };
+

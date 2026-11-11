@@ -6,6 +6,7 @@ import AccountMenu from "../../components/AccountMenu";
 import SchoolCrest from "../../components/SchoolCrest";
 import { getAdmissionData, saveAdmissionDraft, uploadAdmissionDocument } from "../../services/admission";
 import { useCognitoAuth } from "../../auth/useCognitoAuth";
+import ChatPanel from "../../components/ChatPanel/ChatPanel";
 
 const steps = ["OTP Verified", "Admission Details", "Student Details", "Parent Details", "Documents", "Verification", "Approval"];
 
@@ -27,6 +28,7 @@ export default function ParentGuardian() {
   const [photos, setPhotos] = useState({ Father: "", Mother: "" });
   const [message, setMessage] = useState("");
   const [savingDraft, setSavingDraft] = useState(false);
+  const [aiOpen, setAiOpen] = useState(false);
   const fatherUploadRef = useRef(null);
   const motherUploadRef = useRef(null);
   const photoUrlsRef = useRef(new Set());
@@ -176,10 +178,18 @@ export default function ParentGuardian() {
         </div>
 
         <aside className="guardian-help">
-          <section className="guardian-assistant"><div><span>✦</span><p><b>Sherwood Assistant</b><small><i /> Online</small></p></div><button onClick={() => navigate("/ai-assistant")}>Ask a question →</button></section>
-          <section className="guardian-help-card"><h2>Quick Help</h2><button onClick={() => setMessage("You will need the student's birth certificate, passport photograph and previous school records.")}>What documents are required?</button><button onClick={() => setMessage("The Date of Birth field shows the eligible birth years for the selected class and academic session. For 2027–28, Class 8 accepts 2013 or 2014 births.")}>What is the age criteria?</button><button onClick={() => setMessage("Transport routes can be selected after student information is completed.")}>How do I enroll for transport?</button><button onClick={() => setMessage("Our admissions team can help with sibling applications.")}>Is a sibling facility available?</button><input placeholder="Type your question..." aria-label="Ask a question" /></section>
+          <section className="guardian-assistant"><div><span>✦</span><p><b>Sherwood Assistant</b><small><i /> Online</small></p></div><button type="button" onClick={() => setAiOpen(true)}>Ask a question →</button></section>
+          <section className="guardian-help-card"><h2>Quick Help</h2><button type="button" onClick={() => setMessage("You will need the student's birth certificate, passport photograph and previous school records.")}>What documents are required?</button><button type="button" onClick={() => setMessage("The Date of Birth field shows the eligible birth years for the selected class and academic session. For 2027–28, Class 8 accepts 2013 or 2014 births.")}>What is the age criteria?</button><button type="button" onClick={() => setMessage("Transport routes can be selected after student information is completed.")}>How do I enroll for transport?</button><button type="button" onClick={() => setMessage("Our admissions team can help with sibling applications.")}>Is a sibling facility available?</button><input placeholder="Type your question..." aria-label="Ask a question" onFocus={() => setAiOpen(true)} /></section>
         </aside>
       </section>
+
+      <ChatPanel
+        variant="popup"
+        isOpen={aiOpen}
+        onClose={() => setAiOpen(false)}
+        accessToken={session?.accessToken}
+        role="parent"
+      />
     </main>
   );
 }

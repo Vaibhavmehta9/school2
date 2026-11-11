@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useCognitoAuth } from "../auth/useCognitoAuth";
 import SchoolCrest from "../components/SchoolCrest";
+import ChatPanel from "../components/ChatPanel/ChatPanel";
 import "./StudentDashboard.css";
 import "./StudentAuth.css";
 import StudentPortalModule from "./StudentPortalModule";
@@ -13,20 +14,12 @@ const classes = [];
 const homework = [];
 
 export default function StudentDashboard() {
-  const { signOut, user } = useCognitoAuth();
+  const { signOut, user, session } = useCognitoAuth();
+  const triggerRef = useRef(null);
   const [activeNav, setActiveNav] = useState("Dashboard");
   const [notice, setNotice] = useState("");
   const [search, setSearch] = useState("");
   const [aiOpen, setAiOpen] = useState(false);
-  const [question, setQuestion] = useState("");
-  const [aiAnswer, setAiAnswer] = useState("Hi Rahul! I can explain a chapter, make MCQs, or help you plan homework.");
-
-  const askAi = (event) => {
-    event.preventDefault();
-    if (!question.trim()) return;
-    setAiAnswer("Let’s work through that together. I suggest reviewing the key concept first, then trying three practice questions.");
-    setQuestion("");
-  };
 
   return <main className="student-dashboard">
     <aside className="student-sidebar">
@@ -66,11 +59,35 @@ export default function StudentDashboard() {
           <article className="student-card fee-card"><p>FEE STATUS</p><h2>All fees paid <i>✓</i></h2><span>Next term fee due on <b>10 July 2027</b></span><div><button onClick={() => setNotice("Payment history opened.")}>Payment history</button><button onClick={() => setNotice("Receipt download started.")}>Download receipt</button></div></article>
           <article className="student-card leave-card"><p>LEAVE REQUEST</p><h2>Need a day off?</h2><span>Apply for medical, personal or event leave and track approval status.</span><button onClick={() => setNotice("Leave request form opened.")}>＋ Apply leave</button></article>
         </section>
-        </> : <StudentPortalModule section={activeNav} setNotice={setNotice} onAskAI={() => setAiOpen(true)} />}
+        </> : <StudentPortalModule section={activeNav} setNotice={setNotice} onAskAI={() => setAiOpen(true)} session={session} user={user} />}
       </section>
     </section>
 
-    {aiOpen && <section className="student-ai-popup" role="dialog" aria-modal="false" aria-labelledby="student-ai-title"><header><div><i>✧</i><span><b id="student-ai-title">AI Study Assistant</b><small>Online · Ready to help</small></span></div><button onClick={() => setAiOpen(false)} aria-label="Close AI assistant">×</button></header><p>{aiAnswer}</p><div>{["Explain this chapter", "Create 10 MCQs", "Help with homework", "Show weak subjects"].map((prompt) => <button key={prompt} onClick={() => setAiAnswer(`${prompt}: I can help you with that. Tell me the subject or chapter.`)}>{prompt}</button>)}</div><form onSubmit={askAi}><input value={question} onChange={(event) => setQuestion(event.target.value)} placeholder="Ask about homework or a subject..." /><button aria-label="Send">→</button></form></section>}
-    <button className="student-ai-float" onClick={() => setAiOpen((open) => !open)} aria-expanded={aiOpen}><span>✧</span> Ask Study AI</button>
+    <ChatPanel
+      variant="popup"
+      isOpen={aiOpen}
+      onClose={() => setAiOpen(false)}
+      accessToken={session?.accessToken}
+      role="student"
+      triggerRef={triggerRef}
+    />
+    <button
+      ref={triggerRef}
+      className="sherwood-ai-launcher"
+      onClick={() => setAiOpen((open) => !open)}
+      aria-expanded={aiOpen}
+      aria-haspopup="dialog"
+    >
+      <span className="sherwood-ai-launcher-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 2v3M4.93 4.93l2.12 2.12M2 12h3M19.07 4.93l-2.12 2.12M22 12h-3" />
+          <rect x="5" y="8" width="14" height="12" rx="3" />
+          <circle cx="9.5" cy="13.5" r="1.2" fill="currentColor" />
+          <circle cx="14.5" cy="13.5" r="1.2" fill="currentColor" />
+          <path d="M9 17h6" />
+        </svg>
+      </span>
+      Ask Study AI
+    </button>
   </main>;
 }

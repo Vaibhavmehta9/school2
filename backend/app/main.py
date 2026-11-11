@@ -12,6 +12,7 @@ from uuid import uuid4
 import httpx
 from dotenv import load_dotenv
 from fastapi import BackgroundTasks, Depends, FastAPI, File, Header, HTTPException, Request, Response, UploadFile, status
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, RedirectResponse
 from starlette.concurrency import run_in_threadpool
@@ -214,6 +215,24 @@ app.include_router(teacher.router)
 app.include_router(admin.router)
 app.include_router(ai.router)
 app.include_router(otp.router)
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(_request: Request, exc: RequestValidationError):
+    """Ensure all validation errors return a clean, human-readable string detail."""
+    errors = exc.errors()
+    if errors:
+        first = errors[0]
+        loc = [str(part) for part in first.get("loc", []) if part != "body"]
+        field = " -> ".join(loc)
+        msg = first.get("msg", "Invalid value")
+        detail = f"{field}: {msg}" if field else msg
+    else:
+        detail = "Request validation failed. Please check the submitted fields."
+    return JSONResponse(
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        content={"detail": detail},
+    )
 
 
 def serialize_user(row: Any) -> dict[str, Any]:
