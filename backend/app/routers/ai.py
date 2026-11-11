@@ -25,6 +25,7 @@ from ..ai import (
 )
 from ..dependencies import resolve_verified_audience
 from ..faq_service import find_matching_entry
+from ..greeting_service import get_canned_greeting_reply
 from ..schemas import AIRequest
 
 logger = logging.getLogger("ai_assistant")
@@ -114,7 +115,7 @@ def chat(
     payload: AIRequest,
     request: Request,
     authorization: Annotated[str | None, Header()] = None,
-) -> dict[str, str]:
+) -> dict[str, Any]:
     """Answer a school question synchronously without exposing the OpenAI key to the browser."""
     _check_payload_size(request)
     client_id = request.client.host if request.client else "unknown"
@@ -129,11 +130,20 @@ def chat(
 
     try:
         user_message = payload.get_user_text()
+        history_dicts = [item.model_dump() for item in payload.history]
+
+        # Fast-Path: Greeting and Small Talk (Zero OpenAI call)
+        greeting_result = get_canned_greeting_reply(user_message, history=history_dicts)
+        if greeting_result:
+            answer, chips = greeting_result
+            source = "greeting"
+            matched_faq_ids = ["greeting_fast_path"]
+            return {"answer": answer, "model": "canned-greeting", "chips": chips}
+
         matched_entry, score = find_matching_entry(user_message)
         if matched_entry and score >= 0.6:
             matched_faq_ids = [matched_entry["id"]]
 
-        history_dicts = [item.model_dump() for item in payload.history]
         answer = generate_ai_reply(user_message, history=history_dicts, audience=verified_audience)
         return {"answer": answer, "model": configured_model()}
     except (AIConfigurationError, AIProviderRateLimitError, AIProviderUnavailableError) as error:
@@ -164,16 +174,36 @@ async def chat_stream(
     # Derive audience strictly from verified credentials; client value is ignored
     verified_audience = resolve_verified_audience(authorization)
     user_message = payload.get_user_text()
-    matched_entry, score = find_matching_entry(user_message)
-    matched_faq_ids: list[str] = [matched_entry["id"]] if (matched_entry and score >= 0.6) else []
-
     history_dicts = [item.model_dump() for item in payload.history]
+
+    # Check fast path
+    greeting_result = get_canned_greeting_reply(user_message, history=history_dicts)
+    if greeting_result:
+        source = "greeting"
+        matched_faq_ids = ["greeting_fast_path"]
+    else:
+        source = "faq"
+        matched_entry, score = find_matching_entry(user_message)
+        matched_faq_ids = [matched_entry["id"]] if (matched_entry and score >= 0.6) else []
+
     start_time = monotonic()
-    source = "faq"
 
     async def sse_event_generator() -> AsyncGenerator[str, None]:
         error_type: str | None = None
         try:
+            # Fast-path instant stream for greetings without calling OpenAI
+            if greeting_result:
+                answer, chips = greeting_result
+                words = answer.split(" ")
+                for i in range(0, len(words), 3):
+                    if await request.is_disconnected():
+                        break
+                    part = " ".join(words[i:i+3]) + (" " if i+3 < len(words) else "")
+                    yield f"data: {json.dumps({'chunk': part})}\n\n"
+                yield f"data: {json.dumps({'chips': chips})}\n\n"
+                yield "data: [DONE]\n\n"
+                return
+
             # Run generator in threadpool to allow cooperative async checking of client disconnect
             generator = stream_ai_reply(user_message, history=history_dicts, audience=verified_audience)
 
