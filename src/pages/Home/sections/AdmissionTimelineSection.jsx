@@ -60,7 +60,7 @@ export default function AdmissionTimelineSection() {
         </div>
 
         <div className="sherwood-timeline__footer">
-          <Button as={Link} to="/login?flow=admission" variant="gold" size="md">
+          <Button as={Link} to="/admission-details" variant="gold" size="md">
             Begin Application Process <span>→</span>
           </Button>
           <Button as={Link} to="/admission-details" variant="outline" size="md">

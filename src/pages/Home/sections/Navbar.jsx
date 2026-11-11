@@ -66,7 +66,7 @@ export default function Navbar({ user, signOut }) {
               )}
               <Button
                 as={Link}
-                to="/login?flow=admission"
+                to="/admission-details"
                 variant="gold"
                 size="sm"
                 onClick={() => setMenuOpen(false)}
@@ -98,7 +98,7 @@ export default function Navbar({ user, signOut }) {
             )}
             <Button
               as={Link}
-              to="/login?flow=admission"
+              to="/admission-details"
               variant="gold"
               size="sm"
             >

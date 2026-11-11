@@ -25,7 +25,7 @@ export default function VirtualTour() {
     <div className="virtual-tour-page">
       <header className="virtual-tour-nav">
         <Link className="virtual-tour-brand" to="/"><SchoolCrest /><div><strong>Sherwood</strong><small>College</small></div></Link>
-        <div><Link to="/">Home</Link><Link to="/gallery">Gallery</Link><Link to="/calendar">Calendar</Link><Link className="tour-admission-link" to="/login?flow=admission">Start Admission</Link></div>
+        <div><Link to="/">Home</Link><Link to="/gallery">Gallery</Link><Link to="/calendar">Calendar</Link><Link className="tour-admission-link" to="/admission-details">Start Admission</Link></div>
       </header>
 
       <main>
@@ -47,12 +47,12 @@ export default function VirtualTour() {
             <div className="tour-stop-list" role="tablist" aria-label="Virtual tour stops">
               {tourStops.map((stop, index) => <button key={stop.number} type="button" role="tab" aria-selected={activeStop === index} className={activeStop === index ? "active" : ""} onClick={() => setActiveStop(index)}><span>{stop.number}</span><div><b>{stop.title}</b><small>{stop.subtitle}</small></div><i>→</i></button>)}
             </div>
-            <article className="tour-stop-feature" aria-live="polite"><img src={active.image} alt={active.alt} /><div><span>{active.number} · {active.subtitle}</span><h3>{active.title}</h3><p>{active.text}</p><Link to="/login?flow=admission">Book a campus visit <b>→</b></Link></div></article>
+            <article className="tour-stop-feature" aria-live="polite"><img src={active.image} alt={active.alt} /><div><span>{active.number} · {active.subtitle}</span><h3>{active.title}</h3><p>{active.text}</p><Link to="/admission-details">Book a campus visit <b>→</b></Link></div></article>
           </div>
         </section>
 
         <section className="virtual-tour-visit">
-          <div><span>READY TO EXPERIENCE MORE?</span><h2>Come see it <em>in person.</em></h2><p>Book a guided campus visit with our admissions team and discover if Sherwood College is the right place for your child.</p></div><div><Link to="/login?flow=admission">Book a visit <span>→</span></Link><Link to="/calendar">View upcoming events</Link></div>
+          <div><span>READY TO EXPERIENCE MORE?</span><h2>Come see it <em>in person.</em></h2><p>Book a guided campus visit with our admissions team and discover if Sherwood College is the right place for your child.</p></div><div><Link to="/admission-details">Book a visit <span>→</span></Link><Link to="/calendar">View upcoming events</Link></div>
         </section>
       </main>
     </div>

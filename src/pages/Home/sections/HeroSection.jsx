@@ -79,7 +79,7 @@ export default function HeroSection({ onOpenCampusFilm, onOpenAdmissionCode }) {
           <div className="sherwood-hero__actions">
             <Button
               as={Link}
-              to="/login?flow=admission"
+              to="/admission-details"
               variant="gold"
               size="lg"
             >

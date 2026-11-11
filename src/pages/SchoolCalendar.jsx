@@ -51,7 +51,7 @@ export default function SchoolCalendar() {
     <div className="school-calendar-page">
       <header className="calendar-navbar">
         <Link className="calendar-brand" to="/"><SchoolCrest /><div><strong>Sherwood</strong><small>College</small></div></Link>
-        <nav><Link to="/">Home</Link><Link to="/gallery">Gallery</Link><Link to="/login?flow=admission">Admissions</Link></nav>
+        <nav><Link to="/">Home</Link><Link to="/gallery">Gallery</Link><Link to="/admission-details">Admissions</Link></nav>
         <Link className="calendar-login" to="/login">Parent Login</Link>
       </header>
 
@@ -85,7 +85,7 @@ export default function SchoolCalendar() {
         </section>
 
         <section className="calendar-upcoming" aria-labelledby="coming-up-title">
-          <header><div><span className="calendar-eyebrow">NEXT AT SHERWOOD COLLEGE</span><h2 id="coming-up-title">Coming <em>up.</em></h2></div><Link to="/login?flow=admission">Plan a campus visit <span>→</span></Link></header>
+          <header><div><span className="calendar-eyebrow">NEXT AT SHERWOOD COLLEGE</span><h2 id="coming-up-title">Coming <em>up.</em></h2></div><Link to="/admission-details">Plan a campus visit <span>→</span></Link></header>
           <div>{events.map((event) => <article key={`upcoming-${event.time}-${event.title}`}><time><b>{new Date(`${event.date}T12:00:00`).toLocaleDateString("en-IN", { day: "2-digit" })}</b><small>{new Date(`${event.date}T12:00:00`).toLocaleDateString("en-IN", { month: "short" })}</small></time><div><span>{event.type}</span><h3>{event.title}</h3><p>{event.time} · {event.place}</p></div></article>)}</div>
         </section>
       </main>

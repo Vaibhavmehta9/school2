@@ -32,7 +32,7 @@ export default function FooterSection() {
             <h3>Admissions</h3>
             <ul>
               <li><a href="#admission-process">Admission Process</a></li>
-              <li><Link to="/login?flow=admission">Online Application 2027–28</Link></li>
+              <li><Link to="/admission-details">Online Application 2027–28</Link></li>
               <li><Link to="/admission-details">Eligibility &amp; Age Cutoffs</Link></li>
               <li><Link to="/track-application">Track Application Status</Link></li>
             </ul>
