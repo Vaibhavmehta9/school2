@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ChatPanel from "../components/ChatPanel/ChatPanel";
+import SherwoodAIAvatar from "../components/ChatPanel/SherwoodAIAvatar";
 import { useCognitoAuth } from "../auth/useCognitoAuth";
 import { initSmoothScrolling } from "../utils/motion";
 
@@ -30,6 +31,44 @@ export default function Home() {
   const [campusFilmOpen, setCampusFilmOpen] = useState(false);
   const [admissionCodeOpen, setAdmissionCodeOpen] = useState(false);
   const [aiOpen, setAiOpen] = useState(false);
+  const [hasAttentionPulse, setHasAttentionPulse] = useState(false);
+  const [isScrollingMobile, setIsScrollingMobile] = useState(false);
+
+  // Soft attention pulse after 8 seconds (once per session)
+  useEffect(() => {
+    try {
+      const alreadyPulsed = sessionStorage.getItem("sherwood_ai_pulsed");
+      if (!alreadyPulsed) {
+        const timer = setTimeout(() => {
+          setHasAttentionPulse(true);
+          sessionStorage.setItem("sherwood_ai_pulsed", "true");
+          setTimeout(() => setHasAttentionPulse(false), 2600);
+        }, 8000);
+        return () => clearTimeout(timer);
+      }
+    } catch {
+      // Storage unavailable in restricted mode
+    }
+    return undefined;
+  }, []);
+
+  // Collapse launcher label on mobile during scroll to save viewport space
+  useEffect(() => {
+    let scrollTimeout;
+    const handleScroll = () => {
+      setIsScrollingMobile(true);
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        setIsScrollingMobile(false);
+      }, 400);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      clearTimeout(scrollTimeout);
+    };
+  }, []);
 
   // Smooth inertial scrolling setup
   useEffect(() => {
@@ -94,20 +133,14 @@ export default function Home() {
       <button
         ref={launcherRef}
         type="button"
-        className="sherwood-ai-launcher"
+        className={`sherwood-ai-launcher ${hasAttentionPulse ? "attention-pulse" : ""} ${isScrollingMobile ? "scrolling-collapsed" : ""}`.trim()}
         onClick={() => setAiOpen((isOpen) => !isOpen)}
         aria-expanded={aiOpen}
         aria-haspopup="dialog"
-        aria-label="Open Sherwood AI Assistant"
+        aria-label="Open Sherwood AI Admissions Assistant"
       >
         <span className="sherwood-ai-launcher-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 2v3M4.93 4.93l2.12 2.12M2 12h3M19.07 4.93l-2.12 2.12M22 12h-3" />
-            <rect x="5" y="8" width="14" height="12" rx="3" />
-            <circle cx="9.5" cy="13.5" r="1.2" fill="currentColor" />
-            <circle cx="14.5" cy="13.5" r="1.2" fill="currentColor" />
-            <path d="M9 17h6" />
-          </svg>
+          <SherwoodAIAvatar size={34} state={aiOpen ? "speaking" : "idle"} />
         </span>
         <span className="sherwood-ai-launcher-text">Ask Sherwood AI</span>
       </button>

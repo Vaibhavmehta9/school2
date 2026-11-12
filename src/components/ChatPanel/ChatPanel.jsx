@@ -2,22 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Link } from "react-router-dom";
 import SafeMarkdown from "./SafeMarkdown";
+import SherwoodAIAvatar from "./SherwoodAIAvatar";
 import { FOLLOW_UP_SUGGESTIONS, INITIAL_QUICK_CHIPS, useChat } from "./useChat";
 import "./ChatPanel.css";
 
 // Clean inline SVG Icons
-function AssistantIcon() {
-  return (
-    <svg className="chat-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M12 2v3M4.93 4.93l2.12 2.12M2 12h3M19.07 4.93l-2.12 2.12M22 12h-3" />
-      <rect x="5" y="8" width="14" height="12" rx="3" />
-      <circle cx="9.5" cy="13.5" r="1.2" fill="currentColor" />
-      <circle cx="14.5" cy="13.5" r="1.2" fill="currentColor" />
-      <path d="M9 17h6" />
-    </svg>
-  );
-}
-
 function SendIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -255,9 +244,11 @@ export default function ChatPanel({
       {/* Header */}
       <header className="chat-header">
         <div className="chat-header-identity">
-          <div className="chat-avatar" aria-hidden="true">
-            <AssistantIcon />
-          </div>
+          <SherwoodAIAvatar
+            size={38}
+            state={isStreaming ? "speaking" : loading ? "thinking" : "idle"}
+            showOnline={true}
+          />
           <div className="chat-title-wrap">
             <h2 id="chat-panel-title" className="chat-title">
               Sherwood AI
@@ -321,8 +312,8 @@ export default function ChatPanel({
       >
         {messages.length === 0 && (
           <div className="chat-welcome-state">
-            <div className="chat-welcome-icon" aria-hidden="true">
-              <AssistantIcon />
+            <div className="chat-welcome-icon-wrap" aria-hidden="true">
+              <SherwoodAIAvatar size={64} state="idle" />
             </div>
             <h3 className="chat-welcome-heading">Welcome to Sherwood College</h3>
             <p className="chat-welcome-desc">
@@ -412,12 +403,15 @@ export default function ChatPanel({
         {/* Typing indicator */}
         {loading && !isStreaming && (
           <div className="chat-message chat-message-assistant" aria-label="Sherwood AI is thinking">
-            <div className="chat-bubble chat-typing-bubble">
-              <span className="chat-bubble-sender">Sherwood AI</span>
-              <div className="chat-typing-dots" aria-hidden="true">
-                <span />
-                <span />
-                <span />
+            <div className="chat-typing-container">
+              <SherwoodAIAvatar size={28} state="thinking" />
+              <div className="chat-bubble chat-typing-bubble">
+                <span className="chat-bubble-sender">Sherwood AI</span>
+                <div className="chat-typing-dots" aria-hidden="true">
+                  <span />
+                  <span />
+                  <span />
+                </div>
               </div>
             </div>
           </div>

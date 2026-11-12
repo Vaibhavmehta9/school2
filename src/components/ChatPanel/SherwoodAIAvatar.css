@@ -1,0 +1,281 @@
+/* =============================================================================
+   SHERWOOD AI AVATAR STYLES
+   Original collegiate crest + AI spark brand mark.
+   Compliant with WCAG 2.1 AA and prefers-reduced-motion.
+   Only transforms and opacities are animated for 60fps GPU performance.
+   ============================================================================= */
+
+.sherwood-ai-avatar-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  user-select: none;
+  cursor: inherit;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), filter 0.25s ease;
+}
+
+.sherwood-ai-avatar-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  display: block;
+}
+
+/* Subtle default filter */
+.sherwood-ai-avatar-wrap:hover {
+  filter: drop-shadow(0 4px 10px rgba(197, 155, 39, 0.35));
+}
+
+/* -----------------------------------------------------------------------------
+   Default Elements Visibility
+   ----------------------------------------------------------------------------- */
+
+.avatar-speaking-waves {
+  opacity: 0;
+  transform-origin: 24px 21px;
+  pointer-events: none;
+}
+
+.avatar-thinking-dots {
+  opacity: 0;
+  transform-origin: 24px 22px;
+  pointer-events: none;
+}
+
+.avatar-spark-group {
+  transform-origin: 24px 21px;
+  transition: transform 0.3s ease;
+}
+
+/* -----------------------------------------------------------------------------
+   STATE: IDLE (Gentle 4.5s breathing loop)
+   ----------------------------------------------------------------------------- */
+
+.sherwood-ai-avatar-idle .avatar-glow-ring {
+  transform-origin: 24px 24px;
+  animation: avatar-breathe-glow 4.5s ease-in-out infinite;
+}
+
+.sherwood-ai-avatar-idle .avatar-spark-group {
+  animation: avatar-spark-subtle-shimmer 4.5s ease-in-out infinite;
+}
+
+@keyframes avatar-breathe-glow {
+  0%, 100% {
+    transform: scale(0.96);
+    opacity: 0.25;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.7;
+  }
+}
+
+@keyframes avatar-spark-subtle-shimmer {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.95;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   STATE: THINKING (Spark rotation + orbiting pulsing dots)
+   ----------------------------------------------------------------------------- */
+
+.sherwood-ai-avatar-thinking .avatar-spark-group {
+  animation: avatar-spark-rotate 2.8s linear infinite;
+}
+
+.sherwood-ai-avatar-thinking .avatar-thinking-dots {
+  opacity: 1;
+  animation: avatar-dots-orbit 3.2s linear infinite;
+}
+
+.sherwood-ai-avatar-thinking .think-dot-1 {
+  animation: avatar-dot-pulse 1.2s ease-in-out infinite 0s;
+}
+
+.sherwood-ai-avatar-thinking .think-dot-2 {
+  animation: avatar-dot-pulse 1.2s ease-in-out infinite 0.4s;
+}
+
+.sherwood-ai-avatar-thinking .think-dot-3 {
+  animation: avatar-dot-pulse 1.2s ease-in-out infinite 0.8s;
+}
+
+@keyframes avatar-spark-rotate {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.15);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+@keyframes avatar-dots-orbit {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes avatar-dot-pulse {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.3);
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   STATE: SPEAKING (Concentric gold soundwave ripples)
+   ----------------------------------------------------------------------------- */
+
+.sherwood-ai-avatar-speaking .avatar-speaking-waves {
+  opacity: 1;
+}
+
+.sherwood-ai-avatar-speaking .wave-arc-1 {
+  transform-origin: 24px 21px;
+  animation: avatar-wave-ripple 1.4s ease-out infinite 0s;
+}
+
+.sherwood-ai-avatar-speaking .wave-arc-2 {
+  transform-origin: 24px 21px;
+  animation: avatar-wave-ripple 1.4s ease-out infinite 0.45s;
+}
+
+.sherwood-ai-avatar-speaking .avatar-spark-group {
+  animation: avatar-speaking-spark 0.7s ease-in-out infinite alternate;
+}
+
+@keyframes avatar-wave-ripple {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.1;
+  }
+  40% {
+    opacity: 0.95;
+  }
+  100% {
+    transform: scale(1.22);
+    opacity: 0;
+  }
+}
+
+@keyframes avatar-speaking-spark {
+  0% {
+    transform: scale(0.98);
+  }
+  100% {
+    transform: scale(1.12);
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   STATE: HOVER (Tilt and elevated radiance)
+   ----------------------------------------------------------------------------- */
+
+.sherwood-ai-avatar-hover {
+  transform: translateY(-2px) rotate(2deg) scale(1.05);
+  filter: drop-shadow(0 6px 14px rgba(197, 155, 39, 0.45));
+}
+
+.sherwood-ai-avatar-hover .avatar-spark-group {
+  transform: scale(1.15) rotate(8deg);
+}
+
+/* -----------------------------------------------------------------------------
+   STATE: ERROR (Calm dignified amber tone, strictly no flashing)
+   ----------------------------------------------------------------------------- */
+
+.sherwood-ai-avatar-error {
+  filter: drop-shadow(0 2px 8px rgba(180, 83, 9, 0.35));
+}
+
+.sherwood-ai-avatar-error .avatar-spark-radiance {
+  fill: #f59e0b;
+}
+
+/* -----------------------------------------------------------------------------
+   ONLINE STATUS DOT
+   ----------------------------------------------------------------------------- */
+
+.sherwood-avatar-online-dot {
+  position: absolute;
+  right: -1px;
+  bottom: -1px;
+  width: 10px;
+  height: 10px;
+  background-color: #22c55e;
+  border: 1.5px solid #ffffff;
+  border-radius: 50%;
+  display: block;
+  z-index: 2;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.online-pulse-ring {
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  border: 1.5px solid #22c55e;
+  animation: online-ring-pulse 2.2s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+  pointer-events: none;
+}
+
+@keyframes online-ring-pulse {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* Dark Theme online dot border adjustment */
+body[data-theme="dark"] .sherwood-avatar-online-dot {
+  border-color: #112017;
+}
+
+/* -----------------------------------------------------------------------------
+   ACCESSIBILITY: PREFERS-REDUCED-MOTION
+   ----------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .sherwood-ai-avatar-wrap,
+  .avatar-glow-ring,
+  .avatar-spark-group,
+  .avatar-thinking-dots,
+  .think-dot-1,
+  .think-dot-2,
+  .think-dot-3,
+  .wave-arc-1,
+  .wave-arc-2,
+  .online-pulse-ring {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+
+  /* Keep decorative waves visible in speaking state without animation */
+  .sherwood-ai-avatar-speaking .avatar-speaking-waves {
+    opacity: 0.7 !important;
+  }
+}

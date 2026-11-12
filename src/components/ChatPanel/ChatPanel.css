@@ -223,20 +223,11 @@
   color: var(--sherwood-muted);
 }
 
-.chat-welcome-icon {
-  width: 52px;
-  height: 52px;
-  margin: 0 auto 12px;
-  border-radius: 50%;
-  background: var(--sherwood-green-light);
-  color: var(--sherwood-green);
-  display: grid;
-  place-items: center;
-}
-
-.chat-welcome-icon svg {
-  width: 28px;
-  height: 28px;
+.chat-welcome-icon-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 14px;
 }
 
 .chat-welcome-heading {
@@ -400,6 +391,12 @@
 }
 
 /* Typing Indicator */
+.chat-typing-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
 .chat-typing-dots {
   display: flex;
   align-items: center;
@@ -1054,5 +1051,9 @@ body[data-theme="dark"] .chat-inline-chips .chat-quick-chip {
 body[data-theme="dark"] .chat-inline-chips .chat-quick-chip:hover {
   background: #08783f;
   color: #ffffff;
+}
+
+body[data-theme="dark"] .chat-typing-dots span {
+  background: #4ade80;
 }
 
