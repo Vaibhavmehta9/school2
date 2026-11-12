@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { Link } from "react-router-dom";
 import SafeMarkdown from "./SafeMarkdown";
 import { FOLLOW_UP_SUGGESTIONS, INITIAL_QUICK_CHIPS, useChat } from "./useChat";
@@ -106,11 +107,15 @@ export default function ChatPanel({
   const inputRef = useRef(null);
   const panelRef = useRef(null);
   const userScrolledUpRef = useRef(false);
+  const [showJumpToBottom, setShowJumpToBottom] = useState(false);
 
-  // Auto-scroll to newest message unless user scrolled up
+  // Auto-scroll to newest message only if near bottom; otherwise show jump button
   useEffect(() => {
-    if (!userScrolledUpRef.current && messagesEndRef.current) {
+    if (userScrolledUpRef.current) {
+      setShowJumpToBottom(true);
+    } else if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+      setShowJumpToBottom(false);
     }
   }, [messages, loading, isStreaming]);
 
@@ -118,9 +123,73 @@ export default function ChatPanel({
   const handleScroll = () => {
     const el = messagesContainerRef.current;
     if (!el) return;
-    const isAtBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 50;
+    const isAtBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 60;
     userScrolledUpRef.current = !isAtBottom;
+    if (isAtBottom) {
+      setShowJumpToBottom(false);
+    }
   };
+
+  // Lock page scroll while popup is open without layout shift (restores exact scroll position)
+  useEffect(() => {
+    if (variant !== "popup" || !isOpen) return undefined;
+
+    const scrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
+    const originalPosition = document.body.style.position;
+    const originalTop = document.body.style.top;
+    const originalLeft = document.body.style.left;
+    const originalWidth = document.body.style.width;
+    const originalOverflow = document.body.style.overflow;
+    const originalPaddingRight = document.body.style.paddingRight;
+
+    // Compensate scrollbar width to prevent layout shift
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    if (scrollbarWidth > 0) {
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+    }
+
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.left = "0";
+    document.body.style.width = "100%";
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.position = originalPosition;
+      document.body.style.top = originalTop;
+      document.body.style.left = originalLeft;
+      document.body.style.width = originalWidth;
+      document.body.style.overflow = originalOverflow;
+      document.body.style.paddingRight = originalPaddingRight;
+      window.scrollTo(0, scrollY);
+    };
+  }, [variant, isOpen]);
+
+  // Desktop wheel handler: prevent wheel scrolling over chat from leaking into page
+  useEffect(() => {
+    if (variant !== "popup" || !isOpen || !panelRef.current) return undefined;
+    const panel = panelRef.current;
+
+    const handleWheel = (e) => {
+      const scrollable = messagesContainerRef.current;
+      if (!scrollable || !scrollable.contains(e.target)) {
+        // Over header, chips tray, footer - prevent page scroll
+        e.preventDefault();
+        return;
+      }
+
+      const { scrollTop, scrollHeight, clientHeight } = scrollable;
+      const isAtTop = scrollTop <= 0;
+      const isAtBottom = scrollTop + clientHeight >= scrollHeight - 1;
+
+      if ((e.deltaY < 0 && isAtTop) || (e.deltaY > 0 && isAtBottom)) {
+        e.preventDefault();
+      }
+    };
+
+    panel.addEventListener("wheel", handleWheel, { passive: false });
+    return () => panel.removeEventListener("wheel", handleWheel);
+  }, [variant, isOpen]);
 
   // Keyboard navigation & accessibility (Focus trap and Escape for popup)
   useEffect(() => {
@@ -164,17 +233,24 @@ export default function ChatPanel({
     return null;
   }
 
-  const roleLabel = role !== "guest" ? ` (${role.charAt(0).toUpperCase() + role.slice(1)})` : "";
+  // Header role label: omit for guests; show human-readable role for logged in users
+  const isGuest = !role || role.toLowerCase() === "guest";
+  const formattedRole = !isGuest
+    ? role.charAt(0).toUpperCase() + role.slice(1).toLowerCase()
+    : null;
   const showInitialChips = messages.length === 0;
   const showFollowUpChips = messages.length > 0 && !loading;
 
-  return (
+  const panelContent = (
     <section
       ref={panelRef}
       className={`chat-panel chat-panel-${variant}`}
       role={variant === "popup" ? "dialog" : "region"}
       aria-modal={variant === "popup" ? "true" : undefined}
       aria-labelledby="chat-panel-title"
+      data-lenis-prevent="true"
+      data-lenis-prevent-wheel="true"
+      data-lenis-prevent-touch="true"
     >
       {/* Header */}
       <header className="chat-header">
@@ -185,11 +261,11 @@ export default function ChatPanel({
           <div className="chat-title-wrap">
             <h2 id="chat-panel-title" className="chat-title">
               Sherwood AI
-              {roleLabel && <span className="chat-role-badge">{roleLabel}</span>}
+              {formattedRole && <span className="chat-role-badge">{formattedRole}</span>}
             </h2>
             <p className="chat-subtitle">
               <span className="chat-online-indicator" aria-hidden="true" />
-              Online · Official College Assistant
+              {isGuest ? "Online · Admissions Assistant" : "Online · Official College Assistant"}
             </p>
           </div>
         </div>
@@ -239,6 +315,9 @@ export default function ChatPanel({
         aria-relevant="additions text"
         tabIndex={0}
         aria-label="Chat conversation log"
+        data-lenis-prevent="true"
+        data-lenis-prevent-wheel="true"
+        data-lenis-prevent-touch="true"
       >
         {messages.length === 0 && (
           <div className="chat-welcome-state">
@@ -370,6 +449,22 @@ export default function ChatPanel({
         <div ref={messagesEndRef} aria-hidden="true" />
       </div>
 
+      {/* Floating Jump to Bottom Button */}
+      {showJumpToBottom && (
+        <button
+          type="button"
+          className="chat-jump-bottom-btn"
+          onClick={() => {
+            userScrolledUpRef.current = false;
+            setShowJumpToBottom(false);
+            messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+          }}
+          aria-label="Scroll to newest messages"
+        >
+          <span aria-hidden="true">↓</span> New message
+        </button>
+      )}
+
       {/* Suggested Quick Reply Chips */}
       {showInitialChips && (
         <div className="chat-chips-tray" aria-label="Suggested initial topics">
@@ -462,4 +557,9 @@ export default function ChatPanel({
       </footer>
     </section>
   );
+
+  if (variant === "popup") {
+    return createPortal(panelContent, document.body);
+  }
+  return panelContent;
 }
