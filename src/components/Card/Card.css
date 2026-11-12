@@ -5,10 +5,13 @@
 .sherwood-card {
   position: relative;
   background-color: var(--color-bg-surface);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-lg); /* 12-16px modern standard */
+  border: 1px solid rgba(0, 0, 0, 0.08);
   color: var(--color-text-primary);
   box-sizing: border-box;
+  font-size: var(--text-sm); /* >= 14px body */
+  line-height: var(--leading-relaxed);
+  box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
   transition:
     transform var(--dur-base) var(--ease-out),
     box-shadow var(--dur-base) var(--ease-out),
@@ -21,63 +24,92 @@
 }
 
 .sherwood-card--pad-sm {
-  padding: var(--space-4);
+  padding: 16px;
 }
 
 .sherwood-card--pad-md {
-  padding: var(--space-6);
+  padding: 24px; /* Consistent 20-28px on desktop */
 }
 
 .sherwood-card--pad-lg {
-  padding: var(--space-8);
+  padding: 28px;
+}
+
+@media (max-width: 640px) {
+  .sherwood-card--pad-md,
+  .sherwood-card--pad-lg {
+    padding: 18px; /* Consistent 16-20px on mobile */
+  }
 }
 
 /* --- Card Variants --- */
 
 /* Default */
 .sherwood-card--default {
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
 }
 
 /* Interactive (Hover lift & deepened shadow) */
 .sherwood-card--interactive {
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
   cursor: pointer;
 }
 
 .sherwood-card--interactive:hover {
   transform: translateY(-3px);
-  box-shadow: var(--shadow-md);
-  border-color: var(--color-border-default);
+  box-shadow: 0 10px 24px -4px rgba(15, 23, 42, 0.1), 0 4px 8px -2px rgba(15, 23, 42, 0.04);
+  border-color: rgba(8, 120, 63, 0.25);
 }
 
 /* Elevated */
 .sherwood-card--elevated {
   box-shadow: var(--shadow-lg);
-  border-color: transparent;
+  border-color: rgba(0, 0, 0, 0.06);
 }
 
 /* Outlined */
 .sherwood-card--outlined {
   background-color: transparent;
-  border-color: var(--color-border-default);
+  border-color: rgba(0, 0, 0, 0.12);
   box-shadow: none;
 }
 
 /* Gold Accent */
 .sherwood-card--gold-accent {
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.05);
   border-top: 3px solid var(--color-gold);
 }
 
 .sherwood-card--gold-accent:hover {
-  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px -4px rgba(15, 23, 42, 0.1);
+}
+
+/* Typography in cards */
+.sherwood-card h1,
+.sherwood-card h2,
+.sherwood-card h3,
+.sherwood-card h4 {
+  color: var(--color-charcoal-900);
+}
+
+.sherwood-card p,
+.sherwood-card span,
+.sherwood-card li {
+  font-size: var(--text-sm); /* >= 14px body */
+}
+
+.sherwood-card small,
+.sherwood-card .meta-label,
+.sherwood-card time {
+  font-size: var(--text-xs); /* >= 12px meta/labels */
+  color: var(--color-charcoal-500);
 }
 
 /* --- Sub-elements --- */
 .sherwood-card__header {
   padding-bottom: var(--space-4);
-  border-bottom: 1px solid var(--color-border-subtle);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
   margin-bottom: var(--space-4);
 }
 
@@ -87,11 +119,51 @@
 
 .sherwood-card__footer {
   padding-top: var(--space-4);
-  border-top: 1px solid var(--color-border-subtle);
+  border-top: 1px solid rgba(0, 0, 0, 0.07);
   margin-top: var(--space-4);
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: var(--space-3);
+}
+
+/* =============================================================================
+   Dark Theme Card Overrides (body[data-theme="dark"])
+   ============================================================================= */
+
+body[data-theme="dark"] .sherwood-card {
+  background-color: #122119;
+  border-color: rgba(255, 255, 255, 0.08);
+  color: #e2f4e8;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+}
+
+body[data-theme="dark"] .sherwood-card--interactive:hover {
+  border-color: rgba(74, 222, 128, 0.35);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+}
+
+body[data-theme="dark"] .sherwood-card h1,
+body[data-theme="dark"] .sherwood-card h2,
+body[data-theme="dark"] .sherwood-card h3,
+body[data-theme="dark"] .sherwood-card h4 {
+  color: #f1f9f4;
+}
+
+body[data-theme="dark"] .sherwood-card p,
+body[data-theme="dark"] .sherwood-card span,
+body[data-theme="dark"] .sherwood-card li {
+  color: #c9ded2;
+}
+
+body[data-theme="dark"] .sherwood-card small,
+body[data-theme="dark"] .sherwood-card .meta-label,
+body[data-theme="dark"] .sherwood-card time {
+  color: #8da497;
+}
+
+body[data-theme="dark"] .sherwood-card__header,
+body[data-theme="dark"] .sherwood-card__footer {
+  border-color: rgba(255, 255, 255, 0.08);
 }
 

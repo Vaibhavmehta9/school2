@@ -110,3 +110,234 @@ textarea {
   }
 }
 
+/* =============================================================================
+   UNIVERSAL BUTTON STYLES & HIERARCHY (STAGE 4)
+   ============================================================================= */
+
+/* Universal interactive standards */
+button,
+.btn,
+.sherwood-btn {
+  font-family: var(--font-sans);
+  touch-action: manipulation;
+}
+
+/* Base button defaults */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 44px; /* WCAG 2.1 touch target */
+  padding: 10px 22px;
+  border-radius: var(--radius-md, 8px); /* 8-12px standard radius */
+  font-size: var(--text-sm); /* 14px */
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.015em;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+  user-select: none;
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--color-gold, #c59b27);
+  outline-offset: 2px;
+}
+
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  pointer-events: none;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+/* Primary Button: Solid Deep Green */
+.btn-primary {
+  background-color: var(--color-primary, #08783f);
+  color: #ffffff;
+  border: 1.5px solid transparent;
+  box-shadow: 0 2px 6px rgba(8, 120, 63, 0.25);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--color-primary-dark, #054b2d);
+  box-shadow: 0 4px 14px rgba(8, 120, 63, 0.35);
+  color: #ffffff;
+}
+
+/* Secondary Button: Outline with 1.5px border */
+.btn-secondary,
+.btn-outline {
+  background-color: var(--color-bg-surface, #ffffff);
+  color: var(--color-charcoal-800, #1e293b);
+  border: 1.5px solid var(--color-border-default, #d6d3c7);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.btn-secondary:hover:not(:disabled),
+.btn-outline:hover:not(:disabled) {
+  background-color: var(--color-bg-muted, #f0ede4);
+  border-color: var(--color-charcoal-500, #64748b);
+  color: var(--color-charcoal-900, #0f172a);
+  box-shadow: 0 3px 8px rgba(15, 23, 42, 0.08);
+}
+
+/* Tertiary / Ghost Button: Text only, subtle hover */
+.btn-tertiary,
+.btn-ghost {
+  background-color: transparent;
+  color: var(--color-primary, #08783f);
+  border: 1.5px solid transparent;
+}
+
+.btn-tertiary:hover:not(:disabled),
+.btn-ghost:hover:not(:disabled) {
+  background-color: rgba(8, 120, 63, 0.08);
+  color: var(--color-primary-dark, #054b2d);
+}
+
+/* Gold Accent Button */
+.btn-gold {
+  background-color: var(--color-gold, #c59b27);
+  color: var(--color-gold-text, #1a1505);
+  border: 1.5px solid transparent;
+  box-shadow: 0 2px 6px rgba(197, 155, 39, 0.25);
+  font-weight: var(--weight-bold);
+}
+
+.btn-gold:hover:not(:disabled) {
+  background-color: var(--color-gold-light, #dfb846);
+  box-shadow: 0 4px 14px rgba(197, 155, 39, 0.35);
+  color: var(--color-gold-text, #1a1505);
+}
+
+/* =============================================================================
+   UNIVERSAL CARD STYLES & ELEVATION (STAGE 4)
+   ============================================================================= */
+
+.card,
+.sherwood-card {
+  position: relative;
+  background-color: var(--color-bg-surface, #ffffff);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: var(--radius-lg, 12px);
+  padding: 24px;
+  color: var(--color-text-primary, #0f172a);
+  box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out);
+}
+
+@media (max-width: 640px) {
+  .card,
+  .sherwood-card {
+    padding: 18px;
+  }
+}
+
+.card-interactive,
+.card.interactive,
+.sherwood-card--interactive {
+  cursor: pointer;
+}
+
+.card-interactive:hover,
+.card.interactive:hover,
+.sherwood-card--interactive:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px -4px rgba(15, 23, 42, 0.1), 0 4px 8px -2px rgba(15, 23, 42, 0.04);
+  border-color: rgba(8, 120, 63, 0.25);
+}
+
+/* Card typography */
+.card h1, .card h2, .card h3, .card h4,
+.sherwood-card h1, .sherwood-card h2, .sherwood-card h3, .sherwood-card h4 {
+  color: var(--color-charcoal-900);
+}
+
+.card p, .card span, .card li,
+.sherwood-card p, .sherwood-card span, .sherwood-card li {
+  font-size: var(--text-sm); /* >= 14px body */
+}
+
+.card small, .card .meta-label, .card time,
+.sherwood-card small, .sherwood-card .meta-label, .sherwood-card time {
+  font-size: var(--text-xs); /* >= 12px meta/labels */
+  color: var(--color-charcoal-500);
+}
+
+/* =============================================================================
+   DARK THEME UNIVERSAL BUTTONS & CARDS (body[data-theme="dark"])
+   ============================================================================= */
+
+body[data-theme="dark"] .btn-secondary,
+body[data-theme="dark"] .btn-outline {
+  background-color: #172b21;
+  color: #e2f4e8;
+  border-color: #2b4936;
+}
+
+body[data-theme="dark"] .btn-secondary:hover:not(:disabled),
+body[data-theme="dark"] .btn-outline:hover:not(:disabled) {
+  background-color: #1f3a2c;
+  border-color: #4ade80;
+  color: #ffffff;
+}
+
+body[data-theme="dark"] .btn-tertiary,
+body[data-theme="dark"] .btn-ghost {
+  color: #4ade80;
+}
+
+body[data-theme="dark"] .btn-tertiary:hover:not(:disabled),
+body[data-theme="dark"] .btn-ghost:hover:not(:disabled) {
+  background-color: rgba(74, 222, 128, 0.1);
+  color: #6ee7b7;
+}
+
+body[data-theme="dark"] .card,
+body[data-theme="dark"] .sherwood-card {
+  background-color: #122119;
+  border-color: rgba(255, 255, 255, 0.08);
+  color: #e2f4e8;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+}
+
+body[data-theme="dark"] .card-interactive:hover,
+body[data-theme="dark"] .card.interactive:hover,
+body[data-theme="dark"] .sherwood-card--interactive:hover {
+  border-color: rgba(74, 222, 128, 0.35);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+}
+
+body[data-theme="dark"] .card h1, body[data-theme="dark"] .card h2, body[data-theme="dark"] .card h3, body[data-theme="dark"] .card h4 {
+  color: #f1f9f4;
+}
+
+body[data-theme="dark"] .card p, body[data-theme="dark"] .card span, body[data-theme="dark"] .card li {
+  color: #c9ded2;
+}
+
+body[data-theme="dark"] .card small, body[data-theme="dark"] .card .meta-label, body[data-theme="dark"] .card time {
+  color: #8da497;
+}
+

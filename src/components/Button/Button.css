@@ -7,16 +7,17 @@
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
-  border: 1px solid transparent;
-  border-radius: var(--radius-sm);
+  border: 1.5px solid transparent;
+  border-radius: var(--radius-md); /* 8-12px standard radius */
   font-family: var(--font-sans);
   font-weight: var(--weight-semibold);
-  letter-spacing: 0.02em;
+  letter-spacing: 0.015em;
   text-align: center;
   text-decoration: none;
   cursor: pointer;
   user-select: none;
   white-space: nowrap;
+  min-height: 44px; /* WCAG 2.1 touch target */
   transition:
     background-color var(--dur-fast) var(--ease-out),
     border-color var(--dur-fast) var(--ease-out),
@@ -25,8 +26,17 @@
     transform var(--dur-fast) var(--ease-out);
 }
 
+.sherwood-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
 .sherwood-btn:active:not(:disabled) {
-  transform: translateY(1px);
+  transform: scale(0.98);
+}
+
+.sherwood-btn:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
 }
 
 .sherwood-btn:disabled,
@@ -40,23 +50,23 @@
 
 /* --- Sizes --- */
 .sherwood-btn--sm {
-  padding: 6px 14px;
-  font-size: var(--text-xs); /* 12px */
-  border-radius: var(--radius-xs);
-  min-height: 32px;
+  padding: 8px 16px;
+  font-size: var(--text-xs); /* 12px label */
+  border-radius: var(--radius-sm);
+  min-height: 44px; /* Accessible touch target */
 }
 
 .sherwood-btn--md {
-  padding: 10px 20px;
+  padding: 10px 22px;
   font-size: var(--text-sm); /* 14px */
-  border-radius: var(--radius-sm);
-  min-height: 42px;
+  border-radius: var(--radius-md);
+  min-height: 44px;
 }
 
 .sherwood-btn--lg {
   padding: 14px 28px;
   font-size: var(--text-base); /* 16px */
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   min-height: 50px;
 }
 
@@ -65,61 +75,64 @@
 /* Primary: Heritage Green */
 .sherwood-btn--primary {
   background-color: var(--color-primary);
-  color: var(--color-text-inverse);
-  box-shadow: var(--shadow-sm);
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(8, 120, 63, 0.25);
 }
 
 .sherwood-btn--primary:hover:not(:disabled) {
   background-color: var(--color-primary-dark);
-  box-shadow: var(--shadow-green);
-  color: var(--color-text-inverse);
+  box-shadow: 0 4px 14px rgba(8, 120, 63, 0.35);
+  color: #ffffff;
 }
 
 /* Gold: Antique Gold CTA (Dark text for AA contrast) */
 .sherwood-btn--gold {
   background-color: var(--color-gold);
   color: var(--color-gold-text);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 2px 6px rgba(197, 155, 39, 0.25);
   font-weight: var(--weight-bold);
 }
 
 .sherwood-btn--gold:hover:not(:disabled) {
   background-color: var(--color-gold-light);
-  box-shadow: var(--shadow-gold);
+  box-shadow: 0 4px 14px rgba(197, 155, 39, 0.35);
   color: var(--color-gold-text);
 }
 
-/* Secondary: Subtle Warm Neutral */
+/* Secondary: Outline with 1.5px border */
 .sherwood-btn--secondary {
-  background-color: var(--color-bg-surface-warm);
+  background-color: var(--color-bg-surface);
   color: var(--color-charcoal-800);
-  border-color: var(--color-border-subtle);
+  border: 1.5px solid var(--color-border-default);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
 }
 
 .sherwood-btn--secondary:hover:not(:disabled) {
   background-color: var(--color-bg-muted);
-  border-color: var(--color-border-default);
+  border-color: var(--color-charcoal-500);
   color: var(--color-charcoal-900);
+  box-shadow: 0 3px 8px rgba(15, 23, 42, 0.08);
 }
 
 /* Outline Green */
 .sherwood-btn--outline {
   background-color: transparent;
   color: var(--color-primary);
-  border-color: var(--color-primary);
+  border: 1.5px solid var(--color-primary);
 }
 
 .sherwood-btn--outline:hover:not(:disabled) {
   background-color: var(--color-primary-tint);
   border-color: var(--color-primary-dark);
   color: var(--color-primary-dark);
+  box-shadow: 0 3px 8px rgba(8, 120, 63, 0.12);
 }
 
 /* Outline Gold */
 .sherwood-btn--outline-gold {
   background-color: transparent;
   color: var(--color-gold-dark);
-  border-color: var(--color-gold);
+  border: 1.5px solid var(--color-gold);
 }
 
 .sherwood-btn--outline-gold:hover:not(:disabled) {
@@ -128,19 +141,21 @@
   color: var(--color-gold-text);
 }
 
-/* Text / Link Style */
-.sherwood-btn--text {
+/* Ghost / Tertiary: Text only with subtle hover */
+.sherwood-btn--text,
+.sherwood-btn--ghost {
   background-color: transparent;
   color: var(--color-primary);
-  padding-left: var(--space-2);
-  padding-right: var(--space-2);
-  min-height: auto;
+  border-color: transparent;
+  padding-left: var(--space-3);
+  padding-right: var(--space-3);
+  min-height: 44px;
 }
 
-.sherwood-btn--text:hover:not(:disabled) {
+.sherwood-btn--text:hover:not(:disabled),
+.sherwood-btn--ghost:hover:not(:disabled) {
+  background-color: rgba(8, 120, 63, 0.08);
   color: var(--color-primary-dark);
-  text-decoration: underline;
-  text-underline-offset: 4px;
 }
 
 /* --- Spinner --- */
@@ -179,5 +194,43 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+}
+
+/* =============================================================================
+   Dark Theme Button Overrides (body[data-theme="dark"])
+   ============================================================================= */
+
+body[data-theme="dark"] .sherwood-btn--secondary {
+  background-color: #172b21;
+  color: #e2f4e8;
+  border-color: #2b4936;
+}
+
+body[data-theme="dark"] .sherwood-btn--secondary:hover:not(:disabled) {
+  background-color: #1f3a2c;
+  border-color: #4ade80;
+  color: #ffffff;
+}
+
+body[data-theme="dark"] .sherwood-btn--outline {
+  color: #4ade80;
+  border-color: #4ade80;
+}
+
+body[data-theme="dark"] .sherwood-btn--outline:hover:not(:disabled) {
+  background-color: rgba(74, 222, 128, 0.12);
+  border-color: #6ee7b7;
+  color: #ffffff;
+}
+
+body[data-theme="dark"] .sherwood-btn--text,
+body[data-theme="dark"] .sherwood-btn--ghost {
+  color: #4ade80;
+}
+
+body[data-theme="dark"] .sherwood-btn--text:hover:not(:disabled),
+body[data-theme="dark"] .sherwood-btn--ghost:hover:not(:disabled) {
+  background-color: rgba(74, 222, 128, 0.1);
+  color: #6ee7b7;
 }
 
