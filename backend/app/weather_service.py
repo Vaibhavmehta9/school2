@@ -160,3 +160,36 @@ def format_weather_context_for_prompt() -> str:
         f"Mention that Sherwood College is situated at an elevation of 6,837 feet in the hills of Nainital. "
         f"If temperatures are cool (below 16°C), you may suggest visiting parents carry a light jacket or woolen layer."
     )
+
+
+def get_live_weather_answer() -> str:
+    """Format a complete, user-facing answer for live campus weather."""
+    weather = fetch_live_weather()
+    if not weather or weather.get("temperature_c") is None:
+        return (
+            "I could not fetch live campus weather from the weather service at this moment.\n\n"
+            "Sherwood College is situated on Ayarpatta Hill in Nainital at an altitude of **6,837 feet**. "
+            "Hill weather is typically crisp and cool, especially during mornings and evenings. "
+            "Visiting parents are advised to carry a light jacket or woolen clothing."
+        )
+
+    temp = weather.get("temperature_c")
+    apparent = weather.get("apparent_temperature_c")
+    cond = weather.get("condition")
+    wind = weather.get("wind_speed_kmh")
+    t_min = weather.get("today_min_c")
+    t_max = weather.get("today_max_c")
+    t_time = weather.get("ist_time")
+
+    advice = "Visitors are recommended to carry light woolens or a jacket." if (temp is not None and temp < 18) else "The weather is pleasant."
+
+    return (
+        f"Right now at the Sherwood College campus in Nainital (altitude ~**6,837 feet**), "
+        f"the weather is **{cond}** with a temperature of **{temp}°C** (feels like **{apparent}°C**).\n\n"
+        f"• **Today's Expected Range**: {t_min}°C (Min) to {t_max}°C (Max)\n"
+        f"• **Wind Speed**: {wind} km/h\n"
+        f"• *Observed at: {t_time} IST*\n\n"
+        f"{advice}"
+    )
+
+

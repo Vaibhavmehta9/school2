@@ -510,6 +510,8 @@
       "id": "fees_payment_modes",
       "category": "FEES",
       "questions": [
+        "Fee payment schedule",
+        "What is the fee payment schedule?",
         "What are the accepted payment modes for school fees?",
         "Can I pay fees online via Net Banking or UPI?",
         "Demand draft payment",
@@ -561,6 +563,8 @@
       "category": "Facilities",
       "questions": [
         "What medical facilities are available on campus?",
+        "Healthcare facilities",
+        "What are the healthcare and hospital facilities?",
         "Is there a resident doctor?",
         "What happens in a medical emergency?",
         "Medical suvidha kaisi hai school mein?",

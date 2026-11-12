@@ -21,13 +21,19 @@ from ..ai import (
     AIProviderUnavailableError,
     configured_model,
     generate_ai_reply,
+    is_openai_configured,
     stream_ai_reply,
 )
 from ..dependencies import resolve_verified_audience
-from ..faq_service import find_matching_entry
+from ..faq_service import find_matching_entry, get_safe_answer
 from ..greeting_service import get_canned_greeting_reply
 from ..schemas import AIRequest
-from ..weather_service import format_weather_context_for_prompt, is_weather_query
+from ..school_knowledge import OFFICIAL_CONTACT_FALLBACK
+from ..weather_service import (
+    format_weather_context_for_prompt,
+    get_live_weather_answer,
+    is_weather_query,
+)
 
 logger = logging.getLogger("ai_assistant")
 
@@ -46,7 +52,7 @@ def _setting(name: str, default: int) -> int:
 
 
 def _check_rate_limit(client_id: str) -> None:
-    limit = _setting("AI_RATE_LIMIT_REQUESTS", 10)
+    limit = _setting("AI_RATE_LIMIT_REQUESTS", 60)
     window_seconds = _setting("AI_RATE_LIMIT_WINDOW_SECONDS", 300)
     now = monotonic()
     with _history_lock:
@@ -133,7 +139,7 @@ def chat(
         user_message = payload.get_user_text()
         history_dicts = [item.model_dump() for item in payload.history]
 
-        # Fast-Path: Greeting and Small Talk (Zero OpenAI call)
+        # Fast-Path 1: Greeting and Small Talk (Zero OpenAI call)
         greeting_result = get_canned_greeting_reply(user_message, history=history_dicts)
         if greeting_result:
             answer, chips = greeting_result
@@ -141,19 +147,37 @@ def chat(
             matched_faq_ids = ["greeting_fast_path"]
             return {"answer": answer, "model": "canned-greeting", "chips": chips}
 
-        matched_entry, score = find_matching_entry(user_message)
-        is_demo = False
-        if matched_entry and score >= 0.6:
-            matched_faq_ids = [matched_entry["id"]]
-            is_demo = bool(matched_entry.get("demo", False) or matched_entry.get("source") == "demo")
-
+        # Check weather query
         extra_context: str | None = None
         if is_weather_query(user_message):
             source = "weather"
+            matched_faq_ids = ["live_weather_service"]
             extra_context = format_weather_context_for_prompt()
 
-        answer = generate_ai_reply(user_message, history=history_dicts, audience=verified_audience, extra_context=extra_context)
-        return {"answer": answer, "model": configured_model(), "is_demo": is_demo}
+        matched_entry, score = find_matching_entry(user_message)
+        is_demo = False
+        if matched_entry and score >= 0.5:
+            matched_faq_ids = [matched_entry["id"]]
+            is_demo = bool(matched_entry.get("demo", False) or matched_entry.get("source") == "demo")
+
+        try:
+            answer = generate_ai_reply(user_message, history=history_dicts, audience=verified_audience, extra_context=extra_context)
+            return {"answer": answer, "model": configured_model(), "is_demo": is_demo}
+        except (AIConfigurationError, AIProviderUnavailableError):
+            if is_weather_query(user_message):
+                return {"answer": get_live_weather_answer(), "model": "open-meteo-live", "is_demo": False}
+            if matched_entry and score >= 0.5:
+                return {"answer": get_safe_answer(matched_entry), "model": "faq-direct", "is_demo": is_demo}
+            return {
+                "answer": (
+                    f"I do not have specific details for that in our current admissions documentation. {OFFICIAL_CONTACT_FALLBACK}\n\n"
+                    "- **Admissions Helpline**: +91 94563 16655 / +91 94583 07729\n"
+                    "- **Front Office**: +91-5942-236361\n"
+                    "- **Email**: contact@sherwood.edu.in"
+                ),
+                "model": "faq-fallback",
+                "is_demo": False,
+            }
     except (AIConfigurationError, AIProviderRateLimitError, AIProviderUnavailableError) as error:
         error_type = error.__class__.__name__
         _raise_ai_http_error(error)
@@ -198,7 +222,7 @@ async def chat_stream(
     else:
         source = "faq"
         matched_entry, score = find_matching_entry(user_message)
-        if matched_entry and score >= 0.6:
+        if matched_entry and score >= 0.5:
             matched_faq_ids = [matched_entry["id"]]
             is_demo = bool(matched_entry.get("demo", False) or matched_entry.get("source") == "demo")
 
@@ -206,48 +230,91 @@ async def chat_stream(
 
     async def sse_event_generator() -> AsyncGenerator[str, None]:
         error_type: str | None = None
+
+        # Helper to stream pre-computed or offline text chunk by chunk
+        async def stream_words(text: str, is_demo_flag: bool = False, chips: list[str] | None = None) -> AsyncGenerator[str, None]:
+            words = text.split(" ")
+            for i in range(0, len(words), 3):
+                if await request.is_disconnected():
+                    break
+                part = " ".join(words[i:i+3]) + (" " if i+3 < len(words) else "")
+                yield f"data: {json.dumps({'chunk': part})}\n\n"
+            if chips:
+                yield f"data: {json.dumps({'chips': chips})}\n\n"
+            if is_demo_flag:
+                yield f"data: {json.dumps({'is_demo': True})}\n\n"
+            yield "data: [DONE]\n\n"
+
         try:
-            # Fast-path instant stream for greetings without calling OpenAI
+            # Fast-path 1: Instant stream for greetings
             if greeting_result:
                 answer, chips = greeting_result
-                words = answer.split(" ")
-                for i in range(0, len(words), 3):
-                    if await request.is_disconnected():
-                        break
-                    part = " ".join(words[i:i+3]) + (" " if i+3 < len(words) else "")
-                    yield f"data: {json.dumps({'chunk': part})}\n\n"
-                yield f"data: {json.dumps({'chips': chips})}\n\n"
-                yield "data: [DONE]\n\n"
+                async for chunk in stream_words(answer, chips=chips):
+                    yield chunk
                 return
 
-            # Run generator in threadpool to allow cooperative async checking of client disconnect
-            generator = stream_ai_reply(
-                user_message,
-                history=history_dicts,
-                audience=verified_audience,
-                extra_context=extra_context,
-            )
+            # Direct offline/demo path when OpenAI API key is not configured on the server
+            if not is_openai_configured():
+                if is_weather_query(user_message):
+                    weather_text = get_live_weather_answer()
+                    async for chunk in stream_words(weather_text):
+                        yield chunk
+                    return
 
-            def get_next_chunk():
-                try:
-                    return next(generator)
-                except StopIteration:
-                    return None
+                if matched_entry and score >= 0.5:
+                    faq_text = get_safe_answer(matched_entry)
+                    async for chunk in stream_words(faq_text, is_demo_flag=is_demo):
+                        yield chunk
+                    return
 
-            while True:
-                if await request.is_disconnected():
-                    # Stop processing when the client disconnects or clicks "Stop generating"
-                    break
-                chunk = await run_in_threadpool(get_next_chunk)
-                if chunk is None:
-                    break
-                # Yield SSE JSON data chunk
-                yield f"data: {json.dumps({'chunk': chunk})}\n\n"
+                fallback_text = (
+                    f"I do not have specific details for that in our current admissions documentation. {OFFICIAL_CONTACT_FALLBACK}\n\n"
+                    "- **Admissions Helpline**: +91 94563 16655 / +91 94583 07729\n"
+                    "- **Front Office**: +91-5942-236361\n"
+                    "- **Email**: contact@sherwood.edu.in"
+                )
+                async for chunk in stream_words(fallback_text):
+                    yield chunk
+                return
 
-            if is_demo:
-                yield f"data: {json.dumps({'is_demo': True})}\n\n"
+            # Standard OpenAI stream when API key is present
+            try:
+                generator = stream_ai_reply(
+                    user_message,
+                    history=history_dicts,
+                    audience=verified_audience,
+                    extra_context=extra_context,
+                )
 
-            yield "data: [DONE]\n\n"
+                def get_next_chunk():
+                    try:
+                        return next(generator)
+                    except StopIteration:
+                        return None
+
+                while True:
+                    if await request.is_disconnected():
+                        break
+                    chunk = await run_in_threadpool(get_next_chunk)
+                    if chunk is None:
+                        break
+                    yield f"data: {json.dumps({'chunk': chunk})}\n\n"
+
+                if is_demo:
+                    yield f"data: {json.dumps({'is_demo': True})}\n\n"
+
+                yield "data: [DONE]\n\n"
+            except (AIConfigurationError, AIProviderUnavailableError):
+                # Fallback gracefully to FAQ or weather if OpenAI is unreachable
+                if is_weather_query(user_message):
+                    async for chunk in stream_words(get_live_weather_answer()):
+                        yield chunk
+                    return
+                if matched_entry and score >= 0.5:
+                    async for chunk in stream_words(get_safe_answer(matched_entry), is_demo_flag=is_demo):
+                        yield chunk
+                    return
+                raise
         except (AIConfigurationError, AIProviderRateLimitError, AIProviderUnavailableError) as error:
             error_type = error.__class__.__name__
             error_detail = "AI service is temporarily unavailable."

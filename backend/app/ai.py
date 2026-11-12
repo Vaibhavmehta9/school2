@@ -72,6 +72,11 @@ def format_user_prompt_with_history(message: str, history: list[dict[str, Any]] 
     )
 
 
+def is_openai_configured() -> bool:
+    """Return whether a valid OpenAI API key is present in server environment."""
+    return bool(os.getenv("OPENAI_API_KEY", "").strip())
+
+
 @lru_cache(maxsize=1)
 def get_openai_client() -> OpenAI:
     api_key = os.getenv("OPENAI_API_KEY")
