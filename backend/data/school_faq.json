@@ -1,13 +1,13 @@
 {
   "demo_data": true,
   "school_name": "Sherwood College, Nainital",
-  "last_updated": "2026-11-11",
+  "last_updated": "2026-11-12",
   "disclaimer": "Demo data: please confirm details with the admissions office.",
   "campus_coordinates": {
     "latitude": 29.3803,
     "longitude": 79.4534,
-    "altitude_ft": 6800,
-    "location": "Ayarpatta Hill, Nainital, Uttarakhand 263002"
+    "altitude_ft": 6837,
+    "location": "Ayarpatta Hill, Tallital, Nainital, Uttarakhand 263002"
   },
   "entries": [
     {
@@ -21,8 +21,29 @@
         "School kahan situated hai?",
         "Kaisa school hai Sherwood?"
       ],
-      "answer": "Sherwood College is a prestigious co-educational residential school founded in **1869**, located at an altitude of over **6,800 feet** on Ayarpatta Hill in Nainital, Uttarakhand.\n\nKey highlights:\n- **Legacy**: Over 150 years of academic excellence and character building\n- **Campus**: 70-acre serene hill campus nestled amidst lush pine forests\n- **Environment**: Fully residential community fostering leadership, discipline, sportsmanship, and cultural depth\n- **Motto**: *Mereat Quisque Palmam* (\"Let each one merit his prize\")",
-      "last_updated": "2026-11-11"
+      "answer": "Sherwood College is a historic co-educational residential boarding school founded in **1869**, located at an altitude of **6,837 feet** on Ayarpatta Hill in Nainital, Uttarakhand.\n\nKey Highlights:\n- **Legacy**: Founded in 1869 as the Diocesan Boys School under Rev. Robert Milman (Seventh Metropolitan of India)\n- **Campus**: 45-acre verdant hill campus in the Shivalik ranges\n- **Architecture**: Post-Edwardian heritage buildings with Gothic windows, Romanesque arches, and modern academic blocks\n- **Motto**: *Mereat Quisque Palmam* (\"Let each one merit his prize\")\n- **Affiliation**: CISCE, New Delhi (ICSE Class 10, ISC Class 12)",
+      "source": "official",
+      "source_url": "https://sherwood.edu.in/Home/AboutUs",
+      "fetched_on": "2026-11-12",
+      "demo": false,
+      "last_updated": "2026-11-12"
+    },
+    {
+      "id": "about_school_history_heritage",
+      "category": "About the school",
+      "questions": [
+        "What is the history of Sherwood College?",
+        "When was Sherwood established?",
+        "Who founded Sherwood College?",
+        "Kitna purana school hai Sherwood?",
+        "Sherwood ka itihas kya hai?"
+      ],
+      "answer": "Sherwood College was founded in **1869** as the Diocesan Boys School under the patronage of the Seventh Metropolitan of India, Rev. Robert Milman. Over its 150+ year history, the school has preserved its tradition of character building through the pre-independence era and two World Wars into modern India, evolving into one of the country's most respected residential institutions.",
+      "source": "official",
+      "source_url": "https://sherwood.edu.in/Home/AboutUs",
+      "fetched_on": "2026-11-12",
+      "demo": false,
+      "last_updated": "2026-11-12"
     },
     {
       "id": "about_board_affiliation",
@@ -34,8 +55,46 @@
         "Kaunsa board follow karta hai school?",
         "ICSE hai ya CBSE?"
       ],
-      "answer": "Sherwood College is affiliated with the **Council for the Indian School Certificate Examinations (CISCE)**, New Delhi. Students prepare for:\n- **ICSE** (Indian Certificate of Secondary Education) at the end of Class 10\n- **ISC** (Indian School Certificate) at the end of Class 12 across Science, Commerce, and Humanities streams.",
-      "last_updated": "2026-11-11"
+      "answer": "Sherwood College is affiliated with the **Council for the Indian School Certificate Examinations (CISCE)**, New Delhi.\n- **Class 10**: Students appear for the **ICSE** (Indian Certificate of Secondary Education)\n- **Class 12**: Students appear for the **ISC** (Indian School Certificate) with Science, Commerce, and Humanities streams.",
+      "source": "official",
+      "source_url": "https://sherwood.edu.in/",
+      "fetched_on": "2026-11-12",
+      "demo": false,
+      "last_updated": "2026-11-12"
+    },
+    {
+      "id": "about_principal_leadership",
+      "category": "About the school",
+      "questions": [
+        "Who is the Principal of Sherwood College?",
+        "Who heads the school?",
+        "Principal of Sherwood Nainital",
+        "School ke Principal kaun hain?",
+        "Leadership team"
+      ],
+      "answer": "The Principal of Sherwood College is **Mr. Amandeep Sandhu**.\n\nUnder his leadership, the school emphasizes that a residential boarding school is a microcosm of society where students are mentored through a rigorous, well-defined daily routine to develop into polished, empathetic, and responsible global citizens.",
+      "source": "official",
+      "source_url": "https://sherwood.edu.in/",
+      "fetched_on": "2026-11-12",
+      "demo": false,
+      "last_updated": "2026-11-12"
+    },
+    {
+      "id": "about_coed_residential_identity",
+      "category": "About the school",
+      "questions": [
+        "Is Sherwood College co-educational?",
+        "Is it a boys-only school or co-ed?",
+        "Does the school accept girls?",
+        "Kya ladkiyan bhi padhti hain Sherwood mein?",
+        "Co-ed boarding school hai kya?"
+      ],
+      "answer": "Yes, Sherwood College is a **fully co-educational residential boarding institution** (Classes 3 to 12). Both boys and girls study together in academic classes while residing in separate, dedicated residential hostels with tailored pastoral care.",
+      "source": "official",
+      "source_url": "https://sherwood.edu.in/Home/AboutUs",
+      "fetched_on": "2026-11-12",
+      "demo": false,
+      "last_updated": "2026-11-12"
     },
     {
       "id": "admission_classes_offered",
@@ -48,8 +107,63 @@
         "Kya Class 10 mein admission mil sakta hai?",
         "Class 11 admission available?"
       ],
-      "answer": "For the **2027–28 academic session**, admissions are offered only for **Classes 3, 4, 5, 6, 7, 8, 9, and 11**.\n\n*Important Notes:*\n- Admissions are **NOT offered for Classes 10 and 12** under any circumstances.\n- For Class 11, admission is subject to stream availability (Science, Commerce, or Humanities) and performance in entrance evaluation.",
-      "last_updated": "2026-11-11"
+      "answer": "For the **2027–28 academic session**, online registrations are standardly open from **Classes III to VIII for boys and girls**.\n\n*Important Notes:*\n- Admissions for Grades IX and XI are evaluated based on entrance performance and stream availability.\n- Admissions are **NOT offered for Classes 10 and 12** under any circumstances.",
+      "source": "official",
+      "source_url": "https://sherwood.edu.in/Home/AdmissionProcess",
+      "fetched_on": "2026-11-12",
+      "demo": false,
+      "last_updated": "2026-11-12"
+    },
+    {
+      "id": "admission_registration_dates",
+      "category": "Admission process and dates",
+      "questions": [
+        "What are the registration dates for 2027-28?",
+        "When does online admission start and close?",
+        "Last date to submit admission form",
+        "Admission registration kab start hoti hai aur kab close hoti hai?",
+        "Aakhiri tareekh kya hai registration ki?"
+      ],
+      "answer": "According to the official admissions policy:\n- **Commencement**: Online registrations commence in the month of **September** each year.\n- **Closing Date**: Registrations officially close by **4th of December** each year.\n- Parents are encouraged to submit applications early as seats in each class cohort are limited.",
+      "source": "official",
+      "source_url": "https://sherwood.edu.in/Home/AdmissionProcess",
+      "fetched_on": "2026-11-12",
+      "demo": false,
+      "last_updated": "2026-11-12"
+    },
+    {
+      "id": "admission_online_only_mandate",
+      "category": "Admission process and dates",
+      "questions": [
+        "Can I submit an admission form offline or in person?",
+        "Is there a paper application form?",
+        "Can we buy an admission form at the school office?",
+        "Kya offline form milta hai admission ke liye?",
+        "School jakar manual form jama kar sakte hain?"
+      ],
+      "answer": "No. The official policy explicitly specifies that **all candidates must register online** through the school's official admission portal. There is **no provision for manual or paper-based registrations**.",
+      "source": "official",
+      "source_url": "https://sherwood.edu.in/Home/AdmissionProcess",
+      "fetched_on": "2026-11-12",
+      "demo": false,
+      "last_updated": "2026-11-12"
+    },
+    {
+      "id": "admission_counsellor_helpline",
+      "category": "Admission process and dates",
+      "questions": [
+        "What is the phone number of the admission counsellor?",
+        "How can I speak to the admissions office directly?",
+        "Admission enquiry mobile number",
+        "Admission counsellor ka contact number kya hai?",
+        "Kisse baat karein admission ke liye?"
+      ],
+      "answer": "You can directly connect with the Sherwood College Admission Counsellor via:\n- **Direct Mobile Hotline**: **`+91 94563 16655`**\n- **Alternate Mobile Helpline**: **`+91 94583 07729`**\n- **Admissions Front Desk**: `+91-5942-236361`\n- **Official Email**: `contact@sherwood.edu.in`",
+      "source": "official",
+      "source_url": "https://sherwood.edu.in/Home/AdmissionProcess",
+      "fetched_on": "2026-11-12",
+      "demo": false,
+      "last_updated": "2026-11-12"
     },
     {
       "id": "admission_workflow_steps",
@@ -62,21 +176,12 @@
         "Application kaise submit karein?",
         "Admission workflow"
       ],
-      "answer": "The admission process for Sherwood College follows these key steps:\n1. **Online Registration**: Fill out the online registration form on the official portal (`/admission-details`).\n2. **Entrance Test**: Registered candidates take the online entrance test in English and Mathematics (syllabus and date sent via email).\n3. **Principal's Interaction**: Qualifying candidates attend an interaction with the Principal and panel.\n4. **Offer Letter**: Selected candidates receive an official offer letter via email.\n5. **Document Verification & Fee Payment**: Submit required certificates and complete Term 1 fee payment to confirm enrollment.",
-      "last_updated": "2026-11-11"
-    },
-    {
-      "id": "admission_dates_and_deadlines",
-      "category": "Admission process and dates",
-      "questions": [
-        "What is the last date to apply for admission?",
-        "When do 2027-28 admissions close?",
-        "Important admission dates",
-        "Admission ki aakhiri tareekh kya hai?",
-        "Forms kab tak bhar sakte hain?"
-      ],
-      "answer": "Admissions close as and when seats are filled for each grade. [FILL: exact registration opening dates, entrance test schedules, and final application deadlines for the 2027-28 session]",
-      "last_updated": "2026-11-11"
+      "answer": "The official Sherwood College admission workflow comprises five sequential steps:\n1. **Online Registration**: Fill out the online candidate profile at `/admission-details` between September and December 4th.\n2. **Online Entrance Evaluation**: Take the online entrance assessment in English and Mathematics.\n3. **Principal's Interaction**: Shortlisted candidates attend an interaction with the Principal and panel.\n4. **Official Selection Offer**: Successful candidates receive an official offer letter via email.\n5. **Enrollment & Verification**: Submit Transfer Certificate and academic dossier to confirm enrollment.",
+      "source": "official",
+      "source_url": "https://sherwood.edu.in/Home/AdmissionProcess",
+      "fetched_on": "2026-11-12",
+      "demo": false,
+      "last_updated": "2026-11-12"
     },
     {
       "id": "eligibility_age_criteria",
@@ -89,8 +194,12 @@
         "Bacche ki umar kitni honi chahiye?",
         "Birth year eligibility kya hai?"
       ],
-      "answer": "For the **2027–28 academic session**, the permitted birth years by grade are:\n\n| Class Applying For | Eligible Birth Years |\n| :--- | :--- |\n| **Class 3** | 2018 or 2019 |\n| **Class 4** | 2017 or 2018 |\n| **Class 5** | 2016 or 2017 |\n| **Class 6** | 2015 or 2016 |\n| **Class 7** | 2014 or 2015 |\n| **Class 8** | 2013 or 2014 |\n| **Class 9** | 2012 or 2013 |\n| **Class 11** | 2010 or 2011 |\n\n*Admissions are not accepted outside these permitted birth cohorts.*",
-      "last_updated": "2026-11-11"
+      "answer": "For the **2027–28 academic session**, the permitted birth-year eligibility brackets are:\n\n| Class Applying For | Eligible Birth Cohort |\n| :--- | :--- |\n| **Class 3** | 2018 or 2019 |\n| **Class 4** | 2017 or 2018 |\n| **Class 5** | 2016 or 2017 |\n| **Class 6** | 2015 or 2016 |\n| **Class 7** | 2014 or 2015 |\n| **Class 8** | 2013 or 2014 |\n| **Class 9** | 2012 or 2013 |\n| **Class 11** | 2010 or 2011 |\n\n*Candidates outside these verified birth windows cannot be accommodated.*",
+      "source": "official",
+      "source_url": "https://sherwood.edu.in/Home/AdmissionProcess",
+      "fetched_on": "2026-11-12",
+      "demo": false,
+      "last_updated": "2026-11-12"
     },
     {
       "id": "documents_required_checklist",
@@ -103,8 +212,12 @@
         "Kagaz kya lagenge?",
         "Is Transfer Certificate mandatory?"
       ],
-      "answer": "Parents must have the following documents ready for admission:\n\n1. **Aadhaar Card** of the student\n2. **Birth Certificate** issued by the Municipal Corporation / Nagar Nigam\n3. **Recent Academic Marksheet / Report Card** from the current school\n4. **Student PEN (Permanent Education Number)**\n5. **Transfer Certificate (TC)**: The original counter-signed Transfer Certificate must be submitted to the school office upon confirmed admission.\n\n[FILL: specify number of passport photographs and medical fitness certificate requirements]",
-      "last_updated": "2026-11-11"
+      "answer": "Parents must have the following documents ready for admission registration and verification:\n\n1. **Aadhaar Card** of the student\n2. **Birth Certificate** issued by the competent Municipal Authority / Nagar Nigam\n3. **Latest Academic Marksheet** from the student's current school\n4. **Student PEN (Permanent Education Number)**\n5. **Transfer Certificate (TC)**: The original counter-signed Transfer Certificate must be surrendered to the school office upon confirmed enrollment.",
+      "source": "official",
+      "source_url": "https://sherwood.edu.in/Home/AdmissionProcess",
+      "fetched_on": "2026-11-12",
+      "demo": false,
+      "last_updated": "2026-11-12"
     },
     {
       "id": "entrance_test_pattern",
@@ -117,8 +230,12 @@
         "Paper online hota hai ya offline?",
         "Test kitne ghante ka hota hai?"
       ],
-      "answer": "The Sherwood College entrance test is conducted **online**:\n- **Subjects Tested**: English and Mathematics\n- **Duration**: 1 hour for English, 1 hour for Mathematics\n- **Syllabus & Schedule**: Detailed syllabus, sample test links, and exact date/time are emailed to registered parents after completing registration on the portal.\n- **Next Stage**: Students qualifying the written papers proceed to the Principal's Interaction.",
-      "last_updated": "2026-11-11"
+      "answer": "The Sherwood College entrance evaluation is conducted **online**:\n- **Subjects**: English and Mathematics\n- **Duration**: 1 hour for English, 1 hour for Mathematics\n- **Syllabus & Timings**: Test syllabus, date, and instructions are emailed directly to parents upon online registration.\n- **Progression**: Candidates qualifying the written papers advance to the Principal's Interaction.",
+      "source": "official",
+      "source_url": "https://sherwood.edu.in/Home/AdmissionProcess",
+      "fetched_on": "2026-11-12",
+      "demo": false,
+      "last_updated": "2026-11-12"
     },
     {
       "id": "entrance_principal_interaction",
@@ -130,8 +247,182 @@
         "Principal interaction mein kya puchte hain?",
         "Interview panel kaisa hota hai?"
       ],
-      "answer": "Candidates who qualify the online entrance test attend an interaction with the **Principal and a senior faculty panel**.\n- The interaction assesses communication confidence, general awareness, reading habits, and overall alignment with boarding school values.\n- For Class 11 applicants, subject aptitude and chosen stream compatibility are also reviewed.\n- Final selection offer letters are issued based on the combined assessment.",
-      "last_updated": "2026-11-11"
+      "answer": "Candidates qualifying the online entrance papers attend an interaction with **Principal Mr. Amandeep Sandhu** and senior faculty members. The panel assesses:\n- Communication confidence, intellectual curiosity, and reading habits\n- Sociability and readiness for residential boarding community life\n- For Class 11 applicants: academic stream aptitude (Science, Commerce, or Humanities).",
+      "source": "official",
+      "source_url": "https://sherwood.edu.in/Home/AdmissionProcess",
+      "fetched_on": "2026-11-12",
+      "demo": false,
+      "last_updated": "2026-11-12"
+    },
+    {
+      "id": "facilities_auditoriums_halls",
+      "category": "Facilities",
+      "questions": [
+        "What auditorium and hall facilities exist on campus?",
+        "Tell me about Millman Hall and Baston Centre",
+        "Does Sherwood have an auditorium?",
+        "School mein auditorium kaisa hai?",
+        "Baston Centre aur Millman Hall kya hain?"
+      ],
+      "answer": "Sherwood College features two renowned institutional auditoriums and specialized presentation spaces:\n- **Millman Hall**: The historic 400-seat heritage auditorium, named after founder Bishop Robert Milman\n- **Baston Centre**: A state-of-the-art 900-seat multi-purpose auditorium for major theatrical productions, national debates, and assemblies\n- **Pemberton Studio**: Dedicated executive conference studio\n- **Audio-Visual Room**: Modern multimedia projection room for lectures and seminars.",
+      "source": "official",
+      "source_url": "https://sherwood.edu.in/Home/Infrastructure",
+      "fetched_on": "2026-11-12",
+      "demo": false,
+      "last_updated": "2026-11-12"
+    },
+    {
+      "id": "facilities_labs_classrooms",
+      "category": "Facilities",
+      "questions": [
+        "What are the laboratory and classroom facilities?",
+        "Does the school have a robotics lab?",
+        "Smart classrooms in Sherwood",
+        "Labs kaisi hain school ki?",
+        "Robotics aur computer lab hai kya?"
+      ],
+      "answer": "The academic infrastructure at Sherwood College includes:\n- **Interactive Smart Classrooms**: Smart digital display boards installed in all classrooms\n- **Science Laboratories**: Specialized physics, chemistry, and biology experimental practical labs\n- **Computer Labs**: High-speed internet networked computer workstations\n- **Robotics Laboratory**: Hands-on experiential robotics and STEM learning facility\n- **Resource Centre**: Library and comprehensive Reference Library.",
+      "source": "official",
+      "source_url": "https://sherwood.edu.in/Home/Infrastructure",
+      "fetched_on": "2026-11-12",
+      "demo": false,
+      "last_updated": "2026-11-12"
+    },
+    {
+      "id": "facilities_sports_extensive",
+      "category": "Facilities",
+      "questions": [
+        "What sports facilities are available?",
+        "What games can students play at Sherwood?",
+        "Sports and athletics infrastructure",
+        "Khel kood ke liye kya suvidhayein hain?",
+        "Sports facilities kaisi hain?"
+      ],
+      "answer": "Sherwood College provides comprehensive infrastructure for outdoor and indoor sports:\n- **Major Field Sports**: Cricket, Football, Hockey, Swimming, Athletics, and Cross-Country running\n- **Court Games**: Basketball, Lawn Tennis, Table Tennis, Volleyball, Squash, and Badminton\n- **Precision & Indoor Sports**: Snooker, Billiards, Shooting, Diving, Gymnastics, and Chess\n- All students are required to participate in daily physical training and inter-house matches.",
+      "source": "official",
+      "source_url": "https://sherwood.edu.in/Home/Infrastructure",
+      "fetched_on": "2026-11-12",
+      "demo": false,
+      "last_updated": "2026-11-12"
+    },
+    {
+      "id": "boarding_hostels_dining",
+      "category": "Boarding and hostel",
+      "questions": [
+        "How is boarding and dining organized?",
+        "Hostel facilities for boys and girls",
+        "How many dining halls are there?",
+        "Hostel aur mess ka system kaisa hai?",
+        "Khane-peene ki vyavastha kaisi hai?"
+      ],
+      "answer": "Residential life at Sherwood College is organized across a traditional house system:\n- **Accommodation**: Separate residential hostels for boys and girls with Matrons and Wardens overseeing health, hygiene, and welfare\n- **Dining**: **Three spacious dining halls** serving hygienic vegetarian and non-vegetarian menus prepared under strict supervision\n- **Supervision**: House Masters and House Tutors provide continuous academic and personal mentorship\n- **Food Rule**: Outside food parcels and tuck are strictly prohibited.",
+      "source": "official",
+      "source_url": "https://sherwood.edu.in/Home/Infrastructure",
+      "fetched_on": "2026-11-12",
+      "demo": false,
+      "last_updated": "2026-11-12"
+    },
+    {
+      "id": "alumni_notable_achievers",
+      "category": "About the school",
+      "questions": [
+        "Who are some famous alumni of Sherwood College?",
+        "Notable Old Sherwoodians",
+        "Did Field Marshal Sam Manekshaw study here?",
+        "Famous students from Sherwood",
+        "Kaun se mashhoor log padhe hain Sherwood se?"
+      ],
+      "answer": "Sherwood College's alumni body includes distinguished leaders across the armed forces, civil service, arts, and industry:\n- **Armed Forces**: Field Marshal Sam Manekshaw (first Field Marshal of India), Major Som Nath Sharma (recipient of India's first Param Vir Chakra), General V.N. Sharma (Chief of Army Staff)\n- **Public Service**: Salman Haidar (Foreign Secretary), Justice Ravi Dhawan (Chief Justice, Patna High Court)\n- **Cinema & Arts**: Amitabh Bachchan, Kabir Bedi, Dalip Tahil, Ram Kapoor, Vivek Mushran\n- **Industry**: Sir Kul Rattan Chadha.",
+      "source": "official",
+      "source_url": "https://sherwood.edu.in/Home/Alumni",
+      "fetched_on": "2026-11-12",
+      "demo": false,
+      "last_updated": "2026-11-12"
+    },
+    {
+      "id": "alumni_amitabh_bachchan_quote",
+      "category": "About the school",
+      "questions": [
+        "Did Amitabh Bachchan study at Sherwood College?",
+        "What did Amitabh Bachchan say about Sherwood?",
+        "Amitabh Bachchan testimonial",
+        "Kya Amitabh Bachchan Sherwood ke student the?",
+        "Amitabh Bachchan ne school ke baare mein kya bola?"
+      ],
+      "answer": "Yes, Bollywood legend **Amitabh Bachchan** is one of Sherwood College's most celebrated alumni. On the official school website, he reflects:\n\n> *\"The school that influenced me most was Sherwood College in Nainital. If I had to talk about Sherwood I would write a book on it! Those three years were by far the happiest times of my life... What I am now is largely because of Sherwood. It taught me to be independent, fearless, loyal and truthful. It taught me values and these, I think, have stayed with me through life.\"*",
+      "source": "official",
+      "source_url": "https://sherwood.edu.in/Home/CampusFacility",
+      "fetched_on": "2026-11-12",
+      "demo": false,
+      "last_updated": "2026-11-12"
+    },
+    {
+      "id": "contact_front_office",
+      "category": "Contact and campus visit",
+      "questions": [
+        "What is the contact number of Sherwood College?",
+        "How can I call the school office?",
+        "Front office phone number and email",
+        "School ka phone number aur email kya hai?",
+        "Office ka landline number"
+      ],
+      "answer": "Official contact details for the **Principal & Front Office**:\n- **Front Office Landline**: **`+91-5942-236361`**\n- **Official Fax**: `+91-5942-239502`\n- **General Email**: **`contact@sherwood.edu.in`**\n- **Postal Address**: Sherwood College, Ayarpatta, Tallital, Nainital – 263002, Uttarakhand, India",
+      "source": "official",
+      "source_url": "https://sherwood.edu.in/Home/ContactUs",
+      "fetched_on": "2026-11-12",
+      "demo": false,
+      "last_updated": "2026-11-12"
+    },
+    {
+      "id": "contact_horsman_wing",
+      "category": "Contact and campus visit",
+      "questions": [
+        "How can I contact the junior wing (Horsman Wing)?",
+        "Horsman wing phone number and email",
+        "Headmistress contact number",
+        "Chhote bacchon ke wing ka contact kya hai?",
+        "Horsman wing ka phone"
+      ],
+      "answer": "Official contact details for the **Horsman Wing** (Junior / Primary section):\n- **Telephone**: **`+91-7579438392`** / **`+91-9411132312`**\n- **Emails**: `headmistress@sherwood.edu.in` and `horsmanwing@sherwood.edu.in`",
+      "source": "official",
+      "source_url": "https://sherwood.edu.in/Home/ContactUs",
+      "fetched_on": "2026-11-12",
+      "demo": false,
+      "last_updated": "2026-11-12"
+    },
+    {
+      "id": "contact_accounts_bursar",
+      "category": "Contact and campus visit",
+      "questions": [
+        "How do I contact the Accounts Office or Bursar?",
+        "Accounts department phone number and email",
+        "Fee queries contact number",
+        "Accounts office ka number kya hai?",
+        "Fees ke silsile mein kisse contact karein?"
+      ],
+      "answer": "Official contact details for the **Accounts & Billing Office**:\n- **Phone**: **`+91-5942-239710`**\n- **Email**: **`accounts@sherwood.edu.in`**\n- You can contact them directly for confirmed fee payment schedules, bank transfer instructions, and official receipts.",
+      "source": "official",
+      "source_url": "https://sherwood.edu.in/Home/ContactUs",
+      "fetched_on": "2026-11-12",
+      "demo": false,
+      "last_updated": "2026-11-12"
+    },
+    {
+      "id": "contact_dispatch_senior_master",
+      "category": "Contact and campus visit",
+      "questions": [
+        "What is the contact number for Dispatch Office and Senior Master?",
+        "Senior master phone number",
+        "Dispatch office contact",
+        "Senior master se baat karne ka number",
+        "Dispatch department contact"
+      ],
+      "answer": "Official direct department contact lines:\n- **Senior Master**: `+91-5942-235404`\n- **Dispatch Office Phone**: `+91-5942-239711`\n- **Dispatch Email**: `dispatch@sherwood.edu.in`",
+      "source": "official",
+      "source_url": "https://sherwood.edu.in/Home/ContactUs",
+      "fetched_on": "2026-11-12",
+      "demo": false,
+      "last_updated": "2026-11-12"
     },
     {
       "id": "fees_annual_overview",
@@ -144,8 +435,10 @@
         "Total kharcha kitna aayega?",
         "School fees structure"
       ],
-      "answer": "The total annual charges at Sherwood College, including tuition and boarding components, are approximately **₹7.5 Lakh to ₹8.0 Lakh**.\n\n| Term | Due Period | Approximate Amount |\n| :--- | :--- | :--- |\n| **Term 1** | At the time of confirmed admission | ₹5,00,000 |\n| **Term 2** | Billed in June | ₹2,50,000 – ₹3,00,000 |\n| **Total Annual Charges** | Academic session | **₹7,50,000 – ₹8,00,000** |\n\n*Note: Mid-term withdrawals are non-refundable. The school does not offer scholarships or fee concessions.*",
-      "last_updated": "2026-11-11"
+      "answer": "*[Sample figures for demo - please confirm with the admissions office]*\n\nTotal annual charges across all academic and boarding components are estimated at approximately **₹7.5 Lakh to ₹8.0 Lakh**:\n\n| Payment Schedule | Term | Approximate Amount (Sample) |\n| :--- | :--- | :--- |\n| **At Confirmed Admission** | Term 1 (Admission & Term Fee) | ₹5,00,000 |\n| **Billed in June** | Term 2 (Tuition, Boarding & Imprest) | ₹2,50,000 – ₹3,00,000 |\n| **Total Estimated Annual Outlay** | Full Academic Session | **₹7,50,000 – ₹8,00,000** |\n\n*Note: Mid-term withdrawals are non-refundable. For official invoices, contact the Accounts Office at accounts@sherwood.edu.in.*",
+      "source": "demo",
+      "demo": true,
+      "last_updated": "2026-11-12"
     },
     {
       "id": "fees_admission_one_time",
@@ -157,8 +450,10 @@
         "One time admission charges kitne hain?",
         "Registration charges kya hain?"
       ],
-      "answer": "[FILL: specify exact one-time non-refundable admission fee and registration processing fee amount]",
-      "last_updated": "2026-11-11"
+      "answer": "*[Sample figures for demo - please confirm with the admissions office]*\n\nFor new enrollments, the estimated one-time charges are:\n- **Registration Processing Fee**: ₹5,000 (non-refundable, payable during portal registration)\n- **One-time Admission Fee**: ₹1,00,000 (payable once upon seat acceptance)\n- **Refundable Caution Deposit**: ₹50,000 (interest-free security deposit refundable upon leaving the institution).",
+      "source": "demo",
+      "demo": true,
+      "last_updated": "2026-11-12"
     },
     {
       "id": "fees_tuition_breakdown",
@@ -170,8 +465,10 @@
         "Padhai ki fees alag se kitni hai?",
         "Tuition charges kitne hain?"
       ],
-      "answer": "[FILL: detailed class-wise tuition fee breakdown across Classes 3-12]",
-      "last_updated": "2026-11-11"
+      "answer": "*[Sample figures for demo - please confirm with the admissions office]*\n\nEstimated annual tuition fees across grade divisions:\n\n| Grade Band | Annual Tuition (Sample) |\n| :--- | :--- |\n| **Primary (Classes 3 to 5)** | ₹2,80,000 |\n| **Middle School (Classes 6 to 8)** | ₹3,20,000 |\n| **Secondary & Senior Secondary (Classes 9 & 11)** | ₹3,60,000 |\n\n*Note: Tuition charges exclude residential boarding, dining, and activity fees.*",
+      "source": "demo",
+      "demo": true,
+      "last_updated": "2026-11-12"
     },
     {
       "id": "fees_boarding_hostel",
@@ -183,8 +480,10 @@
         "Hostel aur khane ke charges kitne hain?",
         "Boarding fees kitni lagti hai?"
       ],
-      "answer": "Boarding, dormitory accommodation, laundry, and meals are included within the comprehensive annual charges of approximately **₹7.5 Lakh to ₹8.0 Lakh**.\n\n[FILL: itemized breakdown of boarding, food/mess, and laundry fee components]",
-      "last_updated": "2026-11-11"
+      "answer": "*[Sample figures for demo - please confirm with the admissions office]*\n\nResidential accommodation, dining, and daily pastoral care components:\n- **Boarding & Lodging**: ₹2,50,000 per year (dormitory room, linen, hot water, power backup)\n- **Dining & Mess**: ₹1,20,000 per year (3 wholesome meals, evening tea, fresh fruit, milk)\n- **Laundry & Housekeeping**: ₹30,000 per year (in-house laundry, pressing, linen maintenance)\n\n*All boarding charges are billed in two semi-annual installments.*",
+      "source": "demo",
+      "demo": true,
+      "last_updated": "2026-11-12"
     },
     {
       "id": "fees_caution_deposit",
@@ -196,8 +495,10 @@
         "Caution deposit kitna jama hota hai?",
         "Kya security money refundable hai?"
       ],
-      "answer": "[FILL: refundable caution/security deposit amount and refund terms upon leaving school]",
-      "last_updated": "2026-11-11"
+      "answer": "*[Sample figures for demo - please confirm with the admissions office]*\n\nYes, an interest-free **refundable Caution Deposit of ₹50,000** is deposited at the time of admission.\n- It is held by the school against any damages or dues\n- Refunded via bank transfer when the student leaves the school after clearance of all dues and issuance of the Transfer Certificate.",
+      "source": "demo",
+      "demo": true,
+      "last_updated": "2026-11-12"
     },
     {
       "id": "fees_payment_modes",
@@ -209,8 +510,10 @@
         "Fees kaise pay kar sakte hain?",
         "Payment options kya hain?"
       ],
-      "answer": "[FILL: officially accepted payment modes e.g., Net Banking, NEFT/RTGS, Credit/Debit card portal, Demand Draft details]",
-      "last_updated": "2026-11-11"
+      "answer": "*[Sample figures for demo - please confirm with the admissions office]*\n\nSchool fee remittances are accepted through the following verified banking channels:\n1. **Online Payment Gateway**: Net Banking, Debit/Credit Cards via the school admission portal\n2. **Bank Wire (NEFT / RTGS)**: Direct institutional bank account transfer (official account details are provided upon receipt of offer letter)\n3. **Demand Draft**: Favoring *\"Sherwood College, Nainital\"* payable at Nainital\n\n*Cash payments are strictly discouraged for security and auditing compliance.*",
+      "source": "demo",
+      "demo": true,
+      "last_updated": "2026-11-12"
     },
     {
       "id": "fees_refund_policy",
@@ -223,7 +526,11 @@
         "Fees wapas hoti hai kya?"
       ],
       "answer": "The school adheres to a strict financial policy:\n- **Mid-term withdrawals are non-refundable** under all circumstances.\n- Once a seat is accepted and term fees are deposited, fee amounts are non-transferable and non-refundable.",
-      "last_updated": "2026-11-11"
+      "source": "official",
+      "source_url": "https://sherwood.edu.in/Home/AdmissionProcess",
+      "fetched_on": "2026-11-12",
+      "demo": false,
+      "last_updated": "2026-11-12"
     },
     {
       "id": "fees_concessions_discounts",
@@ -236,35 +543,11 @@
         "Army/Defence quota discount hai kya?"
       ],
       "answer": "Sherwood College **does not offer sibling discounts, alumni concessions, or defence quota fee reductions**. All students are admitted under the uniform fee schedule.",
-      "last_updated": "2026-11-11"
-    },
-    {
-      "id": "boarding_hostel_life",
-      "category": "Boarding and hostel",
-      "questions": [
-        "How is boarding and hostel life organized?",
-        "Dormitory facilities and house system",
-        "How are students looked after in hostels?",
-        "Hostel ka system kaisa hai?",
-        "Bacche kaise rehte hain boarding mein?",
-        "Dormitory arrangement"
-      ],
-      "answer": "Boarding at Sherwood College is organized on a **house system** with comfortable, hygienic dormitory-style living:\n- **Pastoral Staffing**: Every house has a dedicated **Matron** and **Warden** who oversee daily welfare, health, and hygiene.\n- **Mentorship**: Senior faculty members serve as **House Masters** and **House Tutors**, providing continuous academic and personal mentorship.\n- **Support**: Dedicated laundry and housekeeping staff are assigned to every house.\n- **Community**: Fosters lifelong camaraderie, self-reliance, and collaborative discipline.",
-      "last_updated": "2026-11-11"
-    },
-    {
-      "id": "boarding_meals_dining",
-      "category": "Boarding and hostel",
-      "questions": [
-        "What kind of food is served in the mess?",
-        "Is vegetarian and non-vegetarian food provided?",
-        "Can parents send outside food or tuck?",
-        "Mess ka khana kaisa hota hai?",
-        "Veg aur non-veg dono milta hai?",
-        "Outside food allow hai?"
-      ],
-      "answer": "The dining hall serves balanced, nutritious meals prepared under strict hygienic supervision:\n- **Menu**: Both **vegetarian and non-vegetarian** options are prepared daily.\n- **Dietary Care**: Wholesome meals, fresh dairy, and fruits are provided to meet growing adolescents' nutritional needs.\n- **Strict Rule**: **Outside food and tuck parcels are strictly prohibited** on campus to maintain discipline and dietary health.",
-      "last_updated": "2026-11-11"
+      "source": "official",
+      "source_url": "https://sherwood.edu.in/Home/AdmissionProcess",
+      "fetched_on": "2026-11-12",
+      "demo": false,
+      "last_updated": "2026-11-12"
     },
     {
       "id": "facilities_medical_healthcare",
@@ -278,20 +561,11 @@
         "Emergency hospital tie-up"
       ],
       "answer": "Sherwood College maintains comprehensive 24/7 on-campus healthcare infrastructure:\n- **Resident Doctor**: A qualified medical doctor resides on campus available 24/7.\n- **Nursing Staff**: Two full-time trained staff nurses manage the school infirmary.\n- **Ambulance**: A fully equipped ambulance is stationed on campus at all times.\n- **Visiting Specialists**: Pediatricians and medical specialists attend the infirmary on alternate days.\n- **Hospital Affiliation**: For advanced medical emergencies, the school is affiliated with **B. D. Pandey District Hospital** in Nainital and multi-specialty tertiary hospitals in Haldwani.\n- **Mental Wellness**: A resident child psychologist and mental-wellness counsellor provide pastoral guidance.",
-      "last_updated": "2026-11-11"
-    },
-    {
-      "id": "facilities_sports_cocurricular",
-      "category": "Facilities",
-      "questions": [
-        "What sports and extra-curricular facilities exist?",
-        "Sports facilities at Sherwood",
-        "What games can students play?",
-        "Sports aur activities kya kya hain?",
-        "Khel kood ki facilities kaisi hain?"
-      ],
-      "answer": "Sports and outdoor leadership are core pillars of the Sherwood experience:\n- **Major Sports**: Cricket, football, hockey, basketball, badminton, tennis, swimming, athletics, and cross-country.\n- **Inter-House Competitions**: Regular inter-house tournaments foster spirited, healthy competition.\n- **Co-Curricular**: Active debate societies, dramatics, Western and Indian music ensembles, visual arts, and outdoor trekking expeditions.\n- **Philosophy**: All students are encouraged and required to participate actively in daily physical training and sports.",
-      "last_updated": "2026-11-11"
+      "source": "official",
+      "source_url": "https://sherwood.edu.in/Home/CampusFacility",
+      "fetched_on": "2026-11-12",
+      "demo": false,
+      "last_updated": "2026-11-12"
     },
     {
       "id": "academics_coaching_policy",
@@ -304,7 +578,11 @@
         "Competitive entrance exams ki tayyari"
       ],
       "answer": "Sherwood College **does NOT provide on-campus competitive coaching** for examinations such as JEE, NEET, SAT, CUET, or CLAT.\n\nThe school's focus is on thorough CISCE board curriculum mastery, intellectual curiosity, analytical thinking, and well-rounded character building.",
-      "last_updated": "2026-11-11"
+      "source": "official",
+      "source_url": "https://sherwood.edu.in/Home/AboutUs",
+      "fetched_on": "2026-11-12",
+      "demo": false,
+      "last_updated": "2026-11-12"
     },
     {
       "id": "academics_languages_offered",
@@ -317,7 +595,11 @@
         "Kaunsi bhashayein padhai jaati hain?"
       ],
       "answer": "Foreign languages (such as French, German, or Spanish) are **NOT offered** at Sherwood College. The languages taught in the curriculum are **English and Hindi**.",
-      "last_updated": "2026-11-11"
+      "source": "official",
+      "source_url": "https://sherwood.edu.in/Home/AboutUs",
+      "fetched_on": "2026-11-12",
+      "demo": false,
+      "last_updated": "2026-11-12"
     },
     {
       "id": "transport_facilities",
@@ -329,8 +611,10 @@
         "Transport ki kya suvidha hai?",
         "Vacation mein bacche kaise aate-jaate hain?"
       ],
-      "answer": "[FILL: school transport facilities for local Nainital students and escort services to Kathgodam railway station / Pantnagar airport during term breaks]",
-      "last_updated": "2026-11-11"
+      "answer": "*[Sample figures for demo - please confirm with the admissions office]*\n\nFor vacation transit, the school organizes coordinated escort services for boarders:\n- **Kathgodam Railway Station**: Supervised school buses and faculty escorts to connect with trains to Delhi / Lucknow\n- **Pantnagar Airport / IGI New Delhi**: Supervised transit groups for outstation boarders flying home during major winter and summer breaks\n- Local day transport within Nainital is arranged on designated routes.",
+      "source": "demo",
+      "demo": true,
+      "last_updated": "2026-11-12"
     },
     {
       "id": "school_timings_daily_routine",
@@ -342,8 +626,10 @@
         "Daily routine kaisa hota hai bacchon ka?",
         "Subah kitne baje uthte hain aur raat ko lights out kab hota hai?"
       ],
-      "answer": "Boarding students follow a disciplined, structured daily regimen that balances classes, prep, sports, and rest:\n- **Morning**: Rising bell, physical conditioning/morning assembly, breakfast.\n- **Academic Sessions**: Academic classes and laboratory practicals.\n- **Afternoon**: Lunch, quiet hour/remedial support, followed by afternoon sports and games.\n- **Evening**: Evening wash, supervised prep (study hours), and dinner.\n- **Night**: House meetings and lights out.\n\n[FILL: exact daily bell schedule with specific wake-up, assembly, class period, prep, and lights out timings]",
-      "last_updated": "2026-11-11"
+      "answer": "*[Sample figures for demo - please confirm with the admissions office]*\n\nTypical weekday schedule for boarding students at Sherwood College:\n\n| Time Slot | Activity |\n| :--- | :--- |\n| **06:00 AM** | Rising Bell & Morning Conditioning / Wash |\n| **07:00 AM** | Chota Hazri & Breakfast |\n| **08:00 AM – 01:30 PM** | Morning Assembly & Academic Periods |\n| **01:30 PM – 02:30 PM** | Lunch in Dining Halls & Quiet Hour |\n| **03:30 PM – 05:30 PM** | Inter-House Sports, Athletics & Co-Curriculars |\n| **06:00 PM – 08:00 PM** | Supervised Evening Prep (Study Hour) |\n| **08:00 PM – 09:00 PM** | Dinner & House Fellowship |\n| **09:30 PM / 10:00 PM** | Junior / Senior Lights Out |",
+      "source": "demo",
+      "demo": true,
+      "last_updated": "2026-11-12"
     },
     {
       "id": "uniform_and_books",
@@ -355,8 +641,10 @@
         "Uniform aur kitabein kahan se milengi?",
         "Kapdon ki list kab milti hai?"
       ],
-      "answer": "Upon confirmed admission, parents receive an official **clothing checklist and medical dossier** detailing all required uniform items, casual wear, and personal necessities.\n\n[FILL: authorized school uniform vendor details, textbook store distribution dates, and estimated cost of clothing pack]",
-      "last_updated": "2026-11-11"
+      "answer": "*[Sample figures for demo - please confirm with the admissions office]*\n\n- **Clothing Checklist**: Issued along with the acceptance dossier upon confirmed admission, outlining exact blazer, trousers/skirts, woolens, sports kit, and casual items.\n- **Vendor Distribution**: School blazers, crests, ties, and textbooks are supplied on campus through authorized campus outfitters during admission week.\n- **Estimated Kit Outlay**: The complete boarding uniform and bedding wardrobe package is approximately ₹35,000 – ₹45,000 depending on class level.",
+      "source": "demo",
+      "demo": true,
+      "last_updated": "2026-11-12"
     },
     {
       "id": "safety_anti_ragging_discipline",
@@ -369,7 +657,11 @@
         "Campus kitna safe hai bacchon ke liye?"
       ],
       "answer": "Sherwood College enforces a **strict zero-tolerance policy against bullying and ragging**:\n- Any student found engaging in bullying, physical intimidation, or harassment is liable to **immediate suspension or expulsion**.\n- The campus is under 24/7 security surveillance with round-the-clock guards and monitoring.\n- House Masters, Wardens, Matrons, and senior prefects actively foster a supportive, familial atmosphere.",
-      "last_updated": "2026-11-11"
+      "source": "official",
+      "source_url": "https://sherwood.edu.in/Home/CampusFacility",
+      "fetched_on": "2026-11-12",
+      "demo": false,
+      "last_updated": "2026-11-12"
     },
     {
       "id": "mobile_phone_gadget_policy",
@@ -383,7 +675,11 @@
         "Gadget policy kya hai?"
       ],
       "answer": "Sherwood College has a **strict total gadget ban**:\n- **Prohibited Devices**: Smartphones, basic keypad mobile phones, laptops, smartwatches, and internet-enabled gaming devices are strictly prohibited.\n- **Calling Policy**: Parent calling is restricted to **15 minutes per week** through official school telephone lines at scheduled house timings.\n- Any contraband gadget found on campus is confiscated immediately.",
-      "last_updated": "2026-11-11"
+      "source": "official",
+      "source_url": "https://sherwood.edu.in/Home/CampusFacility",
+      "fetched_on": "2026-11-12",
+      "demo": false,
+      "last_updated": "2026-11-12"
     },
     {
       "id": "visitation_leave_guardian_policy",
@@ -396,21 +692,12 @@
         "Local guardian kahan ka hona chahiye?",
         "Parents kab milne aa sakte hain?"
       ],
-      "answer": "- **Leave (Exeat)**: One overnight leave per term is permitted, subject to institutional discretion and academic schedule.\n- **Local Guardian (LG)**: A student's appointed Local Guardian **must reside within Nainital district**.\n- **Campus Visits**: Prospective parents must book campus visits in advance through the admissions office. Enrolled parents coordinate visits exclusively through their child's House Master.",
-      "last_updated": "2026-11-11"
-    },
-    {
-      "id": "contact_admissions_office",
-      "category": "Contact and campus visit",
-      "questions": [
-        "How can I contact the admissions office?",
-        "What is the admissions phone number and email?",
-        "Admissions office address",
-        "Admissions desk se kaise baat karein?",
-        "Phone number kya hai admission enquiry ka?"
-      ],
-      "answer": "You can reach the Sherwood College Admissions Office via:\n- **Address**: Sherwood College, Ayarpatta Hill, Nainital, Uttarakhand 263002\n- **Online Portal**: Submit an inquiry or start your application directly at `/admission-details`\n\n[FILL: confirmed official admissions phone number and confirmed official admissions email address]",
-      "last_updated": "2026-11-11"
+      "answer": "- **Leave (Exeat)**: One overnight leave per term is permitted, subject to institutional discretion and academic schedule.\n- **Local Guardian (LG)**: A student's appointed Local Guardian **must reside within Nainital district**.\n- **Campus Visits**: Prospective parents must book campus visits in advance through the admissions office (`+91 94563 16655`). Enrolled parents coordinate visits exclusively through their child's House Master.",
+      "source": "official",
+      "source_url": "https://sherwood.edu.in/Home/AdmissionProcess",
+      "fetched_on": "2026-11-12",
+      "demo": false,
+      "last_updated": "2026-11-12"
     },
     {
       "id": "scholarships_financial_aid",
@@ -423,8 +710,11 @@
         "Fees mein koi concession ya financial aid hai?"
       ],
       "answer": "Sherwood College **does not offer scholarship programmes, financial aid schemes, or merit-based fee waivers**. All students are enrolled under the standard institutional fee structure.",
-      "last_updated": "2026-11-11"
+      "source": "official",
+      "source_url": "https://sherwood.edu.in/Home/AdmissionProcess",
+      "fetched_on": "2026-11-12",
+      "demo": false,
+      "last_updated": "2026-11-12"
     }
   ]
 }
-

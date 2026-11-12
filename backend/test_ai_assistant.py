@@ -185,7 +185,7 @@ def test_streaming_endpoint(test_app):
         yield "Sherwood."
 
     with patch.object(ai_router_module, "stream_ai_reply", side_effect=mock_stream):
-        response = client.post("/api/ai/chat/stream", json={"message": "Hello"})
+        response = client.post("/api/ai/chat/stream", json={"message": "What is the admission procedure?"})
         assert response.status_code == 200
         assert "text/event-stream" in response.headers["content-type"]
         assert response.headers["x-accel-buffering"] == "no"

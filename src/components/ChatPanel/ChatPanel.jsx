@@ -263,7 +263,28 @@ export default function ChatPanel({
               </div>
 
               {message.role === "assistant" ? (
-                <SafeMarkdown content={message.text} />
+                <>
+                  <SafeMarkdown content={message.text} />
+                  {message.isDemo && (
+                    <div className="chat-demo-pill" role="status">
+                      ⚠️ Demo data: please confirm details with the admissions office.
+                    </div>
+                  )}
+                  {Array.isArray(message.chips) && message.chips.length > 0 && (
+                    <div className="chat-inline-chips">
+                      {message.chips.map((chip) => (
+                        <button
+                          key={chip}
+                          type="button"
+                          className="chat-quick-chip"
+                          onClick={() => sendMessage(chip)}
+                        >
+                          {chip}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </>
               ) : (
                 <p className="chat-user-text">{message.text}</p>
               )}

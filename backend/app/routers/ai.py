@@ -141,11 +141,13 @@ def chat(
             return {"answer": answer, "model": "canned-greeting", "chips": chips}
 
         matched_entry, score = find_matching_entry(user_message)
+        is_demo = False
         if matched_entry and score >= 0.6:
             matched_faq_ids = [matched_entry["id"]]
+            is_demo = bool(matched_entry.get("demo", False) or matched_entry.get("source") == "demo")
 
         answer = generate_ai_reply(user_message, history=history_dicts, audience=verified_audience)
-        return {"answer": answer, "model": configured_model()}
+        return {"answer": answer, "model": configured_model(), "is_demo": is_demo}
     except (AIConfigurationError, AIProviderRateLimitError, AIProviderUnavailableError) as error:
         error_type = error.__class__.__name__
         _raise_ai_http_error(error)
@@ -177,6 +179,7 @@ async def chat_stream(
     history_dicts = [item.model_dump() for item in payload.history]
 
     # Check fast path
+    is_demo = False
     greeting_result = get_canned_greeting_reply(user_message, history=history_dicts)
     if greeting_result:
         source = "greeting"
@@ -184,7 +187,9 @@ async def chat_stream(
     else:
         source = "faq"
         matched_entry, score = find_matching_entry(user_message)
-        matched_faq_ids = [matched_entry["id"]] if (matched_entry and score >= 0.6) else []
+        if matched_entry and score >= 0.6:
+            matched_faq_ids = [matched_entry["id"]]
+            is_demo = bool(matched_entry.get("demo", False) or matched_entry.get("source") == "demo")
 
     start_time = monotonic()
 
@@ -222,6 +227,9 @@ async def chat_stream(
                     break
                 # Yield SSE JSON data chunk
                 yield f"data: {json.dumps({'chunk': chunk})}\n\n"
+
+            if is_demo:
+                yield f"data: {json.dumps({'is_demo': True})}\n\n"
 
             yield "data: [DONE]\n\n"
         except (AIConfigurationError, AIProviderRateLimitError, AIProviderUnavailableError) as error:

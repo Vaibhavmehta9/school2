@@ -112,6 +112,8 @@ export function useChat({ accessToken = null, role = "guest" } = {}) {
       // Create empty placeholder for assistant response
       const assistantMessageIndex = nextMessages.length;
       let assistantText = "";
+      let isDemoMessage = false;
+      let assistantChips = [];
 
       const controller = new AbortController();
       abortControllerRef.current = controller;
@@ -125,6 +127,14 @@ export function useChat({ accessToken = null, role = "guest" } = {}) {
           })),
           accessToken,
           signal: controller.signal,
+          onDemoFlag: (flag) => {
+            isDemoMessage = Boolean(flag);
+          },
+          onChips: (chips) => {
+            if (Array.isArray(chips)) {
+              assistantChips = chips;
+            }
+          },
           onChunk: (chunk) => {
             setIsStreaming(true);
             assistantText += chunk;
@@ -133,6 +143,8 @@ export function useChat({ accessToken = null, role = "guest" } = {}) {
               updated[assistantMessageIndex] = {
                 role: "assistant",
                 text: assistantText,
+                isDemo: isDemoMessage,
+                chips: assistantChips,
                 timestamp: Date.now(),
               };
               return updated;
@@ -148,6 +160,8 @@ export function useChat({ accessToken = null, role = "guest" } = {}) {
                 updated[assistantMessageIndex] = {
                   role: "assistant",
                   text: finalText,
+                  isDemo: isDemoMessage,
+                  chips: assistantChips,
                   timestamp: Date.now(),
                 };
                 return updated;

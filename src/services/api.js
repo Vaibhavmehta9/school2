@@ -246,7 +246,17 @@ export async function askSchoolAI(input, options = {}) {
   return data.answer;
 }
 
-export async function streamSchoolAI({ message, history = [], accessToken = null, signal, onChunk, onFinish, onError }) {
+export async function streamSchoolAI({
+  message,
+  history = [],
+  accessToken = null,
+  signal,
+  onChunk,
+  onFinish,
+  onError,
+  onDemoFlag,
+  onChips,
+}) {
   const headers = { "Content-Type": "application/json" };
   if (accessToken) headers.Authorization = `Bearer ${accessToken}`;
 
@@ -308,6 +318,12 @@ export async function streamSchoolAI({ message, history = [], accessToken = null
           if (parsed.chunk) {
             fullAnswer += parsed.chunk;
             if (onChunk) onChunk(parsed.chunk, fullAnswer);
+          }
+          if (parsed.is_demo !== undefined && onDemoFlag) {
+            onDemoFlag(Boolean(parsed.is_demo));
+          }
+          if (parsed.chips && onChips) {
+            onChips(parsed.chips);
           }
         } catch (parseErr) {
           if (payload.includes("error")) throw parseErr;
