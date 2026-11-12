@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import SchoolCrest from "../../../components/SchoolCrest";
 import ThemeToggle from "../../../components/ThemeToggle";
 import Button from "../../../components/Button/Button";
+import { getDefaultRouteForRole } from "../../../auth/cognito";
 import "./Navbar.css";
 
 export default function Navbar({ user, signOut }) {
@@ -43,16 +44,27 @@ export default function Navbar({ user, signOut }) {
 
             <div className="sherwood-navbar__mobile-actions">
               {user ? (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    signOut();
-                    setMenuOpen(false);
-                  }}
-                >
-                  Logout ({user.role})
-                </Button>
+                <>
+                  <Button
+                    as={Link}
+                    to={getDefaultRouteForRole(user.role)}
+                    variant="primary"
+                    size="sm"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    My Dashboard
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      signOut();
+                      setMenuOpen(false);
+                    }}
+                  >
+                    Logout
+                  </Button>
+                </>
               ) : (
                 <Button
                   as={Link}
@@ -79,13 +91,23 @@ export default function Navbar({ user, signOut }) {
           <div className="sherwood-navbar__desktop-actions">
             <ThemeToggle />
             {user ? (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={signOut}
-              >
-                Logout ({user.role})
-              </Button>
+              <>
+                <Button
+                  as={Link}
+                  to={getDefaultRouteForRole(user.role)}
+                  variant="primary"
+                  size="sm"
+                >
+                  My Dashboard
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={signOut}
+                >
+                  Logout
+                </Button>
+              </>
             ) : (
               <Button
                 as={Link}

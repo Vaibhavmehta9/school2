@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { getCognitoConfigurationError, getDefaultRouteForRole } from "../auth/cognito";
 import { useCognitoAuth } from "../auth/useCognitoAuth";
+import { clearSignedOutMarker, getIsSigningOut, wasSignedOut } from "../auth/signOutState";
 import Button from "../components/Button/Button";
 import "../auth/AuthCallback.css";
 
@@ -57,9 +58,9 @@ export default function Login() {
     }
   }, [session, returnTo, navigate]);
 
-  // In production (not localhost), auto-start Cognito sign-in if configured
+  // In production (not localhost), auto-start Cognito sign-in only if NOT signing out
   useEffect(() => {
-    if (session || isLocalHost || !isConfigured || hasStartedSignIn.current) return;
+    if (session || isLocalHost || !isConfigured || hasStartedSignIn.current || getIsSigningOut() || wasSignedOut()) return;
 
     hasStartedSignIn.current = true;
     signIn(returnTo).catch((reason) => {
@@ -69,6 +70,7 @@ export default function Login() {
   }, [isConfigured, isLocalHost, returnTo, session, signIn]);
 
   const handleSelectRole = (profile) => {
+    clearSignedOutMarker();
     if (setSession) {
       setSession(profile.user);
     }
@@ -77,15 +79,16 @@ export default function Login() {
   };
 
   const handleCognitoSignIn = () => {
+    clearSignedOutMarker();
     hasStartedSignIn.current = true;
-    signIn(returnTo).catch((reason) => {
+    signIn(returnTo, { prompt: "login" }).catch((reason) => {
       setError(reason.message || "Cognito sign-in could not be started.");
       hasStartedSignIn.current = false;
     });
   };
 
-  // If not on localhost and loading Cognito redirect
-  if (!isLocalHost && !error && isConfigured && !session) {
+  // If not on localhost and loading Cognito redirect (only when NOT signed out)
+  if (!isLocalHost && !error && isConfigured && !session && !getIsSigningOut() && !wasSignedOut()) {
     return (
       <main className="auth-callback-page" aria-live="polite">
         <section className="auth-callback-card">

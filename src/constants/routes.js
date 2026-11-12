@@ -23,6 +23,7 @@ export const ROUTES = {
   admin: (screen = "dashboard") => `/admin/${screen}`,
   teacherDashboard: "/teacher/dashboard",
   vendorDashboard: "/vendor/dashboard",
+  signedOut: "/signed-out",
 };
 
 export const API_ROUTES = {

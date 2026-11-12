@@ -1,12 +1,18 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { getCognitoConfigurationError, getDefaultRouteForRole } from "./cognito";
 import { useCognitoAuth } from "./useCognitoAuth";
+import { getIsSigningOut, wasSignedOut } from "./signOutState";
 import "./AuthCallback.css";
 
 export default function RequireCognitoAuth({ children, roles }) {
   const location = useLocation();
   const { session, isConfigured, isLoading } = useCognitoAuth();
   const returnTo = `${location.pathname}${location.search}`;
+
+  // If a logout is currently in flight or completed, never redirect to /login
+  if (getIsSigningOut() || wasSignedOut()) {
+    return null;
+  }
 
   if (isLoading) return <main className="auth-callback-page"><section className="auth-callback-card"><p>SHERWOOD COLLEGE</p><h1>Checking your secure session…</h1></section></main>;
   if (!isConfigured) return <Navigate to={`/login?returnTo=${encodeURIComponent(returnTo)}`} replace />;

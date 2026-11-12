@@ -20,6 +20,7 @@ import SchoolCalendar from "../pages/SchoolCalendar";
 import StudentDashboard from "../pages/StudentDashboard";
 import VirtualTour from "../pages/VirtualTour";
 import VendorDashboard from "../pages/VendorDashboard";
+import SignedOut from "../pages/SignedOut";
 import { ROUTES } from "../constants/routes";
 import { Protected } from "./RouteGuard";
 import DirectCognitoEntry from "./DirectCognitoEntry";
@@ -30,6 +31,7 @@ export default function AppRoutes() {
   return (
     <Routes>
       <Route path={ROUTES.home} element={<Home />} />
+      <Route path={ROUTES.signedOut} element={<SignedOut />} />
       <Route path="/cognito-entry" element={<DirectCognitoEntry />} />
       <Route path={ROUTES.login} element={<Login />} />
       <Route path="/apply" element={<Register />} />

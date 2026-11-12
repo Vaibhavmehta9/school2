@@ -1,12 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { getCognitoConfigurationError } from "../auth/cognito";
 import { useCognitoAuth } from "../auth/useCognitoAuth";
-import { clearSignedOutMarker, wasSignedOut } from "../auth/signOutState";
+import { clearSignedOutMarker, getIsSigningOut, wasSignedOut } from "../auth/signOutState";
 import { ROUTES } from "../constants/routes";
 import "../auth/AuthCallback.css";
 
-// The public site URL is the admissions entry point. Start the Hosted UI
-// immediately instead of rendering the marketing home page or local login UI.
+// The admissions direct entry point. Start the Hosted UI only if NOT signed out.
 export default function DirectCognitoEntry() {
   const { session, isConfigured, isLoading, signIn } = useCognitoAuth();
   const hasStarted = useRef(false);
@@ -14,7 +13,7 @@ export default function DirectCognitoEntry() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (signedOut || session || isLoading || !isConfigured || hasStarted.current) return;
+    if (signedOut || getIsSigningOut() || session || isLoading || !isConfigured || hasStarted.current) return;
     hasStarted.current = true;
     signIn(ROUTES.admissionDetails).catch((reason) => {
       setError(reason.message || "Cognito sign-in could not be started.");
