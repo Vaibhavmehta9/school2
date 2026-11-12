@@ -1,41 +1,7 @@
-import { useEffect, useRef, useState } from "react";
-import { getCognitoConfigurationError } from "../auth/cognito";
-import { useCognitoAuth } from "../auth/useCognitoAuth";
-import { clearSignedOutMarker, getIsSigningOut, wasSignedOut } from "../auth/signOutState";
+import { Navigate } from "react-router-dom";
 import { ROUTES } from "../constants/routes";
-import "../auth/AuthCallback.css";
 
-// The admissions direct entry point. Start the Hosted UI only if NOT signed out.
+// In review mode, redirect direct entry directly to /login with admission details returnTo
 export default function DirectCognitoEntry() {
-  const { session, isConfigured, isLoading, signIn } = useCognitoAuth();
-  const hasStarted = useRef(false);
-  const [signedOut, setSignedOut] = useState(wasSignedOut);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    if (signedOut || getIsSigningOut() || session || isLoading || !isConfigured || hasStarted.current) return;
-    hasStarted.current = true;
-    signIn(ROUTES.admissionDetails).catch((reason) => {
-      setError(reason.message || "Cognito sign-in could not be started.");
-      hasStarted.current = false;
-    });
-  }, [isConfigured, isLoading, session, signIn, signedOut]);
-
-  function signInAgain() {
-    clearSignedOutMarker();
-    setSignedOut(false);
-    hasStarted.current = true;
-    signIn(ROUTES.admissionDetails).catch((reason) => {
-      setError(reason.message || "Cognito sign-in could not be started.");
-      hasStarted.current = false;
-    });
-  }
-
-  if (signedOut) {
-    return <main className="auth-callback-page"><section className="auth-callback-card"><p>SHERWOOD COLLEGE</p><h1>You have signed out</h1><div className="auth-callback-status">Your secure session has ended.</div><button type="button" onClick={signInAgain}>Sign in again</button></section></main>;
-  }
-
-  if (!error && isConfigured) return null;
-
-  return <main className="auth-callback-page"><section className="auth-callback-card"><p>SHERWOOD COLLEGE</p><h1>We could not start sign-in</h1><div className="auth-callback-status error" role="alert">{error || getCognitoConfigurationError()}</div></section></main>;
+  return <Navigate to={`/login?returnTo=${encodeURIComponent(ROUTES.admissionDetails)}`} replace />;
 }

@@ -1,54 +1,56 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { getCognitoConfigurationError, getDefaultRouteForRole } from "../auth/cognito";
+import { getDefaultRouteForRole } from "../auth/cognito";
 import { useCognitoAuth } from "../auth/useCognitoAuth";
-import { clearSignedOutMarker, getIsSigningOut, wasSignedOut } from "../auth/signOutState";
-import Button from "../components/Button/Button";
+import { clearSignedOutMarker } from "../auth/signOutState";
+import { ROUTES } from "../constants/routes";
+import SchoolCrest from "../components/SchoolCrest";
 import "../auth/AuthCallback.css";
 
-const DEMO_PROFILES = [
+const REVIEW_PROFILES = [
   {
     role: "parent",
     title: "Parent / Admission Applicant",
-    desc: "Complete online admission, track application, or view parent dashboard.",
-    defaultRoute: "/admission-details",
+    desc: "Parent dashboard, online application form, document upload, and fee payment.",
+    defaultRoute: ROUTES.dashboard,
     user: { email: "parent@sherwood.edu.in", name: "Parent Applicant", role: "parent" },
   },
   {
     role: "student",
     title: "Student Portal",
-    desc: "View academic records, attendance, report cards, and notices.",
-    defaultRoute: "/student-dashboard",
+    desc: "Academic grades, timetable, attendance records, study materials, and notices.",
+    defaultRoute: ROUTES.studentDashboard,
     user: { email: "student@sherwood.edu.in", name: "Aarav Sharma", role: "student" },
   },
   {
     role: "teacher",
     title: "Teacher Portal",
-    desc: "Manage marks, daily attendance, class logs, and curriculum.",
-    defaultRoute: "/teacher",
+    desc: "Daily attendance marking, classroom logs, student progress, and curriculum.",
+    defaultRoute: ROUTES.teacherDashboard,
     user: { email: "teacher@sherwood.edu.in", name: "Prof. Vikram Sen", role: "teacher" },
   },
   {
     role: "admin",
     title: "Administrative Portal",
-    desc: "Institutional controls, admission approvals, and analytics.",
-    defaultRoute: "/admin",
+    desc: "Institutional controls, admission approvals, user roles, syllabus, and system metrics.",
+    defaultRoute: ROUTES.admin(),
     user: { email: "admin@sherwood.edu.in", name: "Principal's Secretariat", role: "admin" },
+  },
+  {
+    role: "vendor",
+    title: "Vendor / Partner Portal",
+    desc: "Application referral management, lead tracking, and admission funnel analytics.",
+    defaultRoute: ROUTES.vendorDashboard,
+    user: { email: "vendor@sherwood.edu.in", name: "Admissions Partner", role: "vendor" },
   },
 ];
 
 export default function Login() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { session, signIn, isConfigured, setSession } = useCognitoAuth();
+  const { session, setSession } = useCognitoAuth();
   const params = new URLSearchParams(location.search);
-  const returnTo = params.get("returnTo") || (params.get("flow") === "admission" ? "/admission-details" : "");
-  const hasStartedSignIn = useRef(false);
-  const [error, setError] = useState("");
-
-  const isLocalHost =
-    typeof window !== "undefined" &&
-    (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
+  const returnTo = params.get("returnTo") || (params.get("flow") === "admission" ? ROUTES.admissionDetails : "");
 
   // If already authenticated and visiting /login directly, redirect to destination
   useEffect(() => {
@@ -57,17 +59,6 @@ export default function Login() {
       navigate(destination, { replace: true });
     }
   }, [session, returnTo, navigate]);
-
-  // In production (not localhost), auto-start Cognito sign-in only if NOT signing out
-  useEffect(() => {
-    if (session || isLocalHost || !isConfigured || hasStartedSignIn.current || getIsSigningOut() || wasSignedOut()) return;
-
-    hasStartedSignIn.current = true;
-    signIn(returnTo).catch((reason) => {
-      setError(reason.message || "Cognito sign-in could not be started.");
-      hasStartedSignIn.current = false;
-    });
-  }, [isConfigured, isLocalHost, returnTo, session, signIn]);
 
   const handleSelectRole = (profile) => {
     clearSignedOutMarker();
@@ -78,84 +69,36 @@ export default function Login() {
     navigate(destination, { replace: true });
   };
 
-  const handleCognitoSignIn = () => {
-    clearSignedOutMarker();
-    hasStartedSignIn.current = true;
-    signIn(returnTo, { prompt: "login" }).catch((reason) => {
-      setError(reason.message || "Cognito sign-in could not be started.");
-      hasStartedSignIn.current = false;
-    });
-  };
-
-  // If not on localhost and loading Cognito redirect (only when NOT signed out)
-  if (!isLocalHost && !error && isConfigured && !session && !getIsSigningOut() && !wasSignedOut()) {
-    return (
-      <main className="auth-callback-page" aria-live="polite">
-        <section className="auth-callback-card">
-          <p>SHERWOOD COLLEGE</p>
-          <h1>Redirecting securely…</h1>
-          <div className="auth-callback-status">Opening secure Cognito authentication portal…</div>
-        </section>
-      </main>
-    );
-  }
-
   return (
-    <main className="auth-callback-page" aria-live="polite" style={{ minHeight: "100vh", padding: "2rem 1rem" }}>
+    <main className="auth-callback-page" aria-live="polite" style={{ minHeight: "100vh", padding: "2.5rem 1rem" }}>
       <section
         className="auth-callback-card"
         style={{
-          maxWidth: "580px",
+          maxWidth: "600px",
           width: "100%",
           padding: "2.5rem 2rem",
-          borderRadius: "var(--radius-lg, 14px)",
-          boxShadow: "var(--shadow-xl, 0 20px 40px rgba(5,75,45,0.12))",
-          border: "1px solid var(--color-border-subtle, #d8e2dc)",
-          background: "#fff",
+          borderRadius: "var(--radius-lg, 16px)",
+          boxShadow: "0 20px 48px rgba(3, 44, 31, 0.15)",
+          border: "1px solid rgba(8, 120, 63, 0.15)",
+          background: "#ffffff",
           textAlign: "center",
         }}
       >
-        <div
-          className="auth-callback-crest"
-          aria-hidden="true"
-          style={{
-            margin: "0 auto 1rem",
-            background: "var(--color-primary, #054b2d)",
-            color: "var(--color-accent, #c9a84c)",
-            display: "grid",
-            placeItems: "center",
-            fontWeight: 800,
-            fontSize: "1.5rem",
-          }}
-        >
-          S
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: "1rem" }}>
+          <SchoolCrest size={64} />
         </div>
-        <p style={{ letterSpacing: "1.5px", fontSize: "0.75rem", fontWeight: 700, color: "var(--color-primary, #054b2d)", textTransform: "uppercase" }}>
+        <p style={{ letterSpacing: "1.5px", fontSize: "0.75rem", fontWeight: 700, color: "var(--color-primary, #08783f)", textTransform: "uppercase" }}>
           Sherwood College · Nainital
         </p>
-        <h1 style={{ fontFamily: "var(--font-heading, 'Playfair Display', serif)", fontSize: "1.75rem", color: "var(--color-text, #1b2e25)", margin: "0.25rem 0 0.5rem" }}>
+        <h1 style={{ fontFamily: "var(--font-serif, Georgia, serif)", fontSize: "1.85rem", color: "#172b21", margin: "0.25rem 0 0.5rem" }}>
           Portal Authentication
         </h1>
-        <p style={{ fontSize: "0.9375rem", color: "var(--color-text-muted, #4b5e54)", marginBottom: "1.75rem", lineHeight: 1.5 }}>
-          {isLocalHost
-            ? "Choose your account role to access admissions or portals directly:"
-            : "Sign in with your verified institutional credentials:"}
+        <p style={{ fontSize: "0.9375rem", color: "#5e7467", marginBottom: "1.5rem", lineHeight: 1.5 }}>
+          Select any role below to review its features, workflows, and dashboard:
         </p>
 
-        {error && (
-          <div className="auth-callback-status error" role="alert" style={{ marginBottom: "1.5rem" }}>
-            {error}
-          </div>
-        )}
-
-        {!isConfigured && (
-          <div className="auth-callback-status error" role="alert" style={{ marginBottom: "1.5rem" }}>
-            {getCognitoConfigurationError()}
-          </div>
-        )}
-
-        <div style={{ display: "flex", flexDirection: "column", gap: "0.875rem", textAlign: "left", marginBottom: "1.75rem" }}>
-          {DEMO_PROFILES.map((profile) => (
+        <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", textAlign: "left", marginBottom: "1.5rem" }}>
+          {REVIEW_PROFILES.map((profile) => (
             <button
               key={profile.role}
               type="button"
@@ -165,56 +108,53 @@ export default function Login() {
                 flexDirection: "column",
                 alignItems: "flex-start",
                 padding: "1rem 1.25rem",
-                borderRadius: "var(--radius-md, 8px)",
-                border: "1.5px solid var(--color-border-subtle, #e2e8e4)",
-                background: "var(--color-surface, #fcfbf7)",
+                borderRadius: "10px",
+                border: "1.5px solid #d7e6db",
+                background: "#fcfbf7",
                 cursor: "pointer",
                 transition: "all 0.15s ease",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = "var(--color-primary, #08783f)";
-                e.currentTarget.style.background = "#fff";
-                e.currentTarget.style.transform = "translateY(-1px)";
+                e.currentTarget.style.borderColor = "#08783f";
+                e.currentTarget.style.background = "#ffffff";
+                e.currentTarget.style.transform = "translateY(-2px)";
+                e.currentTarget.style.boxShadow = "0 6px 16px rgba(8, 120, 63, 0.12)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = "var(--color-border-subtle, #e2e8e4)";
-                e.currentTarget.style.background = "var(--color-surface, #fcfbf7)";
+                e.currentTarget.style.borderColor = "#d7e6db";
+                e.currentTarget.style.background = "#fcfbf7";
                 e.currentTarget.style.transform = "none";
+                e.currentTarget.style.boxShadow = "none";
               }}
             >
               <div style={{ display: "flex", justifyContent: "space-between", width: "100%", alignItems: "center" }}>
-                <strong style={{ fontSize: "1rem", color: "var(--color-primary, #054b2d)", fontWeight: 700 }}>
+                <strong style={{ fontSize: "1rem", color: "#054b2d", fontWeight: 700 }}>
                   {profile.title}
                 </strong>
-                <span style={{ fontSize: "0.8125rem", color: "var(--color-accent, #c9a84c)", fontWeight: 600 }}>
-                  Enter →
+                <span style={{ fontSize: "0.85rem", color: "#c59b27", fontWeight: 700 }}>
+                  Open {profile.role} portal →
                 </span>
               </div>
-              <span style={{ fontSize: "0.8125rem", color: "var(--color-text-muted, #5f7166)", marginTop: "0.25rem" }}>
+              <span style={{ fontSize: "0.825rem", color: "#5e7467", marginTop: "0.25rem", lineHeight: 1.45 }}>
                 {profile.desc}
               </span>
             </button>
           ))}
         </div>
 
-        <div style={{ paddingTop: "1rem", borderTop: "1px solid var(--color-border-subtle, #e2e8e4)", display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-          <Button
-            type="button"
-            variant="outline"
-            size="md"
-            onClick={handleCognitoSignIn}
-            style={{ width: "100%" }}
-          >
-            Sign in via Amazon Cognito (Hosted UI)
-          </Button>
+        <div style={{ paddingTop: "1rem", borderTop: "1px solid #e8efea", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+          <div style={{ fontSize: "11px", color: "#64748b", background: "#f1f5f9", padding: "8px 12px", borderRadius: "6px" }}>
+            🔒 Review Mode Active: AWS Cognito Hosted UI bypassed for instant persona navigation.
+          </div>
 
           <Link
             to="/"
             style={{
               fontSize: "0.875rem",
-              color: "var(--color-text-muted, #5f7166)",
+              color: "#08783f",
+              fontWeight: 600,
               textDecoration: "none",
-              marginTop: "0.25rem",
+              marginTop: "0.5rem",
             }}
           >
             ← Back to Sherwood College Homepage

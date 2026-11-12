@@ -1,6 +1,5 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useCognitoAuth } from "../auth/useCognitoAuth";
 import { clearSignedOutMarker } from "../auth/signOutState";
 import SchoolCrest from "../components/SchoolCrest";
 import Button from "../components/Button/Button";
@@ -8,17 +7,10 @@ import "../auth/AuthCallback.css";
 
 export default function SignedOut() {
   const navigate = useNavigate();
-  const { signIn, isConfigured } = useCognitoAuth();
 
   const handleSignInAgain = () => {
     clearSignedOutMarker();
-    if (isConfigured) {
-      signIn("/dashboard", { prompt: "login" }).catch(() => {
-        navigate("/login");
-      });
-    } else {
-      navigate("/login");
-    }
+    navigate("/login");
   };
 
   const handleBackToWebsite = () => {
@@ -63,3 +55,4 @@ export default function SignedOut() {
     </main>
   );
 }
+

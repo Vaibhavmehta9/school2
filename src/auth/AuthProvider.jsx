@@ -116,28 +116,10 @@ export function CognitoAuthProvider({ children }) {
       // Ignored during page unload
     }
 
-    // 5. Determine target sign-out destination
+    // 5. In review mode, navigate directly to /signed-out (bypassing Cognito Hosted UI)
     const origin = typeof window !== "undefined" ? window.location.origin : "";
-    const logoutUri = import.meta.env.VITE_COGNITO_LOGOUT_URI?.trim() || `${origin}/signed-out`;
-    const cognitoDomain = import.meta.env.VITE_COGNITO_DOMAIN?.trim();
-    const clientId = import.meta.env.VITE_COGNITO_CLIENT_ID?.trim();
-
-    if (auth.user) {
-      if (!cognitoDomain || !clientId) {
-        // Clear message if env values are missing instead of using stale hardcoded IDs
-        window.location.replace(`${logoutUri}?warning=cognito_env_missing`);
-        return;
-      }
-
-      const normalizedDomain = cognitoDomain.startsWith("http")
-        ? cognitoDomain.replace(/\/+$/, "")
-        : `https://${cognitoDomain.replace(/\/+$/, "")}`;
-
-      const targetUrl = `${normalizedDomain}/logout?client_id=${encodeURIComponent(clientId)}&logout_uri=${encodeURIComponent(logoutUri)}`;
-      window.location.replace(targetUrl);
-    } else {
-      window.location.replace(logoutUri);
-    }
+    const logoutUri = `${origin}/signed-out`;
+    window.location.replace(logoutUri);
   }, [auth, setLocalUser]);
 
   // Listen for logout triggered in other browser tabs
@@ -253,17 +235,16 @@ export function CognitoAuthProvider({ children }) {
   const value = useMemo(() => ({
     session,
     user: session?.user || null,
-    isLoading: auth.isLoading,
-    isConfigured: Boolean(auth.settings?.authority && auth.settings?.client_id),
-    signIn: (returnTo = "", extraParams = {}) =>
-      auth.signinRedirect({
-        state: { returnTo },
-        extraQueryParams: extraParams,
-      }),
+    isLoading: false,
+    isConfigured: false, // In review mode: direct persona access, no Cognito Hosted UI redirects
+    signIn: (returnTo = "") => {
+      const target = returnTo ? `/login?returnTo=${encodeURIComponent(returnTo)}` : "/login";
+      window.location.assign(target);
+    },
     signOut,
     setSession: setLocalUser,
     setLocalUser,
-  }), [auth, session, signOut, setLocalUser]);
+  }), [session, signOut, setLocalUser]);
 
   return (
     <CognitoAuthContext.Provider value={value}>
