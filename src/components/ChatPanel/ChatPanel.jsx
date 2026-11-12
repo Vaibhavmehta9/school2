@@ -243,57 +243,60 @@ export default function ChatPanel({
     >
       {/* Header */}
       <header className="chat-header">
-        <div className="chat-header-identity">
-          <SherwoodAIAvatar
-            size={38}
-            state={isStreaming ? "speaking" : loading ? "thinking" : "idle"}
-            showOnline={true}
-          />
-          <div className="chat-title-wrap">
-            <h2 id="chat-panel-title" className="chat-title">
-              Sherwood AI
-              {formattedRole && <span className="chat-role-badge">{formattedRole}</span>}
-            </h2>
-            <p className="chat-subtitle">
-              <span className="chat-online-indicator" aria-hidden="true" />
-              {isGuest ? "Online · Admissions Assistant" : "Online · Official College Assistant"}
-            </p>
+        {variant === "popup" && <div className="chat-mobile-drag-handle" aria-hidden="true" />}
+        <div className="chat-header-main">
+          <div className="chat-header-identity">
+            <SherwoodAIAvatar
+              size={38}
+              state={isStreaming ? "speaking" : loading ? "thinking" : "idle"}
+              showOnline={true}
+            />
+            <div className="chat-title-wrap">
+              <h2 id="chat-panel-title" className="chat-title">
+                Sherwood AI
+                {formattedRole && <span className="chat-role-badge">{formattedRole}</span>}
+              </h2>
+              <p className="chat-subtitle">
+                <span className="chat-online-indicator" aria-hidden="true" />
+                {isGuest ? "Online · Admissions Assistant" : "Online · Official College Assistant"}
+              </p>
+            </div>
           </div>
-        </div>
 
-        <div className="chat-header-actions">
-          {messages.length > 0 && (
-            <button
-              type="button"
-              className="chat-header-btn"
-              onClick={clearChat}
-              title="Clear conversation"
-              aria-label="Clear conversation history"
-            >
-              <ClearIcon />
-            </button>
-          )}
+          <div className="chat-header-actions">
+            {messages.length > 0 && (
+              <button
+                type="button"
+                className="chat-header-btn"
+                onClick={clearChat}
+                title="Clear conversation"
+                aria-label="Clear conversation history"
+              >
+                <ClearIcon />
+              </button>
+            )}
 
-          {variant === "popup" && (
-            <button
-              type="button"
-              className="chat-header-btn chat-close-btn"
-              onClick={() => {
-                onClose();
-                triggerRef?.current?.focus();
-              }}
-              title="Close chat"
-              aria-label="Close Sherwood AI Assistant"
-            >
-              ×
-            </button>
-          )}
+            {variant === "popup" && (
+              <button
+                type="button"
+                className="chat-header-btn chat-close-btn"
+                onClick={() => {
+                  onClose();
+                  triggerRef?.current?.focus();
+                }}
+                title="Close chat"
+                aria-label="Close Sherwood AI Assistant"
+              >
+                ×
+              </button>
+            )}
 
-          {variant === "page" && (
-            <Link to="/dashboard" className="chat-back-link">
-              ← Dashboard
-            </Link>
-          )}
+            {variant === "page" && (
+              <Link to="/dashboard" className="chat-back-link">
+                ← Dashboard
+              </Link>
+            )}
+          </div>
         </div>
       </header>
 
@@ -464,11 +467,12 @@ export default function ChatPanel({
         <div className="chat-chips-tray" aria-label="Suggested initial topics">
           <p className="chat-chips-label">Popular topics:</p>
           <div className="chat-chips-scroll">
-            {INITIAL_QUICK_CHIPS.map((chip) => (
+            {INITIAL_QUICK_CHIPS.map((chip, idx) => (
               <button
                 key={chip}
                 type="button"
                 className="chat-chip"
+                style={{ "--chip-idx": idx }}
                 onClick={() => sendMessage(chip)}
                 disabled={loading || rateLimitTimer > 0}
               >
@@ -482,11 +486,12 @@ export default function ChatPanel({
       {showFollowUpChips && (
         <div className="chat-chips-tray" aria-label="Suggested follow-up questions">
           <div className="chat-chips-scroll">
-            {FOLLOW_UP_SUGGESTIONS.map((chip) => (
+            {FOLLOW_UP_SUGGESTIONS.map((chip, idx) => (
               <button
                 key={chip}
                 type="button"
                 className="chat-chip follow-up"
+                style={{ "--chip-idx": idx }}
                 onClick={() => sendMessage(chip)}
                 disabled={loading || rateLimitTimer > 0}
               >
@@ -499,7 +504,7 @@ export default function ChatPanel({
 
       {/* Input and Controls */}
       <footer className="chat-footer">
-        {loading && (
+        {(loading || isStreaming) && (
           <div className="chat-stop-wrap">
             <button
               type="button"
@@ -507,7 +512,7 @@ export default function ChatPanel({
               onClick={stopGenerating}
               aria-label="Stop generating response"
             >
-              <StopIcon /> Stop generating
+              <StopIcon /> Stop
             </button>
           </div>
         )}
@@ -516,21 +521,38 @@ export default function ChatPanel({
           className="chat-form"
           onSubmit={(event) => {
             event.preventDefault();
-            sendMessage(input);
+            if (input.trim() && !loading && rateLimitTimer <= 0) {
+              sendMessage(input);
+              if (inputRef.current) inputRef.current.style.height = "auto";
+            }
           }}
         >
-          <input
+          <textarea
             ref={inputRef}
-            type="text"
+            rows={1}
             className="chat-input"
             value={input}
-            onChange={(event) => setInput(event.target.value)}
+            onChange={(event) => {
+              setInput(event.target.value);
+              const el = event.target;
+              el.style.height = "auto";
+              el.style.height = `${Math.min(el.scrollHeight, 120)}px`;
+            }}
+            onKeyDown={(event) => {
+              if (event.key === "Enter" && !event.shiftKey) {
+                event.preventDefault();
+                if (input.trim() && !loading && rateLimitTimer <= 0) {
+                  sendMessage(input);
+                  if (inputRef.current) inputRef.current.style.height = "auto";
+                }
+              }
+            }}
             placeholder={
               rateLimitTimer > 0
                 ? `Please wait ${rateLimitTimer}s...`
-                : "Ask about admissions, fees, boarding..."
+                : "Ask about admissions, fees, boarding... (Enter to send)"
             }
-            aria-label="Type your message for Sherwood AI"
+            aria-label="Type your message for Sherwood AI (Enter to send, Shift+Enter for new line)"
             maxLength={1000}
             disabled={loading || rateLimitTimer > 0}
           />
