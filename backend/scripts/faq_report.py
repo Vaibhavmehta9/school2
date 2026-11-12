@@ -60,3 +60,4 @@ def generate_faq_report() -> None:
 
 if __name__ == "__main__":
     generate_faq_report()
+

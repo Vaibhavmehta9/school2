@@ -33,6 +33,7 @@
       "category": "About the school",
       "questions": [
         "What is the history of Sherwood College?",
+        "Tell me about the history of Sherwood College",
         "When was Sherwood established?",
         "Who founded Sherwood College?",
         "Kitna purana school hai Sherwood?",
@@ -225,6 +226,7 @@
       "questions": [
         "What is the entrance test format?",
         "What subjects are tested in the entrance exam?",
+        "Entrance test mein kaun se subjects aate hain?",
         "How is the entrance exam conducted?",
         "Entrance test ka syllabus aur format kya hai?",
         "Paper online hota hai ya offline?",
@@ -276,6 +278,7 @@
       "category": "Facilities",
       "questions": [
         "What are the laboratory and classroom facilities?",
+        "Does Sherwood have robotics and computer labs?",
         "Does the school have a robotics lab?",
         "Smart classrooms in Sherwood",
         "Labs kaisi hain school ki?",
@@ -310,6 +313,8 @@
       "category": "Boarding and hostel",
       "questions": [
         "How is boarding and dining organized?",
+        "How are hostel dormitories organized?",
+        "Mess mein vegetarian aur non-vegetarian food milta hai?",
         "Hostel facilities for boys and girls",
         "How many dining halls are there?",
         "Hostel aur mess ka system kaisa hai?",
@@ -429,6 +434,7 @@
       "category": "FEES",
       "questions": [
         "What is the total annual fee?",
+        "What are the fees for Class 6?",
         "How much does Sherwood College cost per year?",
         "Total annual charges",
         "Saalana fees kitni hai?",
@@ -521,6 +527,7 @@
       "questions": [
         "What is the fee refund policy?",
         "Can I get a refund if I withdraw my child mid-term?",
+        "Kya mid-term withdrawal pe fee refund milta hai?",
         "Withdrawal refund rules",
         "Agar admission cancel karein toh refund milega?",
         "Fees wapas hoti hai kya?"
@@ -606,6 +613,7 @@
       "category": "Transport",
       "questions": [
         "Is school transport available?",
+        "What transport and vacation escort facilities exist?",
         "How do students travel to and from campus during vacations?",
         "Airport and railway station escort service",
         "Transport ki kya suvidha hai?",

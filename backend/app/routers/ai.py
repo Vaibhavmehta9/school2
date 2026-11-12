@@ -27,6 +27,7 @@ from ..dependencies import resolve_verified_audience
 from ..faq_service import find_matching_entry
 from ..greeting_service import get_canned_greeting_reply
 from ..schemas import AIRequest
+from ..weather_service import format_weather_context_for_prompt, is_weather_query
 
 logger = logging.getLogger("ai_assistant")
 
@@ -146,7 +147,12 @@ def chat(
             matched_faq_ids = [matched_entry["id"]]
             is_demo = bool(matched_entry.get("demo", False) or matched_entry.get("source") == "demo")
 
-        answer = generate_ai_reply(user_message, history=history_dicts, audience=verified_audience)
+        extra_context: str | None = None
+        if is_weather_query(user_message):
+            source = "weather"
+            extra_context = format_weather_context_for_prompt()
+
+        answer = generate_ai_reply(user_message, history=history_dicts, audience=verified_audience, extra_context=extra_context)
         return {"answer": answer, "model": configured_model(), "is_demo": is_demo}
     except (AIConfigurationError, AIProviderRateLimitError, AIProviderUnavailableError) as error:
         error_type = error.__class__.__name__
@@ -180,10 +186,15 @@ async def chat_stream(
 
     # Check fast path
     is_demo = False
+    extra_context: str | None = None
     greeting_result = get_canned_greeting_reply(user_message, history=history_dicts)
     if greeting_result:
         source = "greeting"
         matched_faq_ids = ["greeting_fast_path"]
+    elif is_weather_query(user_message):
+        source = "weather"
+        matched_faq_ids = ["live_weather_service"]
+        extra_context = format_weather_context_for_prompt()
     else:
         source = "faq"
         matched_entry, score = find_matching_entry(user_message)
@@ -210,7 +221,12 @@ async def chat_stream(
                 return
 
             # Run generator in threadpool to allow cooperative async checking of client disconnect
-            generator = stream_ai_reply(user_message, history=history_dicts, audience=verified_audience)
+            generator = stream_ai_reply(
+                user_message,
+                history=history_dicts,
+                audience=verified_audience,
+                extra_context=extra_context,
+            )
 
             def get_next_chunk():
                 try:
