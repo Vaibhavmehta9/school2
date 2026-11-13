@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import principalDeskPortrait from "../../../assets/principal-desk-portrait.png";
+import principalDeskPortrait from "../../../assets/principal-desk-portrait.webp";
 import Button from "../../../components/Button/Button";
 import { isReducedMotion, gsap } from "../../../utils/motion";
 import "./PrincipalSection.css";

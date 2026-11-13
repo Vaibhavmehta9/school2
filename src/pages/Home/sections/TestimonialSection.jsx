@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import amitabhTestimonial from "../../../assets/amitabh-testimonial.png";
+import amitabhTestimonial from "../../../assets/amitabh-testimonial.webp";
 import { isReducedMotion, gsap } from "../../../utils/motion";
 import "./TestimonialSection.css";
 

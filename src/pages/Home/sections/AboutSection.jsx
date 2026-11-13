@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import aboutCampus from "../../../assets/about-campus.png";
+import aboutCampus from "../../../assets/about-campus.webp";
 import Button from "../../../components/Button/Button";
 import { isReducedMotion, gsap } from "../../../utils/motion";
 import "./AboutSection.css";
