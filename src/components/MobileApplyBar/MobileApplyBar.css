@@ -1,0 +1,97 @@
+/* =============================================================================
+   SHERWOOD MOBILE STICKY APPLY BAR
+   Visible only on mobile (< 768px) after scrolling past the Hero.
+   Safe-area inset aware, never overlaps the floating AI launcher.
+   ============================================================================= */
+
+.sherwood-mobile-apply-bar {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .sherwood-mobile-apply-bar {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 850;
+    background: rgba(251, 250, 246, 0.96);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-top: 1px solid var(--color-border-subtle, rgba(8, 120, 63, 0.15));
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
+    animation: mobile-bar-slide-up 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  [data-theme="dark"] .sherwood-mobile-apply-bar {
+    background: rgba(14, 26, 20, 0.96);
+    border-top-color: rgba(223, 184, 70, 0.2);
+    box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.4);
+  }
+
+  .sherwood-mobile-apply-bar__content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .sherwood-mobile-apply-bar__label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .sherwood-mobile-apply-bar__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--color-primary, #054b2d);
+    box-shadow: 0 0 8px rgba(8, 120, 63, 0.6);
+    flex-shrink: 0;
+  }
+
+  [data-theme="dark"] .sherwood-mobile-apply-bar__dot {
+    background-color: var(--color-gold, #c59b27);
+    box-shadow: 0 0 8px rgba(197, 155, 39, 0.6);
+  }
+
+  .sherwood-mobile-apply-bar__text strong {
+    display: block;
+    font-size: 0.875rem;
+    color: var(--color-charcoal-900, #172b21);
+    line-height: 1.2;
+  }
+
+  [data-theme="dark"] .sherwood-mobile-apply-bar__text strong {
+    color: #ffffff;
+  }
+
+  .sherwood-mobile-apply-bar__text small {
+    display: block;
+    font-size: 0.6875rem;
+    color: var(--color-charcoal-500, #64748b);
+  }
+
+  .sherwood-mobile-apply-bar__btn {
+    min-height: 44px; /* Touch target */
+    padding: 8px 18px;
+    font-size: 0.8125rem;
+    flex-shrink: 0;
+  }
+
+  @keyframes mobile-bar-slide-up {
+    from {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+}

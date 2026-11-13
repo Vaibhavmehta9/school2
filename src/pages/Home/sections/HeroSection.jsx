@@ -13,6 +13,7 @@ export default function HeroSection({ onOpenCampusFilm, onOpenAdmissionCode }) {
   const copyRef = useRef(null);
   const ctaWrapRef = useRef(null);
   const scrollCueRef = useRef(null);
+  const videoRef = useRef(null);
 
   // Counter refs
   const statYearsRef = useRef(null);
@@ -21,6 +22,38 @@ export default function HeroSection({ onOpenCampusFilm, onOpenAdmissionCode }) {
   const statAcresRef = useRef(null);
 
   const [shouldPlayVideo, setShouldPlayVideo] = useState(false);
+
+  // Pause video when off-screen or when browser tab is hidden
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return undefined;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) {
+          video.pause();
+        } else if (!document.hidden && shouldPlayVideo) {
+          video.play().catch(() => {});
+        }
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(video);
+
+    const handleVisibility = () => {
+      if (document.hidden) {
+        video.pause();
+      } else if (shouldPlayVideo) {
+        video.play().catch(() => {});
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibility);
+
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", handleVisibility);
+    };
+  }, [shouldPlayVideo]);
 
   // Subtle magnetic pull for hero "Start Admission" CTA (desktop only, no reduced motion)
   const handleMagneticMove = (e) => {
@@ -163,6 +196,7 @@ export default function HeroSection({ onOpenCampusFilm, onOpenAdmissionCode }) {
       <div className="sherwood-hero__background" aria-hidden="true">
         {shouldPlayVideo ? (
           <video
+            ref={videoRef}
             className="sherwood-hero__video"
             autoPlay
             muted

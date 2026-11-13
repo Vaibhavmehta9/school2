@@ -20,6 +20,7 @@ import AdmissionCtaSection from "./Home/sections/AdmissionCtaSection";
 import FooterSection from "./Home/sections/FooterSection";
 import CampusFilmModal from "./Home/sections/CampusFilmModal";
 import AdmissionCodeModal from "./Home/sections/AdmissionCodeModal";
+import MobileApplyBar from "../components/MobileApplyBar/MobileApplyBar";
 
 import "./Home.css";
 
@@ -181,6 +182,9 @@ export default function Home() {
         </span>
         <span className="sherwood-ai-launcher-text">Ask Sherwood AI</span>
       </button>
+
+      {/* 6. Mobile-only Sticky Apply Bar (Appears after hero, never overlaps chat) */}
+      <MobileApplyBar />
     </div>
   );
 }
