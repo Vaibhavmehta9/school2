@@ -32,7 +32,9 @@ export default function Home() {
   const [admissionCodeOpen, setAdmissionCodeOpen] = useState(false);
   const [aiOpen, setAiOpen] = useState(false);
   const [hasAttentionPulse, setHasAttentionPulse] = useState(false);
-  const [isScrollingMobile, setIsScrollingMobile] = useState(false);
+  const [isScrolledCompact, setIsScrolledCompact] = useState(false);
+  const idleTimerRef = useRef(null);
+  const scrollTimerRef = useRef(null);
 
   // Soft attention pulse after 8 seconds (once per session)
   useEffect(() => {
@@ -52,21 +54,25 @@ export default function Home() {
     return undefined;
   }, []);
 
-  // Collapse launcher label on mobile during scroll to save viewport space
+  // Collapse launcher to 56px icon-only circle during scroll; re-expand after 2s of idleness
   useEffect(() => {
-    let scrollTimeout;
     const handleScroll = () => {
-      setIsScrollingMobile(true);
-      clearTimeout(scrollTimeout);
-      scrollTimeout = setTimeout(() => {
-        setIsScrollingMobile(false);
-      }, 400);
+      setIsScrolledCompact(true);
+      if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+      if (scrollTimerRef.current) clearTimeout(scrollTimerRef.current);
+
+      scrollTimerRef.current = setTimeout(() => {
+        idleTimerRef.current = setTimeout(() => {
+          setIsScrolledCompact(false);
+        }, 2000);
+      }, 150);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      clearTimeout(scrollTimeout);
+      if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+      if (scrollTimerRef.current) clearTimeout(scrollTimerRef.current);
     };
   }, []);
 
@@ -133,11 +139,11 @@ export default function Home() {
       <button
         ref={launcherRef}
         type="button"
-        className={`sherwood-ai-launcher ${hasAttentionPulse ? "attention-pulse" : ""} ${isScrollingMobile ? "scrolling-collapsed" : ""}`.trim()}
+        className={`sherwood-ai-launcher ${hasAttentionPulse ? "attention-pulse" : ""} ${isScrolledCompact ? "compact-circle" : ""}`.trim()}
         onClick={() => setAiOpen((isOpen) => !isOpen)}
         aria-expanded={aiOpen}
         aria-haspopup="dialog"
-        aria-label="Open Sherwood AI Admissions Assistant"
+        aria-label="Ask Sherwood Admissions AI Assistant"
       >
         <span className="sherwood-ai-launcher-icon" aria-hidden="true">
           <SherwoodAIAvatar size={34} state={aiOpen ? "speaking" : "idle"} />

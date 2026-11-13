@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import SchoolCrest from "../../../components/SchoolCrest";
@@ -10,17 +10,47 @@ import "./Navbar.css";
 export default function Navbar({ user, signOut }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [accountMenuOpen, setAccountMenuOpen] = useState(false);
+  const accountMenuRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      setScrolled(window.scrollY > 80);
     };
+    handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Close account dropdown on click outside or Escape
+  useEffect(() => {
+    const handlePointerDown = (event) => {
+      if (accountMenuRef.current && !accountMenuRef.current.contains(event.target)) {
+        setAccountMenuOpen(false);
+      }
+    };
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        setAccountMenuOpen(false);
+      }
+    };
+
+    if (accountMenuOpen) {
+      document.addEventListener("mousedown", handlePointerDown);
+      document.addEventListener("touchstart", handlePointerDown);
+      document.addEventListener("keydown", handleKeyDown);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handlePointerDown);
+      document.removeEventListener("touchstart", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [accountMenuOpen]);
+
+  const userInitial = (user?.name || user?.email || "U").charAt(0).toUpperCase();
+
   return (
-    <header className={`sherwood-navbar ${scrolled ? "sherwood-navbar--scrolled" : ""}`}>
+    <header className={`sherwood-navbar ${scrolled ? "sherwood-navbar--scrolled" : "sherwood-navbar--transparent"}`}>
       <div className="sherwood-navbar__container">
         <a className="sherwood-navbar__brand" href="#home">
           <SchoolCrest className="sherwood-navbar__logo" />
@@ -45,6 +75,13 @@ export default function Navbar({ user, signOut }) {
             <div className="sherwood-navbar__mobile-actions">
               {user ? (
                 <>
+                  <div className="sherwood-navbar__mobile-user">
+                    <span className="sherwood-navbar__avatar-circle">{userInitial}</span>
+                    <div className="sherwood-navbar__mobile-user-info">
+                      <strong>{user.name || "Sherwood Member"}</strong>
+                      <small>{user.role || "Portal Member"}</small>
+                    </div>
+                  </div>
                   <Button
                     as={Link}
                     to={getDefaultRouteForRole(user.role)}
@@ -69,7 +106,7 @@ export default function Navbar({ user, signOut }) {
                 <Button
                   as={Link}
                   to="/login"
-                  variant="secondary"
+                  variant="outline"
                   size="sm"
                   onClick={() => setMenuOpen(false)}
                 >
@@ -83,46 +120,79 @@ export default function Navbar({ user, signOut }) {
                 size="sm"
                 onClick={() => setMenuOpen(false)}
               >
-                Apply Now
+                Apply 2027–28
               </Button>
             </div>
           </nav>
 
           <div className="sherwood-navbar__desktop-actions">
             <ThemeToggle />
+
             {user ? (
-              <>
-                <Button
-                  as={Link}
-                  to={getDefaultRouteForRole(user.role)}
-                  variant="primary"
-                  size="sm"
+              <div className="sherwood-navbar__account-dropdown-wrap" ref={accountMenuRef}>
+                <button
+                  type="button"
+                  className="sherwood-navbar__avatar-trigger"
+                  onClick={() => setAccountMenuOpen((prev) => !prev)}
+                  aria-expanded={accountMenuOpen}
+                  aria-haspopup="menu"
+                  aria-label={`User account menu for ${user.name || user.email || "user"}`}
                 >
-                  My Dashboard
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={signOut}
-                >
-                  Logout
-                </Button>
-              </>
+                  <span className="sherwood-navbar__avatar-circle">{userInitial}</span>
+                  <span className="sherwood-navbar__avatar-name">{user.name?.split(" ")[0] || "Account"}</span>
+                  <span className="sherwood-navbar__avatar-caret" aria-hidden="true">▾</span>
+                </button>
+
+                {accountMenuOpen && (
+                  <div className="sherwood-navbar__dropdown-menu" role="menu">
+                    <div className="sherwood-navbar__dropdown-header">
+                      <strong>{user.name || "Sherwood Member"}</strong>
+                      <small>{user.email || ""}</small>
+                      <span className="sherwood-navbar__role-badge">
+                        {(user.role || "parent").toUpperCase()}
+                      </span>
+                    </div>
+                    <div className="sherwood-navbar__dropdown-divider" />
+                    <Link
+                      to={getDefaultRouteForRole(user.role)}
+                      className="sherwood-navbar__dropdown-item"
+                      role="menuitem"
+                      onClick={() => setAccountMenuOpen(false)}
+                    >
+                      <span aria-hidden="true">🏛️</span> My Dashboard
+                    </Link>
+                    <button
+                      type="button"
+                      className="sherwood-navbar__dropdown-item sherwood-navbar__dropdown-item--logout"
+                      role="menuitem"
+                      onClick={() => {
+                        setAccountMenuOpen(false);
+                        signOut();
+                      }}
+                    >
+                      <span aria-hidden="true">🚪</span> Logout
+                    </button>
+                  </div>
+                )}
+              </div>
             ) : (
               <Button
                 as={Link}
                 to="/login"
-                variant="secondary"
+                variant={scrolled ? "outline" : "outline-gold"}
                 size="sm"
+                className="sherwood-navbar__login-btn"
               >
-                Portal Login
+                Login
               </Button>
             )}
+
             <Button
               as={Link}
               to="/admission-details"
               variant="gold"
               size="sm"
+              className="sherwood-navbar__apply-btn"
             >
               Apply 2027–28
             </Button>
@@ -149,4 +219,3 @@ Navbar.propTypes = {
   user: PropTypes.object,
   signOut: PropTypes.func.isRequired,
 };
-

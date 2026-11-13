@@ -18,40 +18,85 @@
 /* Floating AI Launcher Button */
 .sherwood-ai-launcher {
   position: fixed;
-  right: var(--space-6);
-  bottom: calc(var(--space-6) + env(safe-area-inset-bottom, 0px));
-  z-index: var(--z-sticky);
+  right: var(--space-6, 24px);
+  bottom: calc(var(--space-6, 24px) + env(safe-area-inset-bottom, 0px));
+  z-index: var(--z-sticky, 900);
   display: inline-flex;
   align-items: center;
-  gap: var(--space-3);
-  padding: 10px 20px 10px 14px;
-  min-height: 52px;
-  background-color: var(--color-primary);
+  justify-content: center;
+  gap: var(--space-3, 10px);
+  height: 56px;
+  min-width: 56px;
+  padding: 0 20px 0 12px;
+  background-color: var(--color-primary, #054b2d);
   color: #ffffff;
-  border: 1.5px solid rgba(223, 184, 70, 0.4);
-  border-radius: var(--radius-pill);
-  box-shadow: var(--shadow-lg), var(--shadow-green);
+  border: 1.5px solid rgba(223, 184, 70, 0.45);
+  border-radius: var(--radius-pill, 9999px);
+  box-shadow: var(--shadow-lg), 0 10px 25px rgba(3, 44, 28, 0.3);
   cursor: pointer;
-  font-family: var(--font-sans);
-  font-size: var(--text-sm);
-  font-weight: var(--weight-bold);
+  font-family: var(--font-sans, system-ui, sans-serif);
+  font-size: var(--text-sm, 0.875rem);
+  font-weight: var(--weight-bold, 700);
   letter-spacing: 0.02em;
   transition:
-    background-color var(--dur-fast) var(--ease-out),
-    transform var(--dur-fast) var(--ease-out),
-    box-shadow var(--dur-fast) var(--ease-out),
-    width var(--dur-base) var(--ease-out),
-    padding var(--dur-base) var(--ease-out);
+    background-color var(--dur-fast, 150ms) var(--ease-out),
+    transform var(--dur-fast, 150ms) var(--ease-out),
+    box-shadow var(--dur-fast, 150ms) var(--ease-out),
+    padding 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.sherwood-ai-launcher:hover {
-  background-color: var(--color-primary-dark);
+.sherwood-ai-launcher:hover,
+.sherwood-ai-launcher:focus-visible {
+  background-color: var(--color-primary-dark, #033620);
   transform: translateY(-2px);
-  box-shadow: var(--shadow-xl), 0 8px 20px rgba(8, 120, 63, 0.35);
+  box-shadow: var(--shadow-xl), 0 14px 30px rgba(8, 120, 63, 0.35);
+  outline: none;
+}
+
+.sherwood-ai-launcher:focus-visible {
+  outline: 2px solid var(--color-gold, #c59b27);
+  outline-offset: 3px;
 }
 
 .sherwood-ai-launcher:active {
   transform: translateY(0);
+}
+
+.sherwood-ai-launcher-text {
+  max-width: 140px;
+  opacity: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  transition:
+    max-width 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.2s ease;
+}
+
+/* Compact circle while scrolling */
+.sherwood-ai-launcher.compact-circle {
+  padding: 0;
+  width: 56px;
+  border-radius: 50%;
+}
+
+.sherwood-ai-launcher.compact-circle .sherwood-ai-launcher-text {
+  max-width: 0;
+  opacity: 0;
+  margin: 0;
+}
+
+/* Expand on hover/focus even if compact */
+.sherwood-ai-launcher.compact-circle:hover,
+.sherwood-ai-launcher.compact-circle:focus-visible {
+  width: auto;
+  padding: 0 20px 0 12px;
+}
+
+.sherwood-ai-launcher.compact-circle:hover .sherwood-ai-launcher-text,
+.sherwood-ai-launcher.compact-circle:focus-visible .sherwood-ai-launcher-text {
+  max-width: 140px;
+  opacity: 1;
 }
 
 .sherwood-ai-launcher.attention-pulse {
@@ -84,24 +129,19 @@
   flex-shrink: 0;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .sherwood-ai-launcher {
-    right: var(--space-4);
-    bottom: calc(var(--space-4) + env(safe-area-inset-bottom, 0px));
-    min-height: 56px;
-    min-width: 56px;
-    padding: 10px 16px;
+    right: var(--space-4, 16px);
+    bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+    width: 56px !important;
+    height: 56px !important;
+    min-height: 56px !important;
+    min-width: 56px !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
   }
 
-  .sherwood-ai-launcher.scrolling-collapsed {
-    padding: 0;
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    justify-content: center;
-  }
-
-  .sherwood-ai-launcher.scrolling-collapsed .sherwood-ai-launcher-text {
-    display: none;
+  .sherwood-ai-launcher .sherwood-ai-launcher-text {
+    display: none !important;
   }
 }

@@ -3,8 +3,12 @@
    ============================================================================= */
 
 .sherwood-testimonial {
-  padding: var(--space-16) var(--space-6);
-  background-color: var(--color-bg-canvas);
+  padding: var(--space-20, 5rem) var(--space-6, 1.5rem);
+  background-color: var(--color-bg-surface-warm, #fbfaf6);
+}
+
+[data-theme="dark"] .sherwood-testimonial {
+  background-color: #0d1a13;
 }
 
 .sherwood-testimonial__container {

@@ -1,40 +1,78 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import schoolCampusAerial from "../../../assets/sheerwood-campus-aerial-web.jpg";
-import galleryCulture from "../../../assets/gallery-culture.png";
-import galleryCampus from "../../../assets/gallery-campus-library.png";
-import galleryAcademics from "../../../assets/gallery-academics.png";
+import galleryAcademics from "../../../assets/gallery-academics.webp";
+import gallerySports from "../../../assets/gallery-sports.webp";
+import galleryCulture from "../../../assets/gallery-culture.webp";
+import galleryCampus from "../../../assets/gallery-campus-library.webp";
+import galleryHostel from "../../../assets/gallery-hostel-building.webp";
+import galleryAuditorium from "../../../assets/sheerwood-auditorium-web.jpg";
 import Button from "../../../components/Button/Button";
+import SchoolCrest from "../../../components/SchoolCrest";
 import "./GallerySection.css";
 
 const galleryItems = [
   {
     image: schoolCampusAerial,
     alt: "Aerial view of the sprawling 70-acre Sherwood College campus in Nainital",
-    title: "Our Historic Campus",
+    title: "Our Historic Campus Quad",
     tag: "Campus Heritage",
-    className: "sherwood-gallery__item--tall",
+    type: "photo",
+    className: "sherwood-gallery__item--hero",
+  },
+  {
+    image: galleryAcademics,
+    alt: "Students engaging in collaborative scientific inquiry in the ICSE lab",
+    title: "STEM & Discovery",
+    tag: "Academics",
+    type: "photo",
+    className: "sherwood-gallery__item--sm",
+  },
+  {
+    image: gallerySports,
+    alt: "Athletes competing on the Sherwood College mountain sports grounds",
+    title: "Athletics & Character",
+    tag: "Sports",
+    type: "photo",
+    className: "sherwood-gallery__item--sm",
   },
   {
     image: galleryCulture,
-    alt: "Students performing at a college cultural event and musical concert",
-    title: "Co-Curricular & Arts",
-    tag: "Student Life",
+    alt: "Students performing theatrical arts and music at the college concert",
+    title: "The Arts & Cultural Legacy",
+    tag: "Milman Hall",
+    type: "photo",
     className: "sherwood-gallery__item--wide",
   },
   {
     image: galleryCampus,
-    alt: "The Sherwood College library courtyard and colonial cloisters",
+    alt: "The colonial cloisters and library reading rooms at Sherwood College",
     title: "Library & Courtyards",
-    tag: "Facilities",
-    className: "",
+    tag: "Quiet Study",
+    type: "photo",
+    className: "sherwood-gallery__item--sm",
   },
   {
-    image: galleryAcademics,
-    alt: "Students engaging in collaborative experiments in the science laboratory",
-    title: "STEM & Discovery",
-    tag: "Academics",
-    className: "",
+    image: galleryHostel,
+    alt: "The heritage stone residential houses and dormitories",
+    title: "Boarding Life",
+    tag: "Pastoral Care",
+    type: "photo",
+    className: "sherwood-gallery__item--sm",
+  },
+  {
+    image: galleryAuditorium,
+    alt: "Gatherings in the historic Sherwood College auditorium",
+    title: "College Assemblies",
+    tag: "Tradition",
+    type: "photo",
+    className: "sherwood-gallery__item--sm",
+  },
+  {
+    type: "callout",
+    title: "Explore Full Campus Archive",
+    tag: "600+ Heritage Photos",
+    className: "sherwood-gallery__item--callout",
   },
 ];
 
@@ -53,29 +91,55 @@ export default function GallerySection() {
         </header>
 
         <div className="sherwood-gallery__grid">
-          {galleryItems.map((item) => (
-            <Link
-              key={item.title}
-              to="/gallery"
-              className={`sherwood-gallery__item ${item.className}`.trim()}
-            >
-              <img
-                src={item.image}
-                alt={item.alt}
-                loading="lazy"
-                width="600"
-                height="400"
-                className="sherwood-gallery__img"
-              />
-              <div className="sherwood-gallery__overlay">
-                <span className="sherwood-gallery__tag">{item.tag}</span>
-                <strong className="sherwood-gallery__item-title">{item.title}</strong>
-              </div>
-            </Link>
-          ))}
+          {galleryItems.map((item) => {
+            if (item.type === "callout") {
+              return (
+                <Link
+                  key={item.title}
+                  to="/gallery"
+                  className={`sherwood-gallery__item ${item.className}`.trim()}
+                  aria-label="View complete 70-acre campus photographic archive"
+                >
+                  <div className="sherwood-gallery__callout-inner">
+                    <div className="sherwood-gallery__callout-watermark" aria-hidden="true">
+                      <SchoolCrest size={72} />
+                    </div>
+                    <span className="sherwood-gallery__callout-badge">{item.tag}</span>
+                    <strong className="sherwood-gallery__callout-title">{item.title}</strong>
+                    <p className="sherwood-gallery__callout-text">
+                      Step inside our mountain campus, houses, regattas, and laboratories.
+                    </p>
+                    <span className="sherwood-gallery__callout-cta">
+                      Enter Archive <span>→</span>
+                    </span>
+                  </div>
+                </Link>
+              );
+            }
+
+            return (
+              <Link
+                key={item.title}
+                to="/gallery"
+                className={`sherwood-gallery__item ${item.className}`.trim()}
+              >
+                <img
+                  src={item.image}
+                  alt={item.alt}
+                  loading="lazy"
+                  width="600"
+                  height="400"
+                  className="sherwood-gallery__img"
+                />
+                <div className="sherwood-gallery__overlay">
+                  <span className="sherwood-gallery__tag">{item.tag}</span>
+                  <strong className="sherwood-gallery__item-title">{item.title}</strong>
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </div>
     </section>
   );
 }
-
