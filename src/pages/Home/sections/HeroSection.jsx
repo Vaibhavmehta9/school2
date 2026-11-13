@@ -5,15 +5,24 @@ import SchoolCrest from "../../../components/SchoolCrest";
 import Button from "../../../components/Button/Button";
 import homeHeroVideo from "../../../assets/home-hero-background.mp4";
 import schoolCampusAerial from "../../../assets/sheerwood-campus-aerial-web.jpg";
-import { isReducedMotion, fadeInUp } from "../../../utils/motion";
+import { isReducedMotion, gsap } from "../../../utils/motion";
 import "./HeroSection.css";
 
 export default function HeroSection({ onOpenCampusFilm, onOpenAdmissionCode }) {
   const heroRef = useRef(null);
   const copyRef = useRef(null);
   const ctaWrapRef = useRef(null);
+  const scrollCueRef = useRef(null);
+
+  // Counter refs
+  const statYearsRef = useRef(null);
+  const statPassRef = useRef(null);
+  const statRatioRef = useRef(null);
+  const statAcresRef = useRef(null);
+
   const [shouldPlayVideo, setShouldPlayVideo] = useState(false);
 
+  // Subtle magnetic pull for hero "Start Admission" CTA (desktop only, no reduced motion)
   const handleMagneticMove = (e) => {
     if (isReducedMotion()) return;
     const el = ctaWrapRef.current;
@@ -31,7 +40,6 @@ export default function HeroSection({ onOpenCampusFilm, onOpenAdmissionCode }) {
   };
 
   useEffect(() => {
-    // Only autoplay background video if user does NOT prefer reduced motion and does NOT have Save-Data
     const isSaveData = Boolean(
       navigator.connection && navigator.connection.saveData
     );
@@ -41,13 +49,113 @@ export default function HeroSection({ onOpenCampusFilm, onOpenAdmissionCode }) {
       setShouldPlayVideo(true);
     }
 
-    if (copyRef.current) {
-      fadeInUp(copyRef.current.children, {
-        stagger: 0.1,
-        y: 20,
-        duration: 0.7,
-      });
-    }
+    const ctx = gsap.context(() => {
+      if (prefersReduced) {
+        if (statYearsRef.current) statYearsRef.current.textContent = "150";
+        if (statPassRef.current) statPassRef.current.textContent = "100";
+        if (statRatioRef.current) statRatioRef.current.textContent = "1:12";
+        if (statAcresRef.current) statAcresRef.current.textContent = "70";
+        return;
+      }
+
+      // 1. Headline line-by-line reveal from mask
+      const revealLines = gsap.utils.toArray(".sherwood-hero__reveal-line");
+      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+      tl.fromTo(
+        revealLines,
+        { yPercent: 120, opacity: 0 },
+        { yPercent: 0, opacity: 1, duration: 1, stagger: 0.15, delay: 0.1 }
+      )
+        .fromTo(
+          ".sherwood-hero__lead",
+          { y: 24, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.8 },
+          "-=0.5"
+        )
+        .fromTo(
+          ".sherwood-hero__actions",
+          { y: 20, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.7 },
+          "-=0.4"
+        )
+        .fromTo(
+          ".sherwood-hero__metrics",
+          { y: 16, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.7 },
+          "-=0.3"
+        )
+        .fromTo(
+          ".sherwood-hero__aside",
+          { y: 30, opacity: 0, scale: 0.98 },
+          { y: 0, opacity: 1, scale: 1, duration: 0.9 },
+          "-=0.6"
+        );
+
+      // 2. Count-up numbers (150+, 100%, 1:12, 70 Acres)
+      const countUp = (targetEl, targetVal, duration = 1.6) => {
+        if (!targetEl) return;
+        const counterObj = { val: 0 };
+        gsap.to(counterObj, {
+          val: targetVal,
+          duration,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: targetEl,
+            start: "top 95%",
+            once: true,
+          },
+          onUpdate: () => {
+            targetEl.textContent = Math.floor(counterObj.val);
+          },
+          onComplete: () => {
+            targetEl.textContent = targetVal;
+          },
+        });
+      };
+
+      countUp(statYearsRef.current, 150, 1.8);
+      countUp(statPassRef.current, 100, 1.5);
+      countUp(statAcresRef.current, 70, 1.4);
+      if (statRatioRef.current) {
+        gsap.fromTo(
+          statRatioRef.current,
+          { opacity: 0, scale: 0.8 },
+          { opacity: 1, scale: 1, duration: 0.8, delay: 0.6 }
+        );
+      }
+
+      // 3. Desktop parallax on background video/image
+      if (window.innerWidth > 960) {
+        gsap.to(".sherwood-hero__video, .sherwood-hero__poster", {
+          yPercent: 12,
+          ease: "none",
+          scrollTrigger: {
+            trigger: heroRef.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
+      }
+
+      // 4. Scroll-down cue fade on scroll
+      if (scrollCueRef.current) {
+        gsap.to(scrollCueRef.current, {
+          opacity: 0,
+          y: 20,
+          ease: "power1.out",
+          scrollTrigger: {
+            trigger: heroRef.current,
+            start: "top top",
+            end: "25% top",
+            scrub: true,
+          },
+        });
+      }
+    }, heroRef);
+
+    return () => ctx.revert();
   }, []);
 
   return (
@@ -84,8 +192,14 @@ export default function HeroSection({ onOpenCampusFilm, onOpenAdmissionCode }) {
           </div>
 
           <h1 className="sherwood-hero__headline">
-            Where young minds<br />
-            <em>grow with purpose.</em>
+            <span className="sherwood-hero__mask-line">
+              <span className="sherwood-hero__reveal-line">Where young minds</span>
+            </span>
+            <span className="sherwood-hero__mask-line">
+              <span className="sherwood-hero__reveal-line">
+                <em>grow with purpose.</em>
+              </span>
+            </span>
           </h1>
 
           <p className="sherwood-hero__lead">
@@ -126,17 +240,21 @@ export default function HeroSection({ onOpenCampusFilm, onOpenAdmissionCode }) {
 
           <div className="sherwood-hero__metrics">
             <div className="sherwood-hero__metric">
-              <strong>150+</strong>
+              <strong>
+                <span ref={statYearsRef}>150</span>+
+              </strong>
               <small>Years of Heritage</small>
             </div>
             <div className="sherwood-hero__metric-divider" />
             <div className="sherwood-hero__metric">
-              <strong>100%</strong>
+              <strong>
+                <span ref={statPassRef}>100</span>%
+              </strong>
               <small>Board Pass Record</small>
             </div>
             <div className="sherwood-hero__metric-divider" />
             <div className="sherwood-hero__metric">
-              <strong>1:12</strong>
+              <strong ref={statRatioRef}>1:12</strong>
               <small>Faculty to Student Ratio</small>
             </div>
           </div>
@@ -156,7 +274,9 @@ export default function HeroSection({ onOpenCampusFilm, onOpenAdmissionCode }) {
 
           <div className="sherwood-hero__aside-chips">
             <div className="sherwood-hero__chip">
-              <strong>70 Acres</strong>
+              <strong>
+                <span ref={statAcresRef}>70</span> Acres
+              </strong>
               <small>Lush Campus</small>
             </div>
             <div className="sherwood-hero__chip">
@@ -176,6 +296,14 @@ export default function HeroSection({ onOpenCampusFilm, onOpenAdmissionCode }) {
           </Button>
         </aside>
       </div>
+
+      {/* Scroll-down cue that fades on scroll */}
+      <div className="sherwood-hero__scroll-cue" ref={scrollCueRef} aria-hidden="true">
+        <span>Scroll to explore</span>
+        <div className="sherwood-hero__scroll-pill">
+          <div className="sherwood-hero__scroll-dot" />
+        </div>
+      </div>
     </section>
   );
 }
@@ -184,4 +312,3 @@ HeroSection.propTypes = {
   onOpenCampusFilm: PropTypes.func.isRequired,
   onOpenAdmissionCode: PropTypes.func.isRequired,
 };
-

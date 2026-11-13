@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import Card from "../../../components/Card/Card";
+import { isReducedMotion, gsap } from "../../../utils/motion";
 import "./FeaturesSection.css";
 
 const features = [
@@ -83,8 +84,31 @@ const features = [
 ];
 
 export default function FeaturesSection() {
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    if (isReducedMotion()) return undefined;
+
+    const ctx = gsap.context(() => {
+      gsap.from(".sherwood-features__card", {
+        y: 45,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.12,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: ".sherwood-features__grid",
+          start: "top 82%",
+          once: true,
+        },
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section id="features" className="sherwood-features">
+    <section id="features" className="sherwood-features" ref={sectionRef}>
       <div className="sherwood-features__container">
         <header className="sherwood-features__header">
           <span className="sherwood-section-label">ACADEMIC & RESIDENTIAL PILLARS</span>

@@ -1,5 +1,5 @@
 /* =============================================================================
-   SHERWOOD ADMISSION TIMELINE STYLES
+   SHERWOOD ADMISSION TIMELINE STYLES (Stage 4 Motion & Fill)
    ============================================================================= */
 
 .sherwood-timeline {
@@ -19,120 +19,215 @@
 .sherwood-timeline__header {
   text-align: center;
   max-width: 720px;
-  margin: 0 auto var(--space-16);
+  margin: 0 auto var(--space-16, 4rem);
 }
 
 .sherwood-timeline__title {
-  font-family: var(--font-serif);
+  font-family: var(--font-serif, Georgia, serif);
   font-size: clamp(2rem, 3.2vw, 3rem);
-  color: var(--color-charcoal-900);
-  margin-top: var(--space-2);
-  margin-bottom: var(--space-3);
+  color: var(--color-charcoal-900, #172b21);
+  margin-top: var(--space-2, 0.5rem);
+  margin-bottom: var(--space-3, 0.75rem);
+}
+
+[data-theme="dark"] .sherwood-timeline__title {
+  color: #ffffff;
 }
 
 .sherwood-timeline__subtitle {
-  font-size: var(--text-base);
-  color: var(--color-charcoal-600);
-  line-height: var(--leading-relaxed);
+  font-size: var(--text-base, 1rem);
+  color: var(--color-charcoal-600, #4a6356);
+  line-height: var(--leading-relaxed, 1.625);
   margin: 0;
+}
+
+[data-theme="dark"] .sherwood-timeline__subtitle {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+/* Timeline Track Wrap */
+.sherwood-timeline__track-wrap {
+  position: relative;
+  margin-bottom: var(--space-16, 4rem);
+}
+
+/* Continuous Progress Tracks */
+.sherwood-timeline__progress-track {
+  position: absolute;
+  top: 22px;
+  left: 22px;
+  right: 22px;
+  height: 3px;
+  background-color: rgba(8, 120, 63, 0.12);
+  border-radius: 9999px;
+  z-index: 1;
+}
+
+[data-theme="dark"] .sherwood-timeline__progress-track {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.sherwood-timeline__progress-bar {
+  position: absolute;
+  top: 22px;
+  left: 22px;
+  right: 22px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-gold, #c59b27), var(--color-gold-light, #dfb846));
+  border-radius: 9999px;
+  transform-origin: left;
+  transform: scaleX(0);
+  z-index: 2;
+  box-shadow: 0 0 10px rgba(197, 155, 39, 0.5);
+  will-change: transform;
 }
 
 .sherwood-timeline__track {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: var(--space-4);
+  gap: var(--space-6, 1.5rem);
   position: relative;
-  margin-bottom: var(--space-12);
+  z-index: 3;
 }
 
 .sherwood-timeline__step {
   display: flex;
   flex-direction: column;
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .sherwood-timeline__step-marker {
   position: relative;
   display: flex;
   align-items: center;
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--space-4, 1rem);
 }
 
 .sherwood-timeline__step-num {
   width: 44px;
   height: 44px;
-  border-radius: var(--radius-pill);
-  background: var(--color-primary);
-  color: #ffffff;
+  border-radius: 50%;
+  background: var(--color-bg-surface, #ffffff);
+  border: 2px solid var(--color-border-default, #d7e6db);
+  color: var(--color-charcoal-700, #334a3e);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-serif);
-  font-size: var(--text-sm);
-  font-weight: var(--weight-bold);
-  box-shadow: var(--shadow-sm);
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: var(--text-sm, 0.875rem);
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   flex-shrink: 0;
-  z-index: 2;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.sherwood-timeline__line {
-  position: absolute;
-  left: 44px;
-  right: -20px;
-  height: 2px;
-  background-color: var(--color-border-default);
-  z-index: 1;
+[data-theme="dark"] .sherwood-timeline__step-num {
+  background: #14231b;
+  border-color: rgba(223, 184, 70, 0.2);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Active Step Lighting Up */
+.sherwood-timeline__step--active .sherwood-timeline__step-num {
+  background: var(--color-primary, #054b2d);
+  border-color: var(--color-gold, #c59b27);
+  color: #ffffff;
+  box-shadow: 0 0 16px rgba(197, 155, 39, 0.45);
+  transform: scale(1.1);
+}
+
+[data-theme="dark"] .sherwood-timeline__step--active .sherwood-timeline__step-num {
+  background: var(--color-gold, #c59b27);
+  border-color: var(--color-gold-light, #dfb846);
+  color: #033620;
+}
+
+.sherwood-timeline__content {
+  display: flex;
+  flex-direction: column;
 }
 
 .sherwood-timeline__step-title {
-  font-family: var(--font-serif);
-  font-size: var(--text-base);
-  color: var(--color-charcoal-900);
-  margin-bottom: var(--space-2);
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: 1.05rem;
+  color: var(--color-charcoal-900, #172b21);
+  margin-top: 0;
+  margin-bottom: var(--space-2, 0.5rem);
+  font-weight: 700;
+  transition: color 0.3s ease;
+}
+
+[data-theme="dark"] .sherwood-timeline__step-title {
+  color: #ffffff;
+}
+
+.sherwood-timeline__step--active .sherwood-timeline__step-title {
+  color: var(--color-primary-dark, #033620);
+}
+
+[data-theme="dark"] .sherwood-timeline__step--active .sherwood-timeline__step-title {
+  color: var(--color-gold-light, #dfb846);
 }
 
 .sherwood-timeline__step-desc {
-  font-size: var(--text-xs);
-  color: var(--color-charcoal-600);
-  line-height: var(--leading-normal);
+  font-size: 0.8125rem;
+  color: var(--color-charcoal-600, #4a6356);
+  line-height: var(--leading-normal, 1.5);
   margin: 0;
+}
+
+[data-theme="dark"] .sherwood-timeline__step-desc {
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .sherwood-timeline__footer {
   display: flex;
+  align-items: center;
   justify-content: center;
-  gap: var(--space-4);
+  gap: var(--space-4, 1rem);
   flex-wrap: wrap;
-  padding-top: var(--space-6);
-  border-top: 1px solid var(--color-border-subtle);
 }
 
-/* Responsive */
+/* Vertical Mobile Track */
 @media (max-width: 900px) {
   .sherwood-timeline__track {
     grid-template-columns: 1fr;
-    gap: var(--space-6);
+    gap: var(--space-6, 1.5rem);
   }
 
   .sherwood-timeline__step {
     flex-direction: row;
-    gap: var(--space-4);
+    gap: var(--space-4, 1rem);
   }
 
   .sherwood-timeline__step-marker {
     margin-bottom: 0;
   }
 
-  .sherwood-timeline__line {
-    top: 44px;
-    bottom: -30px;
+  .sherwood-timeline__progress-track {
+    top: 22px;
+    bottom: 22px;
     left: 21px;
     right: auto;
-    width: 2px;
+    width: 3px;
     height: auto;
   }
 
+  .sherwood-timeline__progress-bar {
+    top: 22px;
+    bottom: 22px;
+    left: 21px;
+    right: auto;
+    width: 3px;
+    height: auto;
+    transform-origin: top;
+    transform: scaleY(0);
+    background: linear-gradient(180deg, var(--color-gold, #c59b27), var(--color-gold-light, #dfb846));
+  }
+}
+
+@media (max-width: 600px) {
   .sherwood-timeline {
     padding: var(--space-16, 4rem) var(--space-4, 1rem);
   }
 }
-

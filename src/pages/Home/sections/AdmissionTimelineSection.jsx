@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import Button from "../../../components/Button/Button";
+import { isReducedMotion, gsap } from "../../../utils/motion";
 import "./AdmissionTimelineSection.css";
 
 const steps = [
@@ -32,8 +33,64 @@ const steps = [
 ];
 
 export default function AdmissionTimelineSection() {
+  const sectionRef = useRef(null);
+  const trackRef = useRef(null);
+  const progressBarRef = useRef(null);
+  const [activeStepIndex, setActiveStepIndex] = useState(0);
+
+  useEffect(() => {
+    if (isReducedMotion()) {
+      setActiveStepIndex(4);
+      return undefined;
+    }
+
+    const ctx = gsap.context(() => {
+      const isMobile = window.innerWidth <= 768;
+
+      // Animate progress bar fill along the timeline as user scrolls
+      gsap.fromTo(
+        progressBarRef.current,
+        isMobile ? { scaleY: 0 } : { scaleX: 0 },
+        {
+          scaleX: 1,
+          scaleY: 1,
+          ease: "none",
+          scrollTrigger: {
+            trigger: trackRef.current,
+            start: "top 75%",
+            end: "bottom 60%",
+            scrub: 0.5,
+            onUpdate: (self) => {
+              const currentStep = Math.min(
+                steps.length - 1,
+                Math.floor(self.progress * steps.length)
+              );
+              setActiveStepIndex(currentStep);
+            },
+          },
+        }
+      );
+
+      // Staggered entrance for steps
+      gsap.from(".sherwood-timeline__step", {
+        y: 30,
+        opacity: 0,
+        duration: 0.7,
+        stagger: 0.1,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: trackRef.current,
+          start: "top 85%",
+          once: true,
+        },
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section id="admission-process" className="sherwood-timeline">
+    <section id="admission-process" className="sherwood-timeline" ref={sectionRef}>
       <div className="sherwood-timeline__container">
         <header className="sherwood-timeline__header">
           <span className="sherwood-section-label">ADMISSIONS 2027–28</span>
@@ -44,19 +101,34 @@ export default function AdmissionTimelineSection() {
           </p>
         </header>
 
-        <div className="sherwood-timeline__track">
-          {steps.map((item, index) => (
-            <div key={item.step} className="sherwood-timeline__step">
-              <div className="sherwood-timeline__step-marker">
-                <span className="sherwood-timeline__step-num">{item.step}</span>
-                {index < steps.length - 1 && <span className="sherwood-timeline__line" />}
-              </div>
-              <div className="sherwood-timeline__content">
-                <h3 className="sherwood-timeline__step-title">{item.title}</h3>
-                <p className="sherwood-timeline__step-desc">{item.desc}</p>
-              </div>
-            </div>
-          ))}
+        <div className="sherwood-timeline__track-wrap" ref={trackRef}>
+          {/* Continuous progress track and animated gold fill line */}
+          <div className="sherwood-timeline__progress-track" aria-hidden="true" />
+          <div
+            className="sherwood-timeline__progress-bar"
+            ref={progressBarRef}
+            aria-hidden="true"
+          />
+
+          <div className="sherwood-timeline__track">
+            {steps.map((item, index) => {
+              const isActive = index <= activeStepIndex;
+              return (
+                <div
+                  key={item.step}
+                  className={`sherwood-timeline__step ${isActive ? "sherwood-timeline__step--active" : ""}`}
+                >
+                  <div className="sherwood-timeline__step-marker">
+                    <span className="sherwood-timeline__step-num">{item.step}</span>
+                  </div>
+                  <div className="sherwood-timeline__content">
+                    <h3 className="sherwood-timeline__step-title">{item.title}</h3>
+                    <p className="sherwood-timeline__step-desc">{item.desc}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
 
         <div className="sherwood-timeline__footer">
@@ -64,11 +136,10 @@ export default function AdmissionTimelineSection() {
             Begin Application Process <span>→</span>
           </Button>
           <Button as={Link} to="/admission-details" variant="outline" size="md">
-            View Eligibility & Age Cutoffs
+            View Eligibility &amp; Age Cutoffs
           </Button>
         </div>
       </div>
     </section>
   );
 }
-

@@ -3,11 +3,12 @@ import { useNavigate } from "react-router-dom";
 import ChatPanel from "../components/ChatPanel/ChatPanel";
 import SherwoodAIAvatar from "../components/ChatPanel/SherwoodAIAvatar";
 import { useCognitoAuth } from "../auth/useCognitoAuth";
-import { initSmoothScrolling } from "../utils/motion";
+import { initSmoothScrolling, ScrollTrigger } from "../utils/motion";
 
 // Modular Section Components
 import Navbar from "./Home/sections/Navbar";
 import HeroSection from "./Home/sections/HeroSection";
+import MarqueeBanner from "./Home/sections/MarqueeBanner";
 import AboutSection from "./Home/sections/AboutSection";
 import FeaturesSection from "./Home/sections/FeaturesSection";
 import AdmissionTimelineSection from "./Home/sections/AdmissionTimelineSection";
@@ -33,8 +34,30 @@ export default function Home() {
   const [aiOpen, setAiOpen] = useState(false);
   const [hasAttentionPulse, setHasAttentionPulse] = useState(false);
   const [isScrolledCompact, setIsScrolledCompact] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const idleTimerRef = useRef(null);
   const scrollTimerRef = useRef(null);
+
+  // Track global scroll progress for top gold progress bar
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (scrollHeight > 0) {
+        setScrollProgress(Math.min(1, Math.max(0, scrollTop / scrollHeight)));
+      }
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Refresh ScrollTrigger after component mount and asset loading
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 400);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Soft attention pulse after 8 seconds (once per session)
   useEffect(() => {
@@ -93,6 +116,13 @@ export default function Home() {
 
   return (
     <div className="sherwood-home-page">
+      {/* Top Gold Scroll Progress Bar */}
+      <div
+        className="sherwood-scroll-progress-bar"
+        style={{ transform: `scaleX(${scrollProgress})` }}
+        aria-hidden="true"
+      />
+
       {/* 1. Sticky Navigation */}
       <Navbar user={user} signOut={signOut} />
 
@@ -102,6 +132,7 @@ export default function Home() {
           onOpenCampusFilm={() => setCampusFilmOpen(true)}
           onOpenAdmissionCode={() => setAdmissionCodeOpen(true)}
         />
+        <MarqueeBanner />
         <AboutSection />
         <FeaturesSection />
         <AdmissionTimelineSection />

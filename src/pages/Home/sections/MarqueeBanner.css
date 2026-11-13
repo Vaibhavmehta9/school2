@@ -1,0 +1,83 @@
+/* =============================================================================
+   SHERWOOD MARQUEE BANNER STYLES
+   Slow, accessible, pausable horizontal ticker between Hero and About.
+   ============================================================================= */
+
+.sherwood-marquee {
+  width: 100%;
+  overflow: hidden;
+  background: var(--color-primary-dark, #033620);
+  border-top: 1px solid rgba(223, 184, 70, 0.3);
+  border-bottom: 1px solid rgba(223, 184, 70, 0.3);
+  padding: 12px 0;
+  user-select: none;
+  position: relative;
+  z-index: 2;
+}
+
+[data-theme="dark"] .sherwood-marquee {
+  background: #09150e;
+  border-color: rgba(223, 184, 70, 0.2);
+}
+
+.sherwood-marquee__track {
+  display: flex;
+  width: max-content;
+  outline: none;
+}
+
+.sherwood-marquee__content {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  animation: sherwood-marquee-scroll 38s linear infinite;
+}
+
+/* Pause marquee on hover or keyboard focus */
+.sherwood-marquee:hover .sherwood-marquee__content,
+.sherwood-marquee__track:focus-within .sherwood-marquee__content {
+  animation-play-state: paused;
+}
+
+.sherwood-marquee__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 28px;
+  font-family: var(--font-sans, system-ui, sans-serif);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.sherwood-marquee__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--color-gold, #c59b27);
+  box-shadow: 0 0 8px rgba(197, 155, 39, 0.7);
+  flex-shrink: 0;
+}
+
+@keyframes sherwood-marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+/* Disable marquee animation under prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .sherwood-marquee {
+    overflow-x: auto;
+  }
+
+  .sherwood-marquee__content {
+    animation: none;
+  }
+}

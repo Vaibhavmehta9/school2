@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import schoolCampusAerial from "../../../assets/sheerwood-campus-aerial-web.jpg";
 import galleryAcademics from "../../../assets/gallery-academics.webp";
@@ -9,6 +9,7 @@ import galleryHostel from "../../../assets/gallery-hostel-building.webp";
 import galleryAuditorium from "../../../assets/sheerwood-auditorium-web.jpg";
 import Button from "../../../components/Button/Button";
 import SchoolCrest from "../../../components/SchoolCrest";
+import { isReducedMotion, gsap } from "../../../utils/motion";
 import "./GallerySection.css";
 
 const galleryItems = [
@@ -77,8 +78,31 @@ const galleryItems = [
 ];
 
 export default function GallerySection() {
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    if (isReducedMotion()) return undefined;
+
+    const ctx = gsap.context(() => {
+      gsap.from(".sherwood-gallery__item", {
+        y: 40,
+        opacity: 0,
+        duration: 0.75,
+        stagger: 0.08,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: ".sherwood-gallery__grid",
+          start: "top 82%",
+          once: true,
+        },
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section id="gallery" className="sherwood-gallery">
+    <section id="gallery" className="sherwood-gallery" ref={sectionRef}>
       <div className="sherwood-gallery__container">
         <header className="sherwood-gallery__header">
           <div className="sherwood-gallery__header-left">

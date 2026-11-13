@@ -35,11 +35,15 @@
 }
 
 .sherwood-about__welcome-title {
-  font-family: var(--font-serif);
+  font-family: var(--font-serif, Georgia, serif);
   font-size: clamp(2rem, 3.2vw, 3rem);
   line-height: 1.15;
-  color: var(--color-charcoal-900);
+  color: var(--color-charcoal-900, #172b21);
   margin: 0;
+}
+
+.sherwood-about__welcome-line {
+  display: block;
 }
 
 .sherwood-about__welcome-right p {
