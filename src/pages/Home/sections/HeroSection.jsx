@@ -11,7 +11,24 @@ import "./HeroSection.css";
 export default function HeroSection({ onOpenCampusFilm, onOpenAdmissionCode }) {
   const heroRef = useRef(null);
   const copyRef = useRef(null);
+  const ctaWrapRef = useRef(null);
   const [shouldPlayVideo, setShouldPlayVideo] = useState(false);
+
+  const handleMagneticMove = (e) => {
+    if (isReducedMotion()) return;
+    const el = ctaWrapRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    el.style.transform = `translate(${x * 0.15}px, ${y * 0.15 - 2}px)`;
+  };
+
+  const handleMagneticLeave = () => {
+    const el = ctaWrapRef.current;
+    if (!el) return;
+    el.style.transform = "";
+  };
 
   useEffect(() => {
     // Only autoplay background video if user does NOT prefer reduced motion and does NOT have Save-Data
@@ -77,14 +94,21 @@ export default function HeroSection({ onOpenCampusFilm, onOpenAdmissionCode }) {
           </p>
 
           <div className="sherwood-hero__actions">
-            <Button
-              as={Link}
-              to="/admission-details"
-              variant="gold"
-              size="lg"
+            <div
+              ref={ctaWrapRef}
+              onMouseMove={handleMagneticMove}
+              onMouseLeave={handleMagneticLeave}
+              className="sherwood-hero__cta-magnetic-wrap"
             >
-              Start Admission <span>→</span>
-            </Button>
+              <Button
+                as={Link}
+                to="/admission-details"
+                variant="gold"
+                size="lg"
+              >
+                Start Admission <span>→</span>
+              </Button>
+            </div>
 
             <Button
               variant="secondary"

@@ -66,6 +66,50 @@ a:hover {
   color: var(--color-primary-dark);
 }
 
+/* Editorial and homepage text links: underline draws left to right on hover */
+.sherwood-link,
+a.sherwood-text-link,
+.sherwood-about__discover-link,
+.sherwood-hero__login-link,
+.sherwood-calendar-link,
+.sherwood-notice-link,
+.sherwood-features__explore {
+  position: relative;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.sherwood-link::after,
+a.sherwood-text-link::after,
+.sherwood-about__discover-link::after,
+.sherwood-hero__login-link::after,
+.sherwood-calendar-link::after,
+.sherwood-notice-link::after,
+.sherwood-features__explore::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sherwood-link:hover::after,
+a.sherwood-text-link:hover::after,
+.sherwood-about__discover-link:hover::after,
+.sherwood-hero__login-link:hover::after,
+.sherwood-calendar-link:hover::after,
+.sherwood-notice-link:hover::after,
+.sherwood-features__explore:hover::after {
+  transform: scaleX(1);
+}
+
 img, video {
   max-width: 100%;
   height: auto;

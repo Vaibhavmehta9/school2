@@ -1,21 +1,60 @@
 /* =============================================================================
-   SHERWOOD COLLEGE CARD STYLES
+   SHERWOOD COLLEGE CARD STYLES (Stage 3 Motion & Polish)
    ============================================================================= */
 
 .sherwood-card {
   position: relative;
-  background-color: var(--color-bg-surface);
-  border-radius: var(--radius-lg); /* 12-16px modern standard */
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  color: var(--color-text-primary);
+  background-color: var(--color-bg-surface, #ffffff);
+  border-radius: var(--radius-lg, 16px);
+  border: 1px solid var(--color-border-subtle, rgba(8, 120, 63, 0.12));
+  color: var(--color-text-primary, #172b21);
   box-sizing: border-box;
-  font-size: var(--text-sm); /* >= 14px body */
-  line-height: var(--leading-relaxed);
-  box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
+  font-size: var(--text-sm, 0.875rem);
+  line-height: var(--leading-relaxed, 1.625);
+  box-shadow: 0 4px 16px -2px rgba(3, 44, 28, 0.05), 0 2px 6px -1px rgba(3, 44, 28, 0.03);
+  overflow: hidden;
   transition:
-    transform var(--dur-base) var(--ease-out),
-    box-shadow var(--dur-base) var(--ease-out),
-    border-color var(--dur-base) var(--ease-out);
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Thin animated gold line across the top edge on hover */
+.sherwood-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2.5px;
+  background: linear-gradient(90deg, var(--color-gold, #c59b27), var(--color-gold-light, #dfb846));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 5;
+}
+
+.sherwood-card:hover::before {
+  transform: scaleX(1);
+}
+
+/* Hover lift 4-6px with layered soft shadow */
+.sherwood-card:hover,
+.sherwood-card--interactive:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 36px -4px rgba(3, 44, 28, 0.12), 0 6px 12px -2px rgba(3, 44, 28, 0.05);
+  border-color: rgba(197, 155, 39, 0.45);
+}
+
+/* Inner image zoom to 1.05 on card hover */
+.sherwood-card img,
+.sherwood-card .sherwood-card__img {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sherwood-card:hover img,
+.sherwood-card:hover .sherwood-card__img {
+  transform: scale(1.05);
 }
 
 /* --- Padding Variations --- */
@@ -28,17 +67,17 @@
 }
 
 .sherwood-card--pad-md {
-  padding: 24px; /* Consistent 20-28px on desktop */
+  padding: 24px;
 }
 
 .sherwood-card--pad-lg {
-  padding: 28px;
+  padding: 32px;
 }
 
 @media (max-width: 640px) {
   .sherwood-card--pad-md,
   .sherwood-card--pad-lg {
-    padding: 18px; /* Consistent 16-20px on mobile */
+    padding: 20px;
   }
 }
 
@@ -46,43 +85,34 @@
 
 /* Default */
 .sherwood-card--default {
-  box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
+  box-shadow: 0 4px 16px -2px rgba(3, 44, 28, 0.05), 0 2px 6px -1px rgba(3, 44, 28, 0.03);
 }
 
-/* Interactive (Hover lift & deepened shadow) */
+/* Interactive */
 .sherwood-card--interactive {
-  box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
   cursor: pointer;
-}
-
-.sherwood-card--interactive:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 24px -4px rgba(15, 23, 42, 0.1), 0 4px 8px -2px rgba(15, 23, 42, 0.04);
-  border-color: rgba(8, 120, 63, 0.25);
 }
 
 /* Elevated */
 .sherwood-card--elevated {
-  box-shadow: var(--shadow-lg);
-  border-color: rgba(0, 0, 0, 0.06);
+  box-shadow: 0 10px 28px -4px rgba(3, 44, 28, 0.1), 0 4px 10px -2px rgba(3, 44, 28, 0.04);
+  border-color: rgba(8, 120, 63, 0.15);
 }
 
 /* Outlined */
 .sherwood-card--outlined {
   background-color: transparent;
-  border-color: rgba(0, 0, 0, 0.12);
+  border-color: var(--color-border-default, #d7e6db);
   box-shadow: none;
 }
 
 /* Gold Accent */
 .sherwood-card--gold-accent {
-  box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.05);
-  border-top: 3px solid var(--color-gold);
+  border-top: 3px solid var(--color-gold, #c59b27);
 }
 
-.sherwood-card--gold-accent:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 24px -4px rgba(15, 23, 42, 0.1);
+.sherwood-card--gold-accent::before {
+  display: none; /* Already has explicit gold border */
 }
 
 /* Typography in cards */
@@ -90,80 +120,30 @@
 .sherwood-card h2,
 .sherwood-card h3,
 .sherwood-card h4 {
-  color: var(--color-charcoal-900);
+  color: var(--color-charcoal-900, #172b21);
 }
 
 .sherwood-card p,
 .sherwood-card span,
 .sherwood-card li {
-  font-size: var(--text-sm); /* >= 14px body */
+  font-size: var(--text-sm, 0.875rem);
 }
 
-.sherwood-card small,
-.sherwood-card .meta-label,
-.sherwood-card time {
-  font-size: var(--text-xs); /* >= 12px meta/labels */
-  color: var(--color-charcoal-500);
+/* Dark Theme Overrides */
+[data-theme="dark"] .sherwood-card {
+  background-color: #14231b;
+  border-color: rgba(223, 184, 70, 0.15);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 }
 
-/* --- Sub-elements --- */
-.sherwood-card__header {
-  padding-bottom: var(--space-4);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
-  margin-bottom: var(--space-4);
+[data-theme="dark"] .sherwood-card:hover {
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6);
+  border-color: var(--color-gold, #c59b27);
 }
 
-.sherwood-card__body {
-  position: relative;
+[data-theme="dark"] .sherwood-card h1,
+[data-theme="dark"] .sherwood-card h2,
+[data-theme="dark"] .sherwood-card h3,
+[data-theme="dark"] .sherwood-card h4 {
+  color: #ffffff;
 }
-
-.sherwood-card__footer {
-  padding-top: var(--space-4);
-  border-top: 1px solid rgba(0, 0, 0, 0.07);
-  margin-top: var(--space-4);
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: var(--space-3);
-}
-
-/* =============================================================================
-   Dark Theme Card Overrides (body[data-theme="dark"])
-   ============================================================================= */
-
-body[data-theme="dark"] .sherwood-card {
-  background-color: #122119;
-  border-color: rgba(255, 255, 255, 0.08);
-  color: #e2f4e8;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
-}
-
-body[data-theme="dark"] .sherwood-card--interactive:hover {
-  border-color: rgba(74, 222, 128, 0.35);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
-}
-
-body[data-theme="dark"] .sherwood-card h1,
-body[data-theme="dark"] .sherwood-card h2,
-body[data-theme="dark"] .sherwood-card h3,
-body[data-theme="dark"] .sherwood-card h4 {
-  color: #f1f9f4;
-}
-
-body[data-theme="dark"] .sherwood-card p,
-body[data-theme="dark"] .sherwood-card span,
-body[data-theme="dark"] .sherwood-card li {
-  color: #c9ded2;
-}
-
-body[data-theme="dark"] .sherwood-card small,
-body[data-theme="dark"] .sherwood-card .meta-label,
-body[data-theme="dark"] .sherwood-card time {
-  color: #8da497;
-}
-
-body[data-theme="dark"] .sherwood-card__header,
-body[data-theme="dark"] .sherwood-card__footer {
-  border-color: rgba(255, 255, 255, 0.08);
-}
-

@@ -145,6 +145,7 @@
 
 /* Responsive */
 @media (max-width: 900px) {
+
   .sherwood-about__welcome,
   .sherwood-about__story-grid {
     grid-template-columns: 1fr;
@@ -155,4 +156,3 @@
     padding: var(--space-12) var(--space-4);
   }
 }
-

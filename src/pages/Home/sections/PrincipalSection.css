@@ -17,15 +17,46 @@
 }
 
 .sherwood-principal__card {
+  position: relative;
+  overflow: hidden;
   display: grid;
   grid-template-columns: 0.9fr 1.3fr;
-  gap: var(--space-12);
+  gap: var(--space-12, 3rem);
   align-items: center;
-  background-color: var(--color-bg-surface);
-  border: 1px solid var(--color-border-subtle);
-  border-radius: var(--radius-xl);
-  padding: var(--space-10);
-  box-shadow: var(--shadow-md);
+  background-color: var(--color-bg-surface, #ffffff);
+  border: 1px solid var(--color-border-subtle, rgba(8, 120, 63, 0.12));
+  border-radius: var(--radius-xl, 20px);
+  padding: var(--space-10, 2.5rem);
+  box-shadow: 0 4px 20px rgba(3, 44, 28, 0.05);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+}
+
+.sherwood-principal__card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2.5px;
+  background: linear-gradient(90deg, var(--color-gold, #c59b27), var(--color-gold-light, #dfb846));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 5;
+}
+
+.sherwood-principal__card:hover::before {
+  transform: scaleX(1);
+}
+
+.sherwood-principal__card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 40px rgba(3, 44, 28, 0.12);
+  border-color: rgba(197, 155, 39, 0.45);
+}
+
+.sherwood-principal__card:hover .sherwood-principal__portrait {
+  transform: scale(1.05);
 }
 
 .sherwood-principal__portrait-wrap {
