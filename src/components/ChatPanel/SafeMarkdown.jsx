@@ -61,6 +61,42 @@ function renderInline(text, keyPrefix = "") {
   });
 }
 
+function parseTableRows(lines, startIndex) {
+  const headerLine = lines[startIndex].trim();
+  const sepLine = lines[startIndex + 1]?.trim() || "";
+
+  const isSeparator = /^\|?(\s*:?-+:?\s*\|)+\s*:?-+:?\s*\|?$/.test(sepLine);
+  if (!headerLine.includes("|") || !isSeparator) {
+    return null;
+  }
+
+  const cleanRow = (rowStr) => {
+    let s = rowStr.trim();
+    if (s.startsWith("|")) s = s.slice(1);
+    if (s.endsWith("|")) s = s.slice(0, -1);
+    return s.split("|").map((c) => c.trim());
+  };
+
+  const headers = cleanRow(headerLine);
+  const rows = [];
+  let currentIndex = startIndex + 2;
+
+  while (currentIndex < lines.length) {
+    const rowLine = lines[currentIndex].trim();
+    if (!rowLine || !rowLine.includes("|")) {
+      break;
+    }
+    rows.push(cleanRow(rowLine));
+    currentIndex++;
+  }
+
+  return {
+    headers,
+    rows,
+    nextIndex: currentIndex - 1,
+  };
+}
+
 export default function SafeMarkdown({ content = "" }) {
   if (!content) return null;
 
@@ -81,12 +117,58 @@ export default function SafeMarkdown({ content = "" }) {
     currentList = null;
   }
 
-  lines.forEach((line, lineIndex) => {
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
     const trimmed = line.trim();
 
     if (!trimmed) {
       flushList();
-      return;
+      continue;
+    }
+
+    // Check for Markdown table
+    if (trimmed.includes("|") && i + 1 < lines.length) {
+      const sep = lines[i + 1].trim();
+      if (/^\|?(\s*:?-+:?\s*\|)+\s*:?-+:?\s*\|?$/.test(sep)) {
+        flushList();
+        const tableData = parseTableRows(lines, i);
+        if (tableData) {
+          elements.push(
+            <div
+              key={`table-wrap-${elements.length}`}
+              className="chat-table-wrapper"
+              role="region"
+              tabIndex={0}
+              aria-label="Fee and data table"
+            >
+              <table className="chat-table">
+                <thead>
+                  <tr>
+                    {tableData.headers.map((h, colIdx) => (
+                      <th key={`th-${colIdx}`}>
+                        {renderInline(h, `th-${elements.length}-${colIdx}`)}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {tableData.rows.map((row, rIdx) => (
+                    <tr key={`tr-${rIdx}`}>
+                      {row.map((cell, cIdx) => (
+                        <td key={`td-${cIdx}`}>
+                          {renderInline(cell, `td-${elements.length}-${rIdx}-${cIdx}`)}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          );
+          i = tableData.nextIndex;
+          continue;
+        }
+      }
     }
 
     // Bullet point: - item, * item, • item
@@ -97,7 +179,7 @@ export default function SafeMarkdown({ content = "" }) {
         currentList = { type: "ul", items: [] };
       }
       currentList.items.push(bulletMatch[1]);
-      return;
+      continue;
     }
 
     // Numbered list: 1. item
@@ -108,7 +190,7 @@ export default function SafeMarkdown({ content = "" }) {
         currentList = { type: "ol", items: [] };
       }
       currentList.items.push(numberMatch[1]);
-      return;
+      continue;
     }
 
     // Not a list item
@@ -117,28 +199,28 @@ export default function SafeMarkdown({ content = "" }) {
     // Heading: ### or ##
     if (trimmed.startsWith("### ")) {
       elements.push(
-        <h4 key={`h4-${lineIndex}`} className="chat-markdown-h4">
-          {renderInline(trimmed.slice(4), `h4-${lineIndex}`)}
+        <h4 key={`h4-${i}`} className="chat-markdown-h4">
+          {renderInline(trimmed.slice(4), `h4-${i}`)}
         </h4>
       );
-      return;
+      continue;
     }
     if (trimmed.startsWith("## ")) {
       elements.push(
-        <h3 key={`h3-${lineIndex}`} className="chat-markdown-h3">
-          {renderInline(trimmed.slice(3), `h3-${lineIndex}`)}
+        <h3 key={`h3-${i}`} className="chat-markdown-h3">
+          {renderInline(trimmed.slice(3), `h3-${i}`)}
         </h3>
       );
-      return;
+      continue;
     }
 
     // Standard paragraph line
     elements.push(
-      <p key={`p-${lineIndex}`} className="chat-markdown-p">
-        {renderInline(trimmed, `p-${lineIndex}`)}
+      <p key={`p-${i}`} className="chat-markdown-p">
+        {renderInline(trimmed, `p-${i}`)}
       </p>
     );
-  });
+  }
 
   flushList();
 

@@ -217,8 +217,8 @@
 
 .sherwood-avatar-online-dot {
   position: absolute;
-  right: -1px;
-  bottom: -1px;
+  right: 0;
+  bottom: 0;
   width: 10px;
   height: 10px;
   background-color: #22c55e;

@@ -16,6 +16,80 @@ function SendIcon() {
   );
 }
 
+function RupeeIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M6 3h12M6 8h12M6 13l8.5 8M6 13h3a4 4 0 0 0 0-8" />
+    </svg>
+  );
+}
+
+function GraduationCapIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+      <path d="M6 12v5c3 3 9 3 12 0v-5" />
+    </svg>
+  );
+}
+
+function DocumentIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+      <polyline points="14 2 14 8 20 8" />
+      <line x1="16" y1="13" x2="8" y2="13" />
+      <line x1="16" y1="17" x2="8" y2="17" />
+      <polyline points="10 9 9 9 8 9" />
+    </svg>
+  );
+}
+
+function BedIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M2 4v16M2 8h18a2 2 0 0 1 2 2v10M2 17h20M6 8v9" />
+    </svg>
+  );
+}
+
+function CloudSunIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M12 2v2M4.93 4.93l1.41 1.41M20 12h2M19.07 4.93l-1.41 1.41" />
+      <path d="M15.9 14.5A4 4 0 0 0 12 8a3.9 3.9 0 0 0-.6.05A5.5 5.5 0 0 0 4 13.5 5.5 5.5 0 0 0 9.5 19h7a4.5 4.5 0 0 0 .9-8.91z" />
+    </svg>
+  );
+}
+
+function NewChatIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M12 5v14M5 12h14" />
+    </svg>
+  );
+}
+
+function formatMessageTime(timestamp) {
+  if (!timestamp) return "";
+  try {
+    const d = new Date(timestamp);
+    return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  } catch {
+    return "";
+  }
+}
+
+function getChipIcon(chipText) {
+  const lower = (chipText || "").toLowerCase();
+  if (lower.includes("fee")) return <RupeeIcon />;
+  if (lower.includes("apply") || lower.includes("admission")) return <GraduationCapIcon />;
+  if (lower.includes("document")) return <DocumentIcon />;
+  if (lower.includes("board") || lower.includes("hostel")) return <BedIcon />;
+  if (lower.includes("weather") || lower.includes("campus") || lower.includes("climate")) return <CloudSunIcon />;
+  return <GraduationCapIcon />;
+}
+
 function CopyIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -45,15 +119,6 @@ function ThumbsDownIcon({ active }) {
   return (
     <svg viewBox="0 0 24 24" fill={active ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3" />
-    </svg>
-  );
-}
-
-function ClearIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <polyline points="3 6 5 6 21 6" />
-      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
     </svg>
   );
 }
@@ -180,6 +245,45 @@ export default function ChatPanel({
     return () => panel.removeEventListener("wheel", handleWheel);
   }, [variant, isOpen]);
 
+  // Mobile visualViewport integration: prevent virtual keyboard from occluding input
+  useEffect(() => {
+    if (variant !== "popup" || !isOpen) return undefined;
+    const panel = panelRef.current;
+
+    const handleViewportChange = () => {
+      if (!window.visualViewport || !panel) return;
+      if (window.innerWidth <= 600) {
+        const vvHeight = window.visualViewport.height;
+        const vvOffsetTop = window.visualViewport.offsetTop;
+        panel.style.height = `${vvHeight}px`;
+        panel.style.top = `${vvOffsetTop}px`;
+        panel.style.bottom = "auto";
+      } else {
+        panel.style.height = "";
+        panel.style.top = "";
+        panel.style.bottom = "";
+      }
+    };
+
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", handleViewportChange);
+      window.visualViewport.addEventListener("scroll", handleViewportChange);
+      handleViewportChange();
+    }
+
+    return () => {
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener("resize", handleViewportChange);
+        window.visualViewport.removeEventListener("scroll", handleViewportChange);
+      }
+      if (panel) {
+        panel.style.height = "";
+        panel.style.top = "";
+        panel.style.bottom = "";
+      }
+    };
+  }, [variant, isOpen]);
+
   // Keyboard navigation & accessibility (Focus trap and Escape for popup)
   useEffect(() => {
     if (variant !== "popup" || !isOpen) return undefined;
@@ -195,7 +299,7 @@ export default function ChatPanel({
       // Focus trap
       if (event.key === "Tab" && panelRef.current) {
         const focusables = panelRef.current.querySelectorAll(
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+          'button:not(:disabled), [href], input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex="-1"])'
         );
         if (focusables.length === 0) return;
         const first = focusables[0];
@@ -227,7 +331,6 @@ export default function ChatPanel({
   const formattedRole = !isGuest
     ? role.charAt(0).toUpperCase() + role.slice(1).toLowerCase()
     : null;
-  const showInitialChips = messages.length === 0;
   const showFollowUpChips = messages.length > 0 && !loading;
 
   const panelContent = (
@@ -247,9 +350,9 @@ export default function ChatPanel({
         <div className="chat-header-main">
           <div className="chat-header-identity">
             <SherwoodAIAvatar
-              size={38}
+              size={34}
               state={isStreaming ? "speaking" : loading ? "thinking" : "idle"}
-              showOnline={true}
+              showOnline={false}
             />
             <div className="chat-title-wrap">
               <h2 id="chat-panel-title" className="chat-title">
@@ -258,7 +361,7 @@ export default function ChatPanel({
               </h2>
               <p className="chat-subtitle">
                 <span className="chat-online-indicator" aria-hidden="true" />
-                {isGuest ? "Online · Admissions Assistant" : "Online · Official College Assistant"}
+                Online · Admissions Assistant
               </p>
             </div>
           </div>
@@ -267,12 +370,12 @@ export default function ChatPanel({
             {messages.length > 0 && (
               <button
                 type="button"
-                className="chat-header-btn"
+                className="chat-header-btn chat-new-chat-btn"
                 onClick={clearChat}
-                title="Clear conversation"
-                aria-label="Clear conversation history"
+                title="New chat"
+                aria-label="Start new conversation"
               >
-                <ClearIcon />
+                <NewChatIcon />
               </button>
             )}
 
@@ -285,7 +388,7 @@ export default function ChatPanel({
                   triggerRef?.current?.focus();
                 }}
                 title="Close chat"
-                aria-label="Close Sherwood AI Assistant"
+                aria-label="Close chat"
               >
                 ×
               </button>
@@ -316,12 +419,36 @@ export default function ChatPanel({
         {messages.length === 0 && (
           <div className="chat-welcome-state">
             <div className="chat-welcome-icon-wrap" aria-hidden="true">
-              <SherwoodAIAvatar size={64} state="idle" />
+              <SherwoodAIAvatar size={56} state="idle" showOnline={false} />
             </div>
-            <h3 className="chat-welcome-heading">Welcome to Sherwood College</h3>
+            <h3 className="chat-welcome-heading">Hi, I'm Sherwood AI</h3>
             <p className="chat-welcome-desc">
-              I can help you with 2027–28 admissions, documents required, fee schedules, boarding life, entrance test details, and school guidelines.
+              Ask me about admissions, fees, boarding or campus life.
             </p>
+            <p className="chat-welcome-hint">
+              You can ask in English, Hindi or Hinglish.
+            </p>
+
+            <div className="chat-empty-chips-section" aria-label="Suggested topics">
+              <p className="chat-chips-label">Try asking</p>
+              <div className="chat-chip-grid">
+                {INITIAL_QUICK_CHIPS.map((chip, idx) => (
+                  <button
+                    key={chip}
+                    type="button"
+                    className="chat-chip"
+                    style={{ "--chip-idx": idx }}
+                    onClick={() => sendMessage(chip)}
+                    disabled={loading || rateLimitTimer > 0}
+                  >
+                    <span className="chat-chip-icon" aria-hidden="true">
+                      {getChipIcon(chip)}
+                    </span>
+                    <span className="chat-chip-text">{chip}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
         )}
 
@@ -330,9 +457,16 @@ export default function ChatPanel({
             key={`msg-${index}-${message.timestamp || index}`}
             className={`chat-message chat-message-${message.role}`}
           >
-            <div className="chat-bubble">
-              <div className="chat-bubble-sender">
-                {message.role === "user" ? "You" : "Sherwood AI"}
+            <div className={`chat-bubble chat-bubble-${message.role}`}>
+              <div className="chat-bubble-header">
+                <span className="chat-bubble-sender">
+                  {message.role === "user" ? "You" : "Sherwood AI"}
+                </span>
+                {message.timestamp && (
+                  <time className="chat-bubble-time" dateTime={new Date(message.timestamp).toISOString()}>
+                    {formatMessageTime(message.timestamp)}
+                  </time>
+                )}
               </div>
 
               {message.role === "assistant" ? (
@@ -341,6 +475,25 @@ export default function ChatPanel({
                   {message.isDemo && (
                     <div className="chat-demo-pill" role="status">
                       ⚠️ Demo data: please confirm details with the admissions office.
+                    </div>
+                  )}
+                  {Boolean(
+                    message.role === "assistant" &&
+                    typeof message.text === "string" &&
+                    (message.text.includes("Admissions Office will confirm") ||
+                     message.text.includes("admissions office will confirm") ||
+                     message.text.includes("do not have specific details for that in our current admissions documentation"))
+                  ) && (
+                    <div className="chat-admissions-fallback" role="region" aria-label="Official admissions contact">
+                      <p>Need personal admissions help or official clarification?</p>
+                      <div className="chat-fallback-actions">
+                        <a href="tel:+919458307729" className="chat-fallback-btn">
+                          Call Admissions: +91 94583 07729
+                        </a>
+                        <a href="mailto:contact@sherwood.edu.in" className="chat-fallback-btn secondary">
+                          Email Admissions Office
+                        </a>
+                      </div>
                     </div>
                   )}
                   {Array.isArray(message.chips) && message.chips.length > 0 && (
@@ -359,7 +512,9 @@ export default function ChatPanel({
                   )}
                 </>
               ) : (
-                <p className="chat-user-text">{message.text}</p>
+                <p className="chat-user-text" style={{ color: "#ffffff", margin: 0 }}>
+                  {message.text}
+                </p>
               )}
 
               {/* Message tools for assistant responses */}
@@ -462,31 +617,15 @@ export default function ChatPanel({
         </button>
       )}
 
-      {/* Suggested Quick Reply Chips */}
-      {showInitialChips && (
-        <div className="chat-chips-tray" aria-label="Suggested initial topics">
-          <p className="chat-chips-label">Popular topics:</p>
-          <div className="chat-chips-scroll">
-            {INITIAL_QUICK_CHIPS.map((chip, idx) => (
-              <button
-                key={chip}
-                type="button"
-                className="chat-chip"
-                style={{ "--chip-idx": idx }}
-                onClick={() => sendMessage(chip)}
-                disabled={loading || rateLimitTimer > 0}
-              >
-                {chip}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
+      {/* Suggested Follow-up Reply Chips (during active conversation) */}
       {showFollowUpChips && (
         <div className="chat-chips-tray" aria-label="Suggested follow-up questions">
           <div className="chat-chips-scroll">
-            {FOLLOW_UP_SUGGESTIONS.map((chip, idx) => (
+            {(
+              (messages[messages.length - 1]?.chips && messages[messages.length - 1].chips.length > 0)
+                ? messages[messages.length - 1].chips
+                : FOLLOW_UP_SUGGESTIONS
+            ).map((chip, idx) => (
               <button
                 key={chip}
                 type="button"
@@ -523,39 +662,53 @@ export default function ChatPanel({
             event.preventDefault();
             if (input.trim() && !loading && rateLimitTimer <= 0) {
               sendMessage(input);
-              if (inputRef.current) inputRef.current.style.height = "auto";
+              if (inputRef.current) {
+                inputRef.current.style.height = "auto";
+                inputRef.current.style.overflowY = "hidden";
+              }
             }
           }}
         >
-          <textarea
-            ref={inputRef}
-            rows={1}
-            className="chat-input"
-            value={input}
-            onChange={(event) => {
-              setInput(event.target.value);
-              const el = event.target;
-              el.style.height = "auto";
-              el.style.height = `${Math.min(el.scrollHeight, 120)}px`;
-            }}
-            onKeyDown={(event) => {
-              if (event.key === "Enter" && !event.shiftKey) {
-                event.preventDefault();
-                if (input.trim() && !loading && rateLimitTimer <= 0) {
-                  sendMessage(input);
-                  if (inputRef.current) inputRef.current.style.height = "auto";
+          <div className="chat-input-wrapper">
+            <textarea
+              ref={inputRef}
+              rows={1}
+              className="chat-input"
+              value={input}
+              onChange={(event) => {
+                setInput(event.target.value);
+                const el = event.target;
+                el.style.height = "auto";
+                const maxHeight = 96; // ~4 lines
+                const newHeight = Math.min(el.scrollHeight, maxHeight);
+                el.style.height = `${newHeight}px`;
+                el.style.overflowY = el.scrollHeight > maxHeight ? "auto" : "hidden";
+              }}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" && !event.shiftKey) {
+                  event.preventDefault();
+                  if (input.trim() && !loading && rateLimitTimer <= 0) {
+                    sendMessage(input);
+                    if (inputRef.current) {
+                      inputRef.current.style.height = "auto";
+                      inputRef.current.style.overflowY = "hidden";
+                    }
+                  }
                 }
+              }}
+              placeholder={
+                rateLimitTimer > 0
+                  ? `Please wait ${rateLimitTimer}s...`
+                  : "Ask about admissions, fees, boarding..."
               }
-            }}
-            placeholder={
-              rateLimitTimer > 0
-                ? `Please wait ${rateLimitTimer}s...`
-                : "Ask about admissions, fees, boarding... (Enter to send)"
-            }
-            aria-label="Type your message for Sherwood AI (Enter to send, Shift+Enter for new line)"
-            maxLength={1000}
-            disabled={loading || rateLimitTimer > 0}
-          />
+              aria-label="Ask about admissions, fees, boarding..."
+              maxLength={1000}
+              disabled={loading || rateLimitTimer > 0}
+            />
+            <span className="chat-input-hint" aria-hidden="true">
+              Enter to send, Shift+Enter for a new line
+            </span>
+          </div>
 
           <button
             type="submit"
@@ -568,7 +721,7 @@ export default function ChatPanel({
         </form>
 
         <div className="chat-disclaimer">
-          Sherwood AI answers using official college guidelines. For binding decisions, contact the admissions office.
+          Answers are based on Sherwood's admissions information. Please confirm important details with the admissions office.
         </div>
       </footer>
     </section>

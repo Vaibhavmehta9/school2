@@ -4,11 +4,11 @@ import { streamSchoolAI } from "../../services/api";
 const STORAGE_KEY = "sherwood_chat_session_messages";
 
 export const INITIAL_QUICK_CHIPS = [
-  "What documents are required?",
-  "How do I apply?",
-  "What is the age criteria?",
-  "What are the fees?",
-  "How is boarding organized?",
+  "Fees",
+  "How to apply",
+  "Documents required",
+  "Boarding",
+  "Weather at campus",
 ];
 
 export const FOLLOW_UP_SUGGESTIONS = [
