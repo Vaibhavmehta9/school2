@@ -360,7 +360,7 @@ def parent_admission_status_payload(database: Any, application_number: str, pare
 
 @app.get("/api/health")
 def health_check() -> dict[str, str]:
-    return {"status": "ok", "service": "sheerwood-api"}
+    return {"status": "ok", "service": "sheerwood-api", "version": "deploy-v1"}
 
 
 @app.post("/api/auth/cognito/token", include_in_schema=False)

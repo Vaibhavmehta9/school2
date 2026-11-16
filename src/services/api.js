@@ -367,11 +367,11 @@ export async function streamSchoolAI({
     throw timeoutError;
   };
 
-  // 1. Overall timeout: 45s
-  overallTimer = setTimeout(() => triggerTimeout("overall"), 45000);
+  // 1. Overall timeout: 60s
+  overallTimer = setTimeout(() => triggerTimeout("overall"), 60000);
 
-  // 2. First-token timeout: 15s (cleared ONLY by chunk, error, or [DONE], NEVER by status)
-  firstTokenTimer = setTimeout(() => triggerTimeout("first-token"), 15000);
+  // 2. First-token timeout: 30s (gives cloud host and LLM ample warmup time)
+  firstTokenTimer = setTimeout(() => triggerTimeout("first-token"), 30000);
 
   // 3. Inactivity timeout: 20s (resets on every incoming byte/chunk)
   const resetInactivityTimer = () => {
