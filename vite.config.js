@@ -46,6 +46,9 @@ export default defineConfig({
   define: {
     'import.meta.env.VITE_REVIEW_MODE': JSON.stringify(process.env.VITE_REVIEW_MODE || ''),
   },
+  build: {
+    sourcemap: false,
+  },
   server: {
     proxy: {
       '/api': {
