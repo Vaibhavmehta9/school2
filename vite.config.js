@@ -43,10 +43,24 @@ export default {
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), appGardenStaticWorker()],
+  define: {
+    'import.meta.env.VITE_REVIEW_MODE': JSON.stringify(process.env.VITE_REVIEW_MODE || ''),
+  },
   server: {
     proxy: {
       '/api': {
         target: process.env.VITE_API_URL || 'http://localhost:8000',
+        changeOrigin: true,
+      },
+    },
+  },
+  preview: {
+    port: 4173,
+    host: '127.0.0.1',
+    allowedHosts: ['.trycloudflare.com', '.ngrok-free.app'],
+    proxy: {
+      '/api': {
+        target: process.env.VITE_API_URL || 'http://127.0.0.1:8000',
         changeOrigin: true,
       },
     },

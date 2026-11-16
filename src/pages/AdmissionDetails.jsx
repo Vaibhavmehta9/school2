@@ -197,7 +197,7 @@ export default function AdmissionDetails() {
 
           {message && <div className="form-message" role="status">{message}<button aria-label="Dismiss notification" onClick={() => setMessage("")}>×</button></div>}
 
-          <form className="admission-form" onSubmit={(event) => { event.preventDefault(); continueApplication(); }}>
+          <form className="admission-form" noValidate onSubmit={(event) => { event.preventDefault(); continueApplication(); }}>
             <section className="admission-form-block" aria-labelledby="application-information-heading">
               <header className="admission-form-block-header"><div><p>APPLICATION INFORMATION</p><h2 id="application-information-heading">Admission application</h2></div><small>Fields marked <em>*</em> are required.</small></header>
               <div className="admission-fields">

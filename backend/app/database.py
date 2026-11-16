@@ -5,7 +5,11 @@ from pathlib import Path
 from typing import Any
 
 
-DATABASE_PATH = Path(os.getenv("DATABASE_PATH", Path(__file__).resolve().parents[1] / "sheerwood.db"))
+_raw_db_path = os.getenv("DATABASE_PATH")
+if _raw_db_path:
+    DATABASE_PATH = Path(_raw_db_path) if Path(_raw_db_path).is_absolute() else (Path(__file__).resolve().parents[1] / _raw_db_path)
+else:
+    DATABASE_PATH = Path(__file__).resolve().parents[1] / "sheerwood.db"
 
 
 class PostgreSQLConnection:
@@ -119,7 +123,7 @@ def initialize_database() -> None:
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 email TEXT NOT NULL UNIQUE,
                 full_name TEXT NOT NULL,
-                role TEXT NOT NULL CHECK(role IN ('parent', 'teacher', 'student', 'admin', 'admission')),
+                role TEXT NOT NULL CHECK(role IN ('parent', 'teacher', 'student', 'admin', 'admission', 'vendor')),
                 password_hash TEXT NOT NULL,
                 cognito_subject TEXT UNIQUE,
                 created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -375,7 +379,7 @@ def initialize_database() -> None:
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     email TEXT NOT NULL UNIQUE,
                     full_name TEXT NOT NULL,
-                    role TEXT NOT NULL CHECK(role IN ('parent', 'teacher', 'student', 'admin', 'admission')),
+                    role TEXT NOT NULL CHECK(role IN ('parent', 'teacher', 'student', 'admin', 'admission', 'vendor')),
                     password_hash TEXT NOT NULL,
                     cognito_subject TEXT UNIQUE,
                     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP

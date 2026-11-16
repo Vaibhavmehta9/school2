@@ -33,7 +33,7 @@
 }
 
 .new-admission-status-metrics b { color: #173d2d; font-size: 16px; }
-.new-admission-status-metrics small { color: #718078; font-size: 10px; font-weight: 700; }
+.new-admission-status-metrics small { color: #334155; font-size: 10px; font-weight: 700; }
 .new-admission-status-metrics span:nth-child(1) b { color: #155f93; }
 .new-admission-status-metrics span:nth-child(2) b { color: #176b3b; }
 .new-admission-status-metrics span:nth-child(3) b { color: #a46d0b; }

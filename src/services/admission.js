@@ -201,6 +201,9 @@ export function syncAdmissionDataFromDatabase(data = {}) {
 export function saveAdmissionDraft(accessToken, data, status = "draft") {
   const mergedData = { ...getAdmissionData(), ...data };
   sessionStorage.setItem(scopedStorageKey(APPLICATION_DATA_KEY), JSON.stringify(mergedData));
+  if ((import.meta.env.DEV || import.meta.env.VITE_REVIEW_MODE === "true") && accessToken === "review-mock-token") {
+    return Promise.resolve({ success: true, application_number: "SHER-2027-0482" });
+  }
   const referral = getReferralAttribution();
   const applicationNumber = getNewAdmissionId();
   const documents = getAdmissionDocuments();
@@ -300,6 +303,10 @@ export async function uploadAdmissionDocument(accessToken, documentKey, file) {
 
 export async function getAdmissionDocumentRecords(accessToken) {
   if (!accessToken) return [];
+  if ((import.meta.env.DEV || import.meta.env.VITE_REVIEW_MODE === "true") && accessToken === "review-mock-token") {
+    const { REVIEW_MOCK_DATA } = await import("../auth/reviewMode");
+    return REVIEW_MOCK_DATA.parentAdmissionStatus.documents;
+  }
 
   async function requestDocuments(applicationNumber) {
     const response = await fetch(`${API_BASE_URL}/applications/${encodeURIComponent(applicationNumber)}/documents`, {
@@ -328,6 +335,12 @@ export async function getAdmissionDocumentRecords(accessToken) {
 
 export async function getAdmissionDocumentFile(accessToken, applicationNumber, documentKey) {
   if (!accessToken || !applicationNumber || !documentKey) throw new Error("Please sign in again before opening this document.");
+  if ((import.meta.env.DEV || import.meta.env.VITE_REVIEW_MODE === "true") && accessToken === "review-mock-token") {
+    return {
+      blob: new Blob(["Sample document preview content for review mode."], { type: "text/plain" }),
+      contentType: "text/plain",
+    };
+  }
   const response = await fetch(`${API_BASE_URL}/applications/${encodeURIComponent(applicationNumber)}/documents/${encodeURIComponent(documentKey)}`, {
     cache: "no-store",
     headers: { Authorization: `Bearer ${accessToken}` },
@@ -375,6 +388,10 @@ function adoptApplicationNumber(status) {
 
 export async function getCurrentAdmissionStatus(accessToken) {
   if (!accessToken) return null;
+  if ((import.meta.env.DEV || import.meta.env.VITE_REVIEW_MODE === "true") && accessToken === "review-mock-token") {
+    const { REVIEW_MOCK_DATA } = await import("../auth/reviewMode");
+    return REVIEW_MOCK_DATA.parentAdmissionStatus;
+  }
   const result = await requestAdmissionStatus(accessToken, "/applications/current/status");
   if (result) adoptApplicationNumber(result);
   return result;
@@ -382,6 +399,10 @@ export async function getCurrentAdmissionStatus(accessToken) {
 
 export async function getAdmissionStatus(accessToken, applicationNumber = getStoredAdmissionId()) {
   if (!accessToken) return null;
+  if ((import.meta.env.DEV || import.meta.env.VITE_REVIEW_MODE === "true") && accessToken === "review-mock-token") {
+    const { REVIEW_MOCK_DATA } = await import("../auth/reviewMode");
+    return REVIEW_MOCK_DATA.parentAdmissionStatus;
+  }
   if (!applicationNumber) return getCurrentAdmissionStatus(accessToken);
 
   const result = await requestAdmissionStatus(accessToken, `/applications/${encodeURIComponent(applicationNumber)}/status`);

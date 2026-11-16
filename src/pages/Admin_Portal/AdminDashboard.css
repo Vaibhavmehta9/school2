@@ -10,7 +10,7 @@
   --admin-green: var(--role-admin-primary, #123e2b);
   --admin-deep: var(--role-admin-dark, #092418);
   --admin-ink: var(--color-charcoal-900);
-  --admin-muted: var(--color-charcoal-600);
+  --admin-muted: var(--color-charcoal-700);
   --admin-border: var(--color-border-subtle);
 }
 

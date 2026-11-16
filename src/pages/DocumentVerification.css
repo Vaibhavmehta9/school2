@@ -16,7 +16,7 @@
 
 .new-document-card header p {
   margin: 0 0 6px;
-  color: #4f9169;
+  color: #1b5e39;
   font-size: 9px;
   font-weight: 800;
   letter-spacing: 1.2px;
@@ -40,7 +40,7 @@
 
 .new-document-card > p {
   margin: 9px 0 17px;
-  color: #718078;
+  color: #334155;
   font-size: 11px;
 }
 

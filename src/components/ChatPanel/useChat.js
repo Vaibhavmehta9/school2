@@ -24,7 +24,10 @@ export function useChat({ accessToken = null, role = "guest" } = {}) {
       const stored = sessionStorage.getItem(STORAGE_KEY);
       if (stored) {
         const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed)) return parsed;
+        if (Array.isArray(parsed)) {
+          // Filter out any incomplete trailing assistant bubbles with empty text to ensure a refresh is never stuck
+          return parsed.filter((m) => m && (m.role !== "assistant" || (m.text && m.text.trim().length > 0)));
+        }
       }
     } catch {
       // Ignore storage read errors
@@ -94,23 +97,48 @@ export function useChat({ accessToken = null, role = "guest" } = {}) {
   }, []);
 
   const sendMessage = useCallback(
-    async (textToSend) => {
+    async (textToSend, { isRetry = false } = {}) => {
       const cleanText = (textToSend || input).trim();
       if (!cleanText || loading || rateLimitTimer > 0) return;
 
       setError(null);
-      setInput("");
+      if (!isRetry) {
+        setInput("");
+      }
 
-      const userMessage = { role: "user", text: cleanText, timestamp: Date.now() };
-      const currentHistory = [...messages];
-      const nextMessages = [...currentHistory, userMessage];
+      let currentHistory;
+      let nextMessages;
+      let assistantMessageIndex;
 
-      setMessages(nextMessages);
+      if (isRetry) {
+        // Ensure no duplicate user bubble is created
+        // If the last message was a failed or partial assistant message, remove it
+        let baseList = [...messages];
+        if (baseList.length > 0 && baseList[baseList.length - 1].role === "assistant") {
+          baseList.pop();
+        }
+        // If the last message is already this user query, reuse it; otherwise append it
+        if (baseList.length > 0 && baseList[baseList.length - 1].role === "user" && baseList[baseList.length - 1].text === cleanText) {
+          nextMessages = baseList;
+          currentHistory = baseList.slice(0, -1);
+        } else {
+          const userMessage = { role: "user", text: cleanText, timestamp: Date.now() };
+          currentHistory = [...baseList];
+          nextMessages = [...baseList, userMessage];
+        }
+        assistantMessageIndex = nextMessages.length;
+        setMessages(nextMessages);
+      } else {
+        const userMessage = { role: "user", text: cleanText, timestamp: Date.now() };
+        currentHistory = [...messages];
+        nextMessages = [...currentHistory, userMessage];
+        assistantMessageIndex = nextMessages.length;
+        setMessages(nextMessages);
+      }
+
       setLoading(true);
       setIsStreaming(false);
 
-      // Create empty placeholder for assistant response
-      const assistantMessageIndex = nextMessages.length;
       let assistantText = "";
       let isDemoMessage = false;
       let assistantChips = [];
@@ -173,24 +201,42 @@ export function useChat({ accessToken = null, role = "guest" } = {}) {
             setIsStreaming(false);
             abortControllerRef.current = null;
 
-            if (controller.signal.aborted) return;
+            if (controller.signal.aborted && !err.isTimeout) return;
 
             let friendlyMessage = err.message || "An unexpected error occurred.";
-            if (err.status === 429) {
+            if (err.isTimeout) {
+              friendlyMessage = "This is taking longer than expected. Please try again.";
+            } else if (err.status === 429) {
               setRateLimitTimer(60);
               friendlyMessage = "Too many requests. Please wait 60 seconds before asking again.";
-            } else if (err.status === 503) {
+            } else if (err.status >= 500) {
               friendlyMessage = "The Sherwood AI service is currently unavailable. Please check back shortly.";
             } else if (err.isNetwork) {
               friendlyMessage = "Unable to connect to the assistant. Please check your internet connection.";
             }
 
-            setError({ message: friendlyMessage, status: err.status, isNetwork: err.isNetwork });
+            setError({
+              message: friendlyMessage,
+              status: err.status,
+              isNetwork: err.isNetwork,
+              isTimeout: err.isTimeout,
+              canRetry: Boolean(err.isTimeout || err.isNetwork || (err.status && err.status >= 500) || err.isEmptyResponse),
+              retryText: cleanText,
+            });
           },
         });
       } catch (err) {
-        if (!controller.signal.aborted) {
-          setError({ message: err.message || "Service temporarily unavailable.", status: err.status });
+        if (!controller.signal.aborted || err.isTimeout) {
+          const friendlyMessage = err.isTimeout
+            ? "This is taking longer than expected. Please try again."
+            : err.message || "Service temporarily unavailable.";
+          setError({
+            message: friendlyMessage,
+            status: err.status,
+            isTimeout: err.isTimeout,
+            canRetry: Boolean(err.isTimeout || err.isNetwork || (err.status && err.status >= 500) || err.isEmptyResponse),
+            retryText: cleanText,
+          });
           setLoading(false);
           setIsStreaming(false);
         }
@@ -198,6 +244,13 @@ export function useChat({ accessToken = null, role = "guest" } = {}) {
     },
     [input, loading, messages, accessToken, rateLimitTimer]
   );
+
+  const retryLastMessage = useCallback(() => {
+    if (loading || rateLimitTimer > 0) return;
+    const retryText = error?.retryText || (messages.length > 0 && messages[messages.length - 1].role === "user" ? messages[messages.length - 1].text : null);
+    if (!retryText) return;
+    sendMessage(retryText, { isRetry: true });
+  }, [error, loading, rateLimitTimer, messages, sendMessage]);
 
   const copyMessage = useCallback((text, index) => {
     if (navigator?.clipboard?.writeText) {
@@ -226,6 +279,7 @@ export function useChat({ accessToken = null, role = "guest" } = {}) {
     feedback,
     copiedIndex,
     sendMessage,
+    retryLastMessage,
     stopGenerating,
     clearChat,
     copyMessage,

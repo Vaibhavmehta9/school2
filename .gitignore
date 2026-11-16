@@ -3,9 +3,13 @@ dist/
 .env
 .env.*
 !.env.example
+!.env.demo.example
 !backend/.env.example
+!backend/.env.demo.example
 .DS_Store
-backend/*.db
+backend/*.db*
+test-results/
+screenshots/
 backend/.env
 backend/.venv/
 backend/**/__pycache__/

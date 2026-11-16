@@ -95,30 +95,34 @@ def generate_ai_reply(
     audience: str = "guest",
     extra_context: str | None = None,
 ) -> str:
-    """Send a safe, school-specific prompt to OpenAI and return plain assistant text."""
-    instructions = build_system_prompt(audience=audience, extra_context=extra_context, query=message)
-    prompt_input = format_user_prompt_with_history(message, history)
+    """Send a safe, school-specific prompt to OpenAI, Gemini, or NLP query router."""
+    # Attempt OpenAI Responses API if key is explicitly configured and reachable
+    if is_openai_configured():
+        try:
+            instructions = build_system_prompt(audience=audience, extra_context=extra_context, query=message)
+            prompt_input = format_user_prompt_with_history(message, history)
+            response = get_openai_client().responses.create(
+                model=configured_model(),
+                instructions=instructions,
+                input=prompt_input,
+                max_output_tokens=550,
+                store=False,
+            )
+            answer = (response.output_text or "").strip()
+            if not answer:
+                return EMPTY_RESPONSE_FALLBACK
+            return answer
+        except AuthenticationError as exc:
+            raise AIConfigurationError("The configured OpenAI API key is invalid.") from exc
+        except RateLimitError as exc:
+            raise AIProviderRateLimitError("The OpenAI API rate limit has been reached.") from exc
+        except (APIConnectionError, APITimeoutError, APIStatusError):
+            pass
 
-    try:
-        response = get_openai_client().responses.create(
-            model=configured_model(),
-            instructions=instructions,
-            input=prompt_input,
-            max_output_tokens=550,
-            store=False,
-        )
-    except AuthenticationError as exc:
-        raise AIConfigurationError("The configured OpenAI API key is invalid.") from exc
-    except RateLimitError as exc:
-        raise AIProviderRateLimitError("The OpenAI API rate limit has been reached.") from exc
-    except (APIConnectionError, APITimeoutError, APIStatusError) as exc:
-        raise AIProviderUnavailableError("The OpenAI service is temporarily unavailable.") from exc
-
-    answer = (response.output_text or "").strip()
-    if not answer:
-        # Gracefully handle empty output_text (e.g. reasoning models exhausting tokens)
-        return EMPTY_RESPONSE_FALLBACK
-    return answer
+    # Primary unified resolution via NLP engine, FAQ single source of truth, and Gemini
+    from .query_router import route_and_resolve_query
+    res = route_and_resolve_query(message, history=history, audience=audience)
+    return res["answer"]
 
 
 def stream_ai_reply(
@@ -127,31 +131,39 @@ def stream_ai_reply(
     audience: str = "guest",
     extra_context: str | None = None,
 ) -> Generator[str, None, None]:
-    """Stream chunks from the OpenAI Responses API for Server-Sent Events."""
-    instructions = build_system_prompt(audience=audience, extra_context=extra_context, query=message)
-    prompt_input = format_user_prompt_with_history(message, history)
-
-    try:
-        response_stream = get_openai_client().responses.create(
-            model=configured_model(),
-            instructions=instructions,
-            input=prompt_input,
-            max_output_tokens=550,
-            store=False,
-            stream=True,
-        )
-        has_yielded = False
-        for event in response_stream:
-            if getattr(event, "type", "") == "response.output_text.delta":
-                delta = getattr(event, "delta", "")
-                if delta:
-                    has_yielded = True
-                    yield delta
-        if not has_yielded:
+    """Stream chunks from the OpenAI Responses API or NLP query router for Server-Sent Events."""
+    if is_openai_configured():
+        try:
+            instructions = build_system_prompt(audience=audience, extra_context=extra_context, query=message)
+            prompt_input = format_user_prompt_with_history(message, history)
+            response_stream = get_openai_client().responses.create(
+                model=configured_model(),
+                instructions=instructions,
+                input=prompt_input,
+                max_output_tokens=550,
+                store=False,
+                stream=True,
+            )
+            has_yielded = False
+            for event in response_stream:
+                if getattr(event, "type", "") == "response.output_text.delta":
+                    delta = getattr(event, "delta", "")
+                    if delta:
+                        has_yielded = True
+                        yield delta
+            if has_yielded:
+                return
             yield EMPTY_RESPONSE_FALLBACK
-    except AuthenticationError as exc:
-        raise AIConfigurationError("The configured OpenAI API key is invalid.") from exc
-    except RateLimitError as exc:
-        raise AIProviderRateLimitError("The OpenAI API rate limit has been reached.") from exc
-    except (APIConnectionError, APITimeoutError, APIStatusError) as exc:
-        raise AIProviderUnavailableError("The OpenAI service is temporarily unavailable.") from exc
+            return
+        except AuthenticationError as exc:
+            raise AIConfigurationError("The configured OpenAI API key is invalid.") from exc
+        except RateLimitError as exc:
+            raise AIProviderRateLimitError("The OpenAI API rate limit has been reached.") from exc
+        except (APIConnectionError, APITimeoutError, APIStatusError):
+            pass
+
+    from .query_router import route_and_resolve_query
+    res = route_and_resolve_query(message, history=history, audience=audience)
+    words = res["answer"].split(" ")
+    for i in range(0, len(words), 3):
+        yield " ".join(words[i:i+3]) + (" " if i+3 < len(words) else "")

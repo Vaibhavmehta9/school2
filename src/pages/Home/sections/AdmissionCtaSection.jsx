@@ -37,7 +37,7 @@ export default function AdmissionCtaSection() {
               className="sherwood-social__link"
               aria-label="Follow Sherwood College on Facebook"
             >
-              f
+              <span aria-hidden="true">f</span>
             </a>
             <a
               href="https://twitter.com"
@@ -46,16 +46,16 @@ export default function AdmissionCtaSection() {
               className="sherwood-social__link"
               aria-label="Follow Sherwood College on Twitter/X"
             >
-              𝕏
+              <span aria-hidden="true">𝕏</span>
             </a>
             <a
               href="https://linkedin.com"
               target="_blank"
               rel="noopener noreferrer"
               className="sherwood-social__link"
-              aria-label="Follow Sherwood College on LinkedIn"
+              aria-label="in — Follow Sherwood College on LinkedIn"
             >
-              in
+              <span aria-hidden="true">in</span>
             </a>
             <a
               href="https://youtube.com"
@@ -64,7 +64,7 @@ export default function AdmissionCtaSection() {
               className="sherwood-social__link"
               aria-label="Follow Sherwood College on YouTube"
             >
-              ▶
+              <span aria-hidden="true">▶</span>
             </a>
           </div>
         </div>

@@ -36,6 +36,10 @@ from app.weather_service import (
 
 @pytest.fixture
 def client():
+    import os
+    os.environ["AI_RATE_LIMIT_REQUESTS"] = "200"
+    from app.routers.ai import _request_history
+    _request_history.clear()
     return TestClient(app)
 
 

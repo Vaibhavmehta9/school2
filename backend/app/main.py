@@ -194,18 +194,40 @@ def missing_required_submission_upload_keys(database: Any, application_number: s
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     initialize_database()
+    try:
+        from .nlp_engine import preload_nlp_engine
+        preload_nlp_engine()
+    except Exception as exc:
+        pass
+    try:
+        from .llm_service import validate_gemini_model
+        validate_gemini_model()
+    except Exception as exc:
+        pass
     yield
 
+
+is_demo = os.getenv("DEMO_MODE", "false").lower() in ("true", "1", "yes")
 
 app = FastAPI(
     title="Sherwood College Admission Portal API",
     version="1.0.0",
     description="FastAPI backend for Sherwood College parent, teacher and admin portals.",
     lifespan=lifespan,
+    docs_url=None if is_demo else "/docs",
+    redoc_url=None if is_demo else "/redoc",
+    openapi_url=None if is_demo else "/openapi.json",
 )
+
+cors_origins_env = os.getenv("ALLOWED_ORIGINS", "")
+if cors_origins_env:
+    allowed_origins = [o.strip() for o in cors_origins_env.split(",") if o.strip()]
+else:
+    allowed_origins = ["http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:4173", "http://127.0.0.1:4173"]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

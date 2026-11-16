@@ -10,7 +10,7 @@
   --guardian-green: var(--role-parent-primary);
   --guardian-deep: var(--role-parent-dark);
   --guardian-ink: var(--color-charcoal-900);
-  --guardian-muted: var(--color-charcoal-600);
+  --guardian-muted: var(--color-charcoal-700);
   --guardian-border: var(--color-border-subtle);
   --guardian-bg: var(--color-bg-canvas);
 }

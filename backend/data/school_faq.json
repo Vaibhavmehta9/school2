@@ -1,7 +1,7 @@
 {
   "demo_data": true,
   "school_name": "Sherwood College, Nainital",
-  "last_updated": "2026-11-12",
+  "last_updated": "2026-11-15",
   "disclaimer": "Demo data: please confirm details with the admissions office.",
   "campus_coordinates": {
     "latitude": 29.3803,
@@ -12,7 +12,7 @@
   "entries": [
     {
       "id": "about_school_overview",
-      "category": "About the school",
+      "category": "About",
       "questions": [
         "Tell me about Sherwood College",
         "Where is the school located?",
@@ -26,11 +26,11 @@
       "source_url": "https://sherwood.edu.in/Home/AboutUs",
       "fetched_on": "2026-11-12",
       "demo": false,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "about_school_history_heritage",
-      "category": "About the school",
+      "category": "About",
       "questions": [
         "What is the history of Sherwood College?",
         "Tell me about the history of Sherwood College",
@@ -44,11 +44,11 @@
       "source_url": "https://sherwood.edu.in/Home/AboutUs",
       "fetched_on": "2026-11-12",
       "demo": false,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "about_board_affiliation",
-      "category": "About the school",
+      "category": "About",
       "questions": [
         "Which board is the school affiliated with?",
         "Is Sherwood CBSE or ICSE?",
@@ -61,12 +61,14 @@
       "source_url": "https://sherwood.edu.in/",
       "fetched_on": "2026-11-12",
       "demo": false,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "about_principal_leadership",
-      "category": "About the school",
+      "category": "About",
       "questions": [
+        "Who is the principal?",
+        "Who is the principle?",
         "Who is the Principal of Sherwood College?",
         "Who heads the school?",
         "Principal of Sherwood Nainital",
@@ -78,11 +80,11 @@
       "source_url": "https://sherwood.edu.in/",
       "fetched_on": "2026-11-12",
       "demo": false,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "about_coed_residential_identity",
-      "category": "About the school",
+      "category": "About",
       "questions": [
         "Is Sherwood College co-educational?",
         "Is it a boys-only school or co-ed?",
@@ -95,7 +97,7 @@
       "source_url": "https://sherwood.edu.in/Home/AboutUs",
       "fetched_on": "2026-11-12",
       "demo": false,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "admission_classes_offered",
@@ -113,7 +115,7 @@
       "source_url": "https://sherwood.edu.in/Home/AdmissionProcess",
       "fetched_on": "2026-11-12",
       "demo": false,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "admission_registration_dates",
@@ -130,7 +132,7 @@
       "source_url": "https://sherwood.edu.in/Home/AdmissionProcess",
       "fetched_on": "2026-11-12",
       "demo": false,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "admission_online_only_mandate",
@@ -147,7 +149,7 @@
       "source_url": "https://sherwood.edu.in/Home/AdmissionProcess",
       "fetched_on": "2026-11-12",
       "demo": false,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "admission_counsellor_helpline",
@@ -164,7 +166,7 @@
       "source_url": "https://sherwood.edu.in/Home/AdmissionProcess",
       "fetched_on": "2026-11-12",
       "demo": false,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "admission_workflow_steps",
@@ -182,11 +184,11 @@
       "source_url": "https://sherwood.edu.in/Home/AdmissionProcess",
       "fetched_on": "2026-11-12",
       "demo": false,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "eligibility_age_criteria",
-      "category": "Eligibility and age criteria",
+      "category": "Eligibility and age",
       "questions": [
         "What is the age criteria for admission?",
         "What are the birth year cutoffs for 2027-28?",
@@ -200,13 +202,14 @@
       "source_url": "https://sherwood.edu.in/Home/AdmissionProcess",
       "fetched_on": "2026-11-12",
       "demo": false,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "documents_required_checklist",
       "category": "Documents required",
       "questions": [
         "What documents are required for admission?",
+        "What documents do I need to upload?",
         "List of documents to submit",
         "Documents checklist for registration",
         "Kaun kaun se documents chahiye admission ke liye?",
@@ -218,11 +221,11 @@
       "source_url": "https://sherwood.edu.in/Home/AdmissionProcess",
       "fetched_on": "2026-11-12",
       "demo": false,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "entrance_test_pattern",
-      "category": "Entrance test / interaction",
+      "category": "Entrance test/interaction",
       "questions": [
         "What is the entrance test format?",
         "What subjects are tested in the entrance exam?",
@@ -237,12 +240,13 @@
       "source_url": "https://sherwood.edu.in/Home/AdmissionProcess",
       "fetched_on": "2026-11-12",
       "demo": false,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "entrance_principal_interaction",
-      "category": "Entrance test / interaction",
+      "category": "Entrance test/interaction",
       "questions": [
+        "Is there an interaction with the Principal?",
         "What happens in the Principal interaction?",
         "Interview with the Principal",
         "How is the student evaluated in the interview?",
@@ -254,7 +258,7 @@
       "source_url": "https://sherwood.edu.in/Home/AdmissionProcess",
       "fetched_on": "2026-11-12",
       "demo": false,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "facilities_auditoriums_halls",
@@ -271,7 +275,7 @@
       "source_url": "https://sherwood.edu.in/Home/Infrastructure",
       "fetched_on": "2026-11-12",
       "demo": false,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "facilities_labs_classrooms",
@@ -289,11 +293,11 @@
       "source_url": "https://sherwood.edu.in/Home/Infrastructure",
       "fetched_on": "2026-11-12",
       "demo": false,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "facilities_sports_extensive",
-      "category": "Facilities",
+      "category": "Sports and activities",
       "questions": [
         "What sports facilities are available?",
         "What games can students play at Sherwood?",
@@ -306,12 +310,14 @@
       "source_url": "https://sherwood.edu.in/Home/Infrastructure",
       "fetched_on": "2026-11-12",
       "demo": false,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "boarding_hostels_dining",
-      "category": "Boarding and hostel",
+      "category": "Boarding/hostel",
       "questions": [
+        "Hostel ki suvidhayein kaisi hain?",
+        "How are the dormitories and boarding facilities?",
         "How is boarding and dining organized?",
         "How are hostel dormitories organized?",
         "Mess mein vegetarian aur non-vegetarian food milta hai?",
@@ -325,11 +331,11 @@
       "source_url": "https://sherwood.edu.in/Home/Infrastructure",
       "fetched_on": "2026-11-12",
       "demo": false,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "alumni_notable_achievers",
-      "category": "About the school",
+      "category": "About",
       "questions": [
         "Who are some famous alumni of Sherwood College?",
         "Notable Old Sherwoodians",
@@ -342,11 +348,11 @@
       "source_url": "https://sherwood.edu.in/Home/Alumni",
       "fetched_on": "2026-11-12",
       "demo": false,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "alumni_amitabh_bachchan_quote",
-      "category": "About the school",
+      "category": "About",
       "questions": [
         "Did Amitabh Bachchan study at Sherwood College?",
         "What did Amitabh Bachchan say about Sherwood?",
@@ -359,12 +365,15 @@
       "source_url": "https://sherwood.edu.in/Home/CampusFacility",
       "fetched_on": "2026-11-12",
       "demo": false,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "contact_front_office",
       "category": "Contact and campus visit",
       "questions": [
+        "Sherwood phone number",
+        "Sherwood College phone number",
+        "School se sampark kaise karein?",
         "What is the contact number of Sherwood College?",
         "How can I call the school office?",
         "Front office phone number and email",
@@ -376,7 +385,7 @@
       "source_url": "https://sherwood.edu.in/Home/ContactUs",
       "fetched_on": "2026-11-12",
       "demo": false,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "contact_horsman_wing",
@@ -393,7 +402,7 @@
       "source_url": "https://sherwood.edu.in/Home/ContactUs",
       "fetched_on": "2026-11-12",
       "demo": false,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "contact_accounts_bursar",
@@ -410,7 +419,7 @@
       "source_url": "https://sherwood.edu.in/Home/ContactUs",
       "fetched_on": "2026-11-12",
       "demo": false,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "contact_dispatch_senior_master",
@@ -427,24 +436,27 @@
       "source_url": "https://sherwood.edu.in/Home/ContactUs",
       "fetched_on": "2026-11-12",
       "demo": false,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "fees_annual_overview",
       "category": "FEES",
       "questions": [
+        "What is the fee structure?",
+        "What are the fees?",
+        "Fee structure",
         "What is the total annual fee?",
-        "What are the fees for Class 6?",
+        "What are the overall fees?",
         "How much does Sherwood College cost per year?",
         "Total annual charges",
         "Saalana fees kitni hai?",
         "Total kharcha kitna aayega?",
         "School fees structure"
       ],
-      "answer": "*[Sample figures for demo - please confirm with the admissions office]*\n\nTotal annual charges across all academic and boarding components are estimated at approximately **₹7.5 Lakh to ₹8.0 Lakh**:\n\n| Payment Schedule | Term | Approximate Amount (Sample) |\n| :--- | :--- | :--- |\n| **At Confirmed Admission** | Term 1 (Admission & Term Fee) | ₹5,00,000 |\n| **Billed in June** | Term 2 (Tuition, Boarding & Imprest) | ₹2,50,000 – ₹3,00,000 |\n| **Total Estimated Annual Outlay** | Full Academic Session | **₹7,50,000 – ₹8,00,000** |\n\n*Note: Mid-term withdrawals are non-refundable. For official invoices, contact the Accounts Office at accounts@sherwood.edu.in.*",
+      "answer": "*[Demo data: please confirm details with the admissions office]*\n\nTotal annual charges across all academic and boarding components are estimated at approximately **₹7.5 Lakh to ₹8.0 Lakh**:\n\n| Payment Schedule | Term | Approximate Amount (Sample) |\n| :--- | :--- | :--- |\n| **At Confirmed Admission** | Term 1 (Admission & Term Fee) | ₹5,00,000 |\n| **Billed in June** | Term 2 (Tuition, Boarding & Imprest) | ₹2,50,000 – ₹3,00,000 |\n| **Total Estimated Annual Outlay** | Full Academic Session | **₹7,50,000 – ₹8,00,000** |\n\n*Note: Mid-term withdrawals are non-refundable. For official invoices, contact the Accounts Office at accounts@sherwood.edu.in.*",
       "source": "demo",
       "demo": true,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "fees_admission_one_time",
@@ -456,40 +468,45 @@
         "One time admission charges kitne hain?",
         "Registration charges kya hain?"
       ],
-      "answer": "*[Sample figures for demo - please confirm with the admissions office]*\n\nFor new enrollments, the estimated one-time charges are:\n- **Registration Processing Fee**: ₹5,000 (non-refundable, payable during portal registration)\n- **One-time Admission Fee**: ₹1,00,000 (payable once upon seat acceptance)\n- **Refundable Caution Deposit**: ₹50,000 (interest-free security deposit refundable upon leaving the institution).",
+      "answer": "*[Demo data: please confirm details with the admissions office]*\n\nFor new enrollments, the estimated one-time charges are:\n- **Registration Processing Fee**: ₹5,000 (non-refundable, payable during portal registration)\n- **One-time Admission Fee**: ₹1,00,000 (payable once upon seat acceptance)\n- **Refundable Caution Deposit**: ₹50,000 (interest-free security deposit refundable upon leaving the institution).",
       "source": "demo",
       "demo": true,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "fees_tuition_breakdown",
       "category": "FEES",
       "questions": [
+        "What are the fees for class 6?",
+        "What is the fee structure for Class 6?",
         "What is the tuition fee per class?",
         "Tuition fee breakdown for junior and senior classes",
         "Class-wise tuition fee",
+        "Class 6 ki fees kitni hai?",
         "Padhai ki fees alag se kitni hai?",
         "Tuition charges kitne hain?"
       ],
-      "answer": "*[Sample figures for demo - please confirm with the admissions office]*\n\nEstimated annual tuition fees across grade divisions:\n\n| Grade Band | Annual Tuition (Sample) |\n| :--- | :--- |\n| **Primary (Classes 3 to 5)** | ₹2,80,000 |\n| **Middle School (Classes 6 to 8)** | ₹3,20,000 |\n| **Secondary & Senior Secondary (Classes 9 & 11)** | ₹3,60,000 |\n\n*Note: Tuition charges exclude residential boarding, dining, and activity fees.*",
+      "answer": "*[Demo data: please confirm details with the admissions office]*\n\nEstimated annual tuition fees across grade divisions:\n\n| Grade Band | Annual Tuition (Sample) |\n| :--- | :--- |\n| **Primary (Classes 3 to 5)** | ₹2,80,000 |\n| **Middle School (Classes 6 to 8)** | ₹3,20,000 |\n| **Secondary & Senior Secondary (Classes 9 & 11)** | ₹3,60,000 |\n\n*Note: Tuition charges exclude residential boarding, dining, and activity fees.*",
       "source": "demo",
       "demo": true,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "fees_boarding_hostel",
       "category": "FEES",
       "questions": [
+        "What are the fees for boarding?",
         "What are the hostel and boarding charges?",
+        "Boarding and hostel fees",
         "Food and lodging fees",
         "Hostel fee breakdown",
         "Hostel aur khane ke charges kitne hain?",
         "Boarding fees kitni lagti hai?"
       ],
-      "answer": "*[Sample figures for demo - please confirm with the admissions office]*\n\nResidential accommodation, dining, and daily pastoral care components:\n- **Boarding & Lodging**: ₹2,50,000 per year (dormitory room, linen, hot water, power backup)\n- **Dining & Mess**: ₹1,20,000 per year (3 wholesome meals, evening tea, fresh fruit, milk)\n- **Laundry & Housekeeping**: ₹30,000 per year (in-house laundry, pressing, linen maintenance)\n\n*All boarding charges are billed in two semi-annual installments.*",
+      "answer": "*[Demo data: please confirm details with the admissions office]*\n\nResidential accommodation, dining, and daily pastoral care components:\n- **Boarding & Lodging**: ₹2,50,000 per year (dormitory room, linen, hot water, power backup)\n- **Dining & Mess**: ₹1,20,000 per year (3 wholesome meals, evening tea, fresh fruit, milk)\n- **Laundry & Housekeeping**: ₹30,000 per year (in-house laundry, pressing, linen maintenance)\n\n*All boarding charges are billed in two semi-annual installments.*",
       "source": "demo",
       "demo": true,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "fees_caution_deposit",
@@ -501,10 +518,10 @@
         "Caution deposit kitna jama hota hai?",
         "Kya security money refundable hai?"
       ],
-      "answer": "*[Sample figures for demo - please confirm with the admissions office]*\n\nYes, an interest-free **refundable Caution Deposit of ₹50,000** is deposited at the time of admission.\n- It is held by the school against any damages or dues\n- Refunded via bank transfer when the student leaves the school after clearance of all dues and issuance of the Transfer Certificate.",
+      "answer": "*[Demo data: please confirm details with the admissions office]*\n\nYes, an interest-free **refundable Caution Deposit of ₹50,000** is deposited at the time of admission.\n- It is held by the school against any damages or dues\n- Refunded via bank transfer when the student leaves the school after clearance of all dues and issuance of the Transfer Certificate.",
       "source": "demo",
       "demo": true,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "fees_payment_modes",
@@ -518,10 +535,10 @@
         "Fees kaise pay kar sakte hain?",
         "Payment options kya hain?"
       ],
-      "answer": "*[Sample figures for demo - please confirm with the admissions office]*\n\nSchool fee remittances are accepted through the following verified banking channels:\n1. **Online Payment Gateway**: Net Banking, Debit/Credit Cards via the school admission portal\n2. **Bank Wire (NEFT / RTGS)**: Direct institutional bank account transfer (official account details are provided upon receipt of offer letter)\n3. **Demand Draft**: Favoring *\"Sherwood College, Nainital\"* payable at Nainital\n\n*Cash payments are strictly discouraged for security and auditing compliance.*",
+      "answer": "*[Demo data: please confirm details with the admissions office]*\n\nSchool fee remittances are accepted through the following verified banking channels:\n1. **Online Payment Gateway**: Net Banking, Debit/Credit Cards via the school admission portal\n2. **Bank Wire (NEFT / RTGS)**: Direct institutional bank account transfer (official account details are provided upon receipt of offer letter)\n3. **Demand Draft**: Favoring *\"Sherwood College, Nainital\"* payable at Nainital\n\n*Cash payments are strictly discouraged for security and auditing compliance.*",
       "source": "demo",
       "demo": true,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "fees_refund_policy",
@@ -539,12 +556,13 @@
       "source_url": "https://sherwood.edu.in/Home/AdmissionProcess",
       "fetched_on": "2026-11-12",
       "demo": false,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "fees_concessions_discounts",
       "category": "FEES",
       "questions": [
+        "Are there any sibling fee concessions?",
         "Is there any sibling discount or alumni concession?",
         "Defence personnel fee concession",
         "Any fee relaxation or discount?",
@@ -556,7 +574,7 @@
       "source_url": "https://sherwood.edu.in/Home/AdmissionProcess",
       "fetched_on": "2026-11-12",
       "demo": false,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "facilities_medical_healthcare",
@@ -576,11 +594,11 @@
       "source_url": "https://sherwood.edu.in/Home/CampusFacility",
       "fetched_on": "2026-11-12",
       "demo": false,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "academics_coaching_policy",
-      "category": "Academics and curriculum",
+      "category": "Academics/curriculum",
       "questions": [
         "Does the school provide competitive coaching for JEE, NEET, or SAT?",
         "Is there coaching for CLAT or CUET?",
@@ -593,11 +611,11 @@
       "source_url": "https://sherwood.edu.in/Home/AboutUs",
       "fetched_on": "2026-11-12",
       "demo": false,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "academics_languages_offered",
-      "category": "Academics and curriculum",
+      "category": "Academics/curriculum",
       "questions": [
         "Are foreign languages taught?",
         "Can my child study French or German?",
@@ -610,12 +628,13 @@
       "source_url": "https://sherwood.edu.in/Home/AboutUs",
       "fetched_on": "2026-11-12",
       "demo": false,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "transport_facilities",
       "category": "Transport",
       "questions": [
+        "Does the school provide transport or airport pickup?",
         "Is school transport available?",
         "What transport and vacation escort facilities exist?",
         "How do students travel to and from campus during vacations?",
@@ -623,10 +642,10 @@
         "Transport ki kya suvidha hai?",
         "Vacation mein bacche kaise aate-jaate hain?"
       ],
-      "answer": "*[Sample figures for demo - please confirm with the admissions office]*\n\nFor vacation transit, the school organizes coordinated escort services for boarders:\n- **Kathgodam Railway Station**: Supervised school buses and faculty escorts to connect with trains to Delhi / Lucknow\n- **Pantnagar Airport / IGI New Delhi**: Supervised transit groups for outstation boarders flying home during major winter and summer breaks\n- Local day transport within Nainital is arranged on designated routes.",
+      "answer": "*[Demo data: please confirm details with the admissions office]*\n\nFor vacation transit, the school organizes coordinated escort services for boarders:\n- **Kathgodam Railway Station**: Supervised school buses and faculty escorts to connect with trains to Delhi / Lucknow\n- **Pantnagar Airport / IGI New Delhi**: Supervised transit groups for outstation boarders flying home during major winter and summer breaks\n- Local day transport within Nainital is arranged on designated routes.",
       "source": "demo",
       "demo": true,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "school_timings_daily_routine",
@@ -638,10 +657,10 @@
         "Daily routine kaisa hota hai bacchon ka?",
         "Subah kitne baje uthte hain aur raat ko lights out kab hota hai?"
       ],
-      "answer": "*[Sample figures for demo - please confirm with the admissions office]*\n\nTypical weekday schedule for boarding students at Sherwood College:\n\n| Time Slot | Activity |\n| :--- | :--- |\n| **06:00 AM** | Rising Bell & Morning Conditioning / Wash |\n| **07:00 AM** | Chota Hazri & Breakfast |\n| **08:00 AM – 01:30 PM** | Morning Assembly & Academic Periods |\n| **01:30 PM – 02:30 PM** | Lunch in Dining Halls & Quiet Hour |\n| **03:30 PM – 05:30 PM** | Inter-House Sports, Athletics & Co-Curriculars |\n| **06:00 PM – 08:00 PM** | Supervised Evening Prep (Study Hour) |\n| **08:00 PM – 09:00 PM** | Dinner & House Fellowship |\n| **09:30 PM / 10:00 PM** | Junior / Senior Lights Out |",
+      "answer": "*[Demo data: please confirm details with the admissions office]*\n\nTypical weekday schedule for boarding students at Sherwood College:\n\n| Time Slot | Activity |\n| :--- | :--- |\n| **06:00 AM** | Rising Bell & Morning Conditioning / Wash |\n| **07:00 AM** | Chota Hazri & Breakfast |\n| **08:00 AM – 01:30 PM** | Morning Assembly & Academic Periods |\n| **01:30 PM – 02:30 PM** | Lunch in Dining Halls & Quiet Hour |\n| **03:30 PM – 05:30 PM** | Inter-House Sports, Athletics & Co-Curriculars |\n| **06:00 PM – 08:00 PM** | Supervised Evening Prep (Study Hour) |\n| **08:00 PM – 09:00 PM** | Dinner & House Fellowship |\n| **09:30 PM / 10:00 PM** | Junior / Senior Lights Out |",
       "source": "demo",
       "demo": true,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "uniform_and_books",
@@ -653,14 +672,14 @@
         "Uniform aur kitabein kahan se milengi?",
         "Kapdon ki list kab milti hai?"
       ],
-      "answer": "*[Sample figures for demo - please confirm with the admissions office]*\n\n- **Clothing Checklist**: Issued along with the acceptance dossier upon confirmed admission, outlining exact blazer, trousers/skirts, woolens, sports kit, and casual items.\n- **Vendor Distribution**: School blazers, crests, ties, and textbooks are supplied on campus through authorized campus outfitters during admission week.\n- **Estimated Kit Outlay**: The complete boarding uniform and bedding wardrobe package is approximately ₹35,000 – ₹45,000 depending on class level.",
+      "answer": "*[Demo data: please confirm details with the admissions office]*\n\n- **Clothing Checklist**: Issued along with the acceptance dossier upon confirmed admission, outlining exact blazer, trousers/skirts, woolens, sports kit, and casual items.\n- **Vendor Distribution**: School blazers, crests, ties, and textbooks are supplied on campus through authorized campus outfitters during admission week.\n- **Estimated Kit Outlay**: The complete boarding uniform and bedding wardrobe package is approximately ₹35,000 – ₹45,000 depending on class level.",
       "source": "demo",
       "demo": true,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "safety_anti_ragging_discipline",
-      "category": "Safety and discipline",
+      "category": "Safety",
       "questions": [
         "What is the anti-ragging policy?",
         "How safe is the campus for children?",
@@ -673,7 +692,7 @@
       "source_url": "https://sherwood.edu.in/Home/CampusFacility",
       "fetched_on": "2026-11-12",
       "demo": false,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "mobile_phone_gadget_policy",
@@ -691,12 +710,13 @@
       "source_url": "https://sherwood.edu.in/Home/CampusFacility",
       "fetched_on": "2026-11-12",
       "demo": false,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "visitation_leave_guardian_policy",
       "category": "Contact and campus visit",
       "questions": [
+        "What are the visiting rules for parents?",
         "What is the leave / exeat policy for boarders?",
         "Who can be a Local Guardian?",
         "Can parents visit students on weekends?",
@@ -709,7 +729,7 @@
       "source_url": "https://sherwood.edu.in/Home/AdmissionProcess",
       "fetched_on": "2026-11-12",
       "demo": false,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
     },
     {
       "id": "scholarships_financial_aid",
@@ -726,7 +746,57 @@
       "source_url": "https://sherwood.edu.in/Home/AdmissionProcess",
       "fetched_on": "2026-11-12",
       "demo": false,
-      "last_updated": "2026-11-12"
+      "last_updated": "2026-11-15"
+    },
+    {
+      "id": "fees_application_fee",
+      "category": "FEES",
+      "questions": [
+        "What is the application fee or registration charge?",
+        "How much is the registration fee for admission?",
+        "What is the non-refundable registration amount?",
+        "Admission form ki application fee kitni hai?",
+        "Registration fee kitna lagta hai?"
+      ],
+      "answer": "*[Demo data: please confirm details with the admissions office]*\n\nThe admission registration processing fee is **₹5,000** (non-refundable).\n- It is payable online via debit/credit card or net banking upon submitting the registration form on the portal.\n- Registration does not guarantee admission; it admits the candidate to the entrance assessment and interaction schedule.",
+      "source": "demo",
+      "source_url": null,
+      "demo": true,
+      "last_updated": "2026-11-15"
+    },
+    {
+      "id": "sports_and_activities_overview",
+      "category": "Sports and activities",
+      "questions": [
+        "What sports and co-curricular activities are offered?",
+        "Which games and outdoor activities can students participate in?",
+        "What clubs and societies are available beyond academics?",
+        "Sherwood mein sports aur activities kya hoti hain?",
+        "Khel-kood aur co-curricular activities ke baare mein batayein"
+      ],
+      "answer": "Sherwood College emphasizes holistic personality development with comprehensive sports and co-curricular programs:\n- **Outdoor & Field Sports**: Cricket, Football, Field Hockey, Swimming, Cross-Country running, and Athletics\n- **Racket & Court Sports**: Basketball, Lawn Tennis, Squash, Badminton, Volleyball, and Table Tennis\n- **Indoor & Precision Sports**: Billiards, Snooker, Rifle Shooting, Diving, Gymnastics, and Chess\n- **Cultural & Creative Societies**: Debating Society, Dramatic Society, Western and Indian Music, Choir, Art Club, and Photography Club\n- **Leadership & Outbound**: Inter-house championships, Annual Athletic Meet, trekking expeditions in the Nainital hills, and social service initiatives.",
+      "source": "official",
+      "source_url": "https://sherwood.edu.in/Home/Infrastructure",
+      "demo": false,
+      "last_updated": "2026-11-15",
+      "fetched_on": "2026-11-15"
+    },
+    {
+      "id": "academics_curriculum_streams",
+      "category": "Academics/curriculum",
+      "questions": [
+        "What academic streams and subjects are offered in Classes 11 and 12?",
+        "What is the curriculum pattern for ICSE and ISC?",
+        "Which subjects can students choose in ISC?",
+        "Class 11 aur 12 mein kaunse subjects aur streams hote hain?",
+        "Sherwood mein ICSE aur ISC curriculum kaisa hai?"
+      ],
+      "answer": "Sherwood College is affiliated with the Council for the Indian School Certificate Examinations (CISCE), New Delhi:\n- **Classes 3 to 8 (Junior & Middle School)**: Comprehensive broad-based foundation in English, Hindi, Mathematics, General Sciences, Social Studies, Computer Studies, Environmental Education, and Arts/Sanskrit.\n- **Classes 9 & 10 (ICSE)**: Core English, Second Language, Mathematics, Science (Physics, Chemistry, Biology), Social Sciences (History, Civics, Geography), and Electives (Computer Applications, Commercial Studies, Physical Education, Art).\n- **Classes 11 & 12 (ISC)**: Streams include **Science** (Physics, Chemistry, Mathematics, Biology, Computer Science), **Commerce** (Accounts, Commerce, Economics, Business Studies), and **Humanities** (History, Political Science, Economics, Literature, Psychology), anchored by compulsory English Language & Literature.",
+      "source": "official",
+      "source_url": "https://sherwood.edu.in/Home/AboutUs",
+      "demo": false,
+      "last_updated": "2026-11-15",
+      "fetched_on": "2026-11-15"
     }
   ]
 }

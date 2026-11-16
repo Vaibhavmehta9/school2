@@ -565,6 +565,35 @@
   font-size: 12px;
 }
 
+.chat-retry-action-wrap {
+  margin-top: 8px;
+}
+
+.chat-retry-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background-color: var(--sherwood-green, #154734);
+  color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.chat-retry-btn:hover {
+  background-color: var(--sherwood-gold, #c5a059);
+  color: #1a1a1a;
+  transform: translateY(-1px);
+}
+
+.chat-retry-btn:active {
+  transform: translateY(0);
+}
+
 .chat-admissions-fallback {
   margin-top: 10px;
   padding-top: 10px;

@@ -11,7 +11,7 @@
   --teacher-blue: var(--role-teacher-primary);
   --teacher-sky: var(--color-primary-tint);
   --teacher-ink: var(--color-charcoal-900);
-  --teacher-muted: var(--color-charcoal-600);
+  --teacher-muted: var(--color-charcoal-700);
   --teacher-border: var(--color-border-subtle);
 }
 

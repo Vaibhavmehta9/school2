@@ -1,0 +1,38 @@
+# Robots.txt for Sherwood College Admissions Portal
+# Production host: https://sherwood.edu.in
+
+User-agent: *
+Allow: /
+Allow: /gallery
+Allow: /calendar
+Allow: /virtual-tour
+Allow: /apply
+Allow: /register
+Allow: /track-application
+Allow: /ai-assistant
+
+# Disallow private applicant dashboards, internal administrative tools, and backend APIs
+Disallow: /admin
+Disallow: /admin/
+Disallow: /teacher
+Disallow: /teacher/
+Disallow: /student
+Disallow: /student/
+Disallow: /vendor
+Disallow: /vendor/
+Disallow: /dashboard
+Disallow: /new-user-dashboard
+Disallow: /admission-details
+Disallow: /student-information
+Disallow: /parent-guardian
+Disallow: /fee-payment
+Disallow: /application/
+Disallow: /application-success
+Disallow: /consent-withdrawal
+Disallow: /login
+Disallow: /cognito-entry
+Disallow: /signed-out
+Disallow: /api/
+
+Sitemap: https://sherwood.edu.in/sitemap.xml
+

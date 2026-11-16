@@ -16,7 +16,16 @@ def serialize_user(row: Any) -> dict[str, Any]:
     # ``admission`` is the legacy/applicant Cognito role.  The API uses the
     # parent permissions for an applicant throughout the admission workflow.
     role = "parent" if row["role"] == "admission" else row["role"]
-    return {"id": row["id"], "email": row["email"], "full_name": row["full_name"], "role": role}
+    data = {"id": row["id"], "email": row["email"], "full_name": row["full_name"], "role": role}
+    if role == "vendor":
+        with connection() as database:
+            vendor = database.execute(
+                "SELECT vendor_id FROM vendor_accounts WHERE lower(email) = ? OR cognito_username = ?",
+                (row["email"].lower(), row["email"].lower()),
+            ).fetchone()
+            if vendor:
+                data["vendor_id"] = vendor["vendor_id"]
+    return data
 
 
 def authentication_mode() -> str:

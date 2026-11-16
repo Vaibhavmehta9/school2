@@ -49,7 +49,7 @@
 .sherwood-about__welcome-right p {
   font-size: var(--text-base);
   line-height: var(--leading-relaxed);
-  color: var(--color-charcoal-600);
+  color: var(--color-charcoal-700);
   margin-bottom: var(--space-3);
 }
 

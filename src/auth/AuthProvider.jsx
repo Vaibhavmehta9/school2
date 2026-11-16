@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useAuth } from "react-oidc-context";
-import { deriveRole } from "./cognito";
+import { deriveRole, isCognitoConfigured } from "./cognito";
 import { CognitoAuthContext } from "./CognitoAuthContext";
 import { setAdmissionStorageOwner } from "../services/admission";
 import {
@@ -30,25 +30,77 @@ export function CognitoAuthProvider({ children }) {
   const [countdownSeconds, setCountdownSeconds] = useState(60);
   const staySignedInBtnRef = useRef(null);
 
-  // Local user for developer/demo switching - NO automatic login on localhost!
-  const [localUser, setLocalUserState] = useState(() => {
-    try {
-      const stored = localStorage.getItem("sheerwood.local.user");
-      if (stored) return JSON.parse(stored);
-      return null;
-    } catch {
-      return null;
+  // Review mode session - stored in sessionStorage only, active only in dev or VITE_REVIEW_MODE
+  const [reviewSession, setReviewSessionState] = useState(() => {
+    if (import.meta.env.DEV || import.meta.env.VITE_REVIEW_MODE === "true") {
+      try {
+        const raw = window.sessionStorage?.getItem("sheerwood.review.session");
+        if (!raw) return null;
+        const session = JSON.parse(raw);
+        return session?.isReview && session.expiresAt > Date.now() ? session : null;
+      } catch {
+        return null;
+      }
     }
+    return null;
   });
 
-  const setLocalUser = useCallback((user) => {
-    if (user) {
-      localStorage.setItem("sheerwood.local.user", JSON.stringify(user));
-    } else {
-      localStorage.removeItem("sheerwood.local.user");
+  const startReviewPersona = useCallback((persona) => {
+    if (import.meta.env.DEV || import.meta.env.VITE_REVIEW_MODE === "true") {
+      const session = {
+        isReview: true,
+        accessToken: "review-mock-token",
+        idToken: "review-mock-token",
+        expiresAt: Date.now() + 86400000,
+        user: {
+          name: persona.user?.name || "Review Persona",
+          email: persona.user?.email || "review@sherwood.edu.in",
+          role: persona.role || "parent",
+          claims: {
+            sub: `review-${persona.role || "parent"}-sub`,
+            name: persona.user?.name || "Review Persona",
+            email: persona.user?.email || "review@sherwood.edu.in",
+            role: persona.role || "parent",
+          },
+        },
+      };
+      try {
+        window.sessionStorage?.setItem("sheerwood.review.session", JSON.stringify(session));
+      } catch {}
+      setReviewSessionState(session);
+      return session;
     }
-    setLocalUserState(user);
+    return null;
   }, []);
+
+  const exitReviewMode = useCallback(() => {
+    if (import.meta.env.DEV || import.meta.env.VITE_REVIEW_MODE === "true") {
+      try {
+        window.sessionStorage?.removeItem("sheerwood.review.session");
+      } catch {}
+      setReviewSessionState(null);
+    }
+  }, []);
+
+  // In DEV mode, allow instant persona selection via query param ?review_role=<role>
+  useEffect(() => {
+    if (import.meta.env.DEV || import.meta.env.VITE_REVIEW_MODE === "true") {
+      if (typeof window !== "undefined") {
+        const params = new URLSearchParams(window.location.search);
+        const roleParam = params.get("review_role");
+        if (roleParam) {
+          startReviewPersona({
+            role: roleParam,
+            user: {
+              name: `Review ${roleParam.charAt(0).toUpperCase() + roleParam.slice(1)}`,
+              email: `review.${roleParam}@sherwood.edu.in`,
+              role: roleParam,
+            },
+          });
+        }
+      }
+    }
+  }, [startReviewPersona]);
 
   const session = useMemo(() => {
     // If sign-out is in progress, treat session as null immediately
@@ -71,26 +123,14 @@ export function CognitoAuthProvider({ children }) {
       };
     }
 
-    if (localUser) {
-      return {
-        accessToken: "local-dev-token",
-        idToken: "local-dev-token",
-        expiresAt: Date.now() + 86400000,
-        user: {
-          email: localUser.email,
-          name: localUser.name,
-          role: localUser.role || "parent",
-          claims: {
-            sub: `local-${localUser.role || "parent"}-sub`,
-            email: localUser.email,
-            role: localUser.role || "parent",
-          },
-        },
-      };
+    if (import.meta.env.DEV || import.meta.env.VITE_REVIEW_MODE === "true") {
+      if (reviewSession) {
+        return reviewSession;
+      }
     }
 
     return null;
-  }, [auth.user, localUser]);
+  }, [auth.user, reviewSession]);
 
   useEffect(() => {
     setAdmissionStorageOwner(session?.user?.claims?.sub || session?.user?.email);
@@ -104,8 +144,13 @@ export function CognitoAuthProvider({ children }) {
     // 2. Broadcast logout to other tabs
     broadcastLogout();
 
-    // 3. Purge all auth items from localStorage and sessionStorage synchronously
-    setLocalUser(null);
+    // 3. Purge review session and auth items
+    if (import.meta.env.DEV || import.meta.env.VITE_REVIEW_MODE === "true") {
+      try {
+        window.sessionStorage?.removeItem("sheerwood.review.session");
+      } catch {}
+      setReviewSessionState(null);
+    }
     clearBrowserAuthStorage();
     setAdmissionStorageOwner("");
 
@@ -116,22 +161,27 @@ export function CognitoAuthProvider({ children }) {
       // Ignored during page unload
     }
 
-    // 5. In review mode, navigate directly to /signed-out (bypassing Cognito Hosted UI)
+    // 5. Navigate to /signed-out
     const origin = typeof window !== "undefined" ? window.location.origin : "";
     const logoutUri = `${origin}/signed-out`;
     window.location.replace(logoutUri);
-  }, [auth, setLocalUser]);
+  }, [auth]);
 
   // Listen for logout triggered in other browser tabs
   useEffect(() => {
     const cleanup = initCrossTabLogout(() => {
-      setLocalUser(null);
+      if (import.meta.env.DEV || import.meta.env.VITE_REVIEW_MODE === "true") {
+        try {
+          window.sessionStorage?.removeItem("sheerwood.review.session");
+        } catch {}
+        setReviewSessionState(null);
+      }
       const origin = typeof window !== "undefined" ? window.location.origin : "";
       const logoutUri = import.meta.env.VITE_COGNITO_LOGOUT_URI?.trim() || `${origin}/signed-out`;
       window.location.replace(logoutUri);
     });
     return cleanup;
-  }, [setLocalUser]);
+  }, []);
 
   // ---------------------------------------------------------------------------
   // Inactivity Monitoring & 60-Second Warning Modal
@@ -232,19 +282,22 @@ export function CognitoAuthProvider({ children }) {
     return undefined;
   }, [showInactivityWarning, resetInactivityTimer]);
 
+  const isConfigured = isCognitoConfigured();
+
   const value = useMemo(() => ({
     session,
     user: session?.user || null,
-    isLoading: false,
-    isConfigured: false, // In review mode: direct persona access, no Cognito Hosted UI redirects
+    isLoading: auth.isLoading,
+    isConfigured,
     signIn: (returnTo = "") => {
       const target = returnTo ? `/login?returnTo=${encodeURIComponent(returnTo)}` : "/login";
       window.location.assign(target);
     },
     signOut,
-    setSession: setLocalUser,
-    setLocalUser,
-  }), [session, signOut, setLocalUser]);
+    startReviewPersona,
+    exitReviewMode,
+    setSession: startReviewPersona,
+  }), [session, auth.isLoading, isConfigured, signOut, startReviewPersona, exitReviewMode]);
 
   return (
     <CognitoAuthContext.Provider value={value}>

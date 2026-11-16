@@ -10,7 +10,7 @@
   --student-green: var(--role-student-primary);
   --student-deep: var(--role-student-dark);
   --student-ink: var(--color-charcoal-900);
-  --student-muted: var(--color-charcoal-600);
+  --student-muted: var(--color-charcoal-700);
   --student-border: var(--color-border-subtle);
   --student-bg: var(--color-bg-canvas);
 }

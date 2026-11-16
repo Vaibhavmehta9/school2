@@ -39,7 +39,7 @@
 
 .sherwood-qr-modal__desc {
   font-size: var(--text-sm);
-  color: var(--color-charcoal-600);
+  color: var(--color-charcoal-700);
   line-height: var(--leading-relaxed);
   margin-bottom: var(--space-6);
 }

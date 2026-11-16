@@ -18,7 +18,7 @@ export default function MarqueeBanner() {
       role="region"
       aria-label="Sherwood College Key Distinctions Ticker"
     >
-      <div className="sherwood-marquee__track" tabIndex={0} aria-label="Ticker: scroll or pause by focusing or hovering">
+      <div className="sherwood-marquee__track" tabIndex={0} role="region" aria-label="Ticker: scroll or pause by focusing or hovering">
         <div className="sherwood-marquee__content" aria-hidden="true">
           {MARQUEE_ITEMS.map((item, index) => (
             <span key={`a-${index}`} className="sherwood-marquee__item">

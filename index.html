@@ -2,12 +2,154 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sherwood College Admission Portal</title>
+
+    <!-- Favicon & PWA Icons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" type="image/x-icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <!-- Browser & Phone Theme Colors -->
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#08783f" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#054b2d" />
+
+    <!-- Primary SEO Metadata -->
+    <title>Sherwood College, Nainital | Admissions 2027-28</title>
+    <meta name="description" content="Sherwood College, Nainital (Est. 1869). India's premier ICSE/ISC co-educational boarding school in Uttarakhand. Applications now open for Academic Session 2027-28." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="%VITE_SITE_URL%/" />
+
+    <!-- Open Graph (Facebook, WhatsApp, LinkedIn) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Sherwood College, Nainital" />
+    <meta property="og:title" content="Sherwood College, Nainital | Admissions 2027-28" />
+    <meta property="og:description" content="Sherwood College, Nainital (Est. 1869). India's premier ICSE/ISC co-educational boarding school in Uttarakhand. Applications now open for Academic Session 2027-28." />
+    <meta property="og:url" content="%VITE_SITE_URL%/" />
+    <meta property="og:image" content="%VITE_SITE_URL%/og-image.jpg" />
+    <meta property="og:image:secure_url" content="%VITE_SITE_URL%/og-image.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Sherwood College, Nainital - Admissions 2027-28" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Sherwood College, Nainital | Admissions 2027-28" />
+    <meta name="twitter:description" content="Sherwood College, Nainital (Est. 1869). India's premier ICSE/ISC co-educational boarding school in Uttarakhand. Applications now open for Academic Session 2027-28." />
+    <meta name="twitter:image" content="%VITE_SITE_URL%/og-image.jpg" />
+    <meta name="twitter:image:alt" content="Sherwood College, Nainital - Admissions 2027-28" />
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "EducationalOrganization",
+      "name": "Sherwood College",
+      "alternateName": "Sherwood College, Nainital",
+      "url": "%VITE_SITE_URL%/",
+      "logo": "%VITE_SITE_URL%/icon-512.png",
+      "image": "%VITE_SITE_URL%/icon-512.png",
+      "foundingDate": "1869",
+      "description": "Sherwood College, Nainital (Est. 1869) is a premier heritage co-educational residential school affiliated with CISCE (ICSE / ISC).",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Ayarpatta Hill",
+        "addressLocality": "Nainital",
+        "addressRegion": "Uttarakhand",
+        "postalCode": "263002",
+        "addressCountry": "IN"
+      }
+    }
+    </script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div id="app-loading-state" aria-hidden="true">
+        <style>
+          #app-loading-state {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #fbfaf6;
+            color: #054b2d;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            z-index: 99999;
+          }
+          .app-loading-crest {
+            width: 72px;
+            height: 72px;
+            margin-bottom: 16px;
+            animation: crestPulse 2s ease-in-out infinite;
+          }
+          .app-loading-title {
+            font-family: "Georgia", "Cambria", serif;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: #054b2d;
+            margin: 0 0 6px 0;
+          }
+          .app-loading-sub {
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #c59b27;
+            margin: 0;
+          }
+          @keyframes crestPulse {
+            0%, 100% {
+              transform: scale(1);
+              opacity: 0.9;
+            }
+            50% {
+              transform: scale(1.05);
+              opacity: 1;
+            }
+          }
+          @media (prefers-color-scheme: dark) {
+            #app-loading-state {
+              background-color: #042a18;
+              color: #fbfaf6;
+            }
+            .app-loading-title {
+              color: #ffffff;
+            }
+            .app-loading-sub {
+              color: #dfb846;
+            }
+          }
+          @media (prefers-reduced-motion: reduce) {
+            .app-loading-crest {
+              animation: none !important;
+            }
+          }
+        </style>
+        <svg class="app-loading-crest" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 8 C12 6, 14 5, 18 5 L46 5 C50 5, 52 6, 52 8 L52 32 C52 46, 38 56, 32 59 C26 56, 12 46, 12 32 Z" fill="#08783f" stroke="#c59b27" stroke-width="2.5" stroke-linejoin="round" />
+          <path d="M32 14 V44 M20 25 H44" stroke="#dfb846" stroke-width="2" stroke-linecap="round" />
+          <circle cx="32" cy="25" r="3.5" fill="#dfb846" />
+        </svg>
+        <h1 class="app-loading-title">Sherwood College</h1>
+        <p class="app-loading-sub">Est. 1869 · Nainital</p>
+      </div>
+    </div>
+    <noscript>
+      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 560px; margin: 40px auto; padding: 24px; text-align: center; border: 1px solid #c59b27; border-radius: 12px; background: #fbfaf6; color: #1e293b; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+        <h2 style="color: #08783f; margin-top: 0;">JavaScript Required</h2>
+        <p style="font-size: 15px; line-height: 1.6; color: #334155;">
+          To access the Sherwood College Admissions Portal, submit registration forms, or speak with Sherwood AI, please enable JavaScript in your browser settings.
+        </p>
+        <p style="font-size: 13px; color: #64748b; margin-bottom: 0;">
+          For admissions assistance without JavaScript, please contact the admissions helpline at <a href="tel:+919458307729" style="color: #08783f; font-weight: 600;">+91 94583 07729</a>.
+        </p>
+      </div>
+    </noscript>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

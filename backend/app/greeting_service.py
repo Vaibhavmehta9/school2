@@ -29,7 +29,7 @@ SUBSTANTIVE_KEYWORDS = {
     "doctor", "hospital", "infirmary", "medical", "sport", "sports", "coach", "coaching",
     "uniform", "book", "books", "weather", "temperature", "mausam", "thand", "garmi",
     "schedule", "timing", "timings", "transport", "bus", "visit", "campus", "location",
-    "where", "when", "how much", "kitna", "kya", "kab", "kaise", "kahan", "kaun",
+    "kitni fees", "kitna kharcha",
 }
 
 GREETING_WORDS = {
@@ -40,7 +40,7 @@ GREETING_WORDS = {
 
 HOW_ARE_YOU_PHRASES = [
     "how are you", "how are you doing", "how r u", "how do you do",
-    "kya haal hai", "kaise ho", "kaise hain aap", "sab theek",
+    "kya haal hai", "kaise ho", "kaise ho aap", "kaise hain aap", "sab theek",
 ]
 
 WHO_ARE_YOU_PHRASES = [
@@ -76,6 +76,11 @@ def contains_substantive_inquiry(clean_text: str) -> bool:
     # Check for combined phrases like "how much", "kitni fees", etc.
     phrases = ["how much", "how to apply", "kitni fees", "kya rules", "admission date"]
     return any(p in clean_text for p in phrases)
+
+
+def is_pure_greeting(message: str) -> bool:
+    """Return True if the message is a pure greeting or small talk without substantive inquiry."""
+    return get_canned_greeting_reply(message) is not None
 
 
 def get_canned_greeting_reply(

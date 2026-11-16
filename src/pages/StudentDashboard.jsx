@@ -8,10 +8,30 @@ import "./StudentAuth.css";
 import StudentPortalModule from "./StudentPortalModule";
 
 const navigation = [["⌂", "Dashboard"], ["◔", "Attendance"], ["▤", "My Subjects"], ["◷", "Timetable"], ["▱", "Homework"], ["✦", "Exams & Results"], ["▥", "Performance"], ["▣", "Study Material"], ["✉", "Announcements"], ["◫", "Fees"], ["◒", "Leave Request"], ["✧", "AI Assistant"], ["♙", "My Profile"]];
-const kpis = [];
-const subjects = [];
-const classes = [];
-const homework = [];
+const kpis = [
+  ["◔", "Attendance", "92%", "Current academic term", "green"],
+  ["▤", "My Subjects", "6", "ICSE Curriculum", "blue"],
+  ["✦", "Unit Test 1", "86%", "Class Rank: 4th", "gold"],
+  ["▱", "Pending Tasks", "3", "Homework due this week", "orange"],
+];
+const subjects = [
+  ["English Literature", "Mrs. Kapoor", "32/34", "94%", "Good", "green"],
+  ["Mathematics", "Mr. Rawat", "30/34", "88%", "Normal", "blue"],
+  ["Science", "Dr. Joshi", "33/34", "97%", "Excellent", "green"],
+  ["Hindi", "Mrs. Pant", "29/34", "85%", "Normal", "blue"],
+  ["Computer Studies", "Mr. Verma", "31/34", "91%", "Good", "green"],
+];
+const classes = [
+  ["08:30 AM", "Mathematics", "Mr. Rawat", "Room 204", "Completed"],
+  ["09:30 AM", "English Literature", "Mrs. Kapoor", "Room 204", "Now"],
+  ["10:45 AM", "Science", "Dr. Joshi", "Lab 02", "Upcoming"],
+  ["12:00 PM", "Computer Studies", "Mr. Verma", "Lab 01", "Upcoming"],
+];
+const homework = [
+  ["Mathematics", "Fractions and Decimals Ex 3.2", "Tomorrow", "Pending"],
+  ["Science", "Plant Cells Diagram & Questions", "Friday", "Pending"],
+  ["English Literature", "Essay on Mountain Ecosystems", "Monday", "In Progress"],
+];
 
 export default function StudentDashboard() {
   const { signOut, user, session } = useCognitoAuth();

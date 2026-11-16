@@ -37,7 +37,7 @@
   --color-charcoal-400: #94a3b8;
   --color-text-primary: var(--color-charcoal-900);
   --color-text-secondary: var(--color-charcoal-700);
-  --color-text-muted: var(--color-charcoal-600);
+  --color-text-muted: var(--color-charcoal-700);
   --color-text-subtle: var(--color-charcoal-500);
   --color-text-inverse: #ffffff;
   --color-text-inverse-muted: #e2e8f0;

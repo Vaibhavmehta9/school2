@@ -4,6 +4,10 @@
 import { API_ROUTES } from "../constants/routes";
 
 export async function getAdminUsers(accessToken) {
+  if ((import.meta.env.DEV || import.meta.env.VITE_REVIEW_MODE === "true") && accessToken === "review-mock-token") {
+    const { REVIEW_MOCK_DATA } = await import("../auth/reviewMode");
+    return REVIEW_MOCK_DATA.adminUsers;
+  }
   const response = await fetch(API_ROUTES.adminUsers, { headers: { Authorization: `Bearer ${accessToken}` } });
   const data = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(data.detail || "Users could not be loaded.");
@@ -102,6 +106,10 @@ export function getVendorDashboard(accessToken) {
 }
 
 export async function getAdminDocuments(accessToken) {
+  if ((import.meta.env.DEV || import.meta.env.VITE_REVIEW_MODE === "true") && accessToken === "review-mock-token") {
+    const { REVIEW_MOCK_DATA } = await import("../auth/reviewMode");
+    return REVIEW_MOCK_DATA.adminDocuments;
+  }
   const response = await fetch(API_ROUTES.adminDocuments, { headers: { Authorization: `Bearer ${accessToken}` } });
   const data = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(data.detail || "Documents could not be loaded.");
@@ -120,6 +128,12 @@ export async function reviewAdminDocument(accessToken, documentId, decision, rea
 }
 
 export async function downloadAdminDocument(accessToken, documentId, fallbackFileName = "admission-document") {
+  if ((import.meta.env.DEV || import.meta.env.VITE_REVIEW_MODE === "true") && accessToken === "review-mock-token") {
+    return {
+      blob: new Blob(["Sample downloaded document for review mode."], { type: "text/plain" }),
+      fileName: `${fallbackFileName}.txt`,
+    };
+  }
   const response = await fetch(`${API_ROUTES.adminDocuments}/${encodeURIComponent(documentId)}/download`, {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
@@ -145,6 +159,10 @@ export async function deleteAdminDocument(accessToken, documentId) {
 }
 
 export async function getAdminAdmissions(accessToken) {
+  if ((import.meta.env.DEV || import.meta.env.VITE_REVIEW_MODE === "true") && accessToken === "review-mock-token") {
+    const { REVIEW_MOCK_DATA } = await import("../auth/reviewMode");
+    return REVIEW_MOCK_DATA.adminAdmissions;
+  }
   const response = await fetch(API_ROUTES.adminAdmissions, { headers: { Authorization: `Bearer ${accessToken}` } });
   const data = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(data.detail || "Admissions could not be loaded.");
@@ -176,6 +194,19 @@ export function getAdminAdmissionFunnel(accessToken) {
 }
 
 async function getAdminData(url, accessToken, errorMessage) {
+  if ((import.meta.env.DEV || import.meta.env.VITE_REVIEW_MODE === "true") && accessToken === "review-mock-token") {
+    const { REVIEW_MOCK_DATA } = await import("../auth/reviewMode");
+    if (url.includes("/admin/settings")) return REVIEW_MOCK_DATA.adminSettings;
+    if (url.includes("/admin/syllabus")) return REVIEW_MOCK_DATA.adminSyllabus;
+    if (url.includes("/admin/vendors")) return REVIEW_MOCK_DATA.adminVendors;
+    if (url.includes("/vendor/dashboard")) return REVIEW_MOCK_DATA.vendorDashboard;
+    if (url.includes("/admin/admission-funnel")) return { total_leads: 42, active_applications: 18, pending_documents: 6, approved: 14 };
+    if (url.includes("/admin/students")) return [];
+    if (url.includes("/admin/teachers")) return [];
+    if (url.includes("/admin/classes")) return [];
+    if (url.includes("/admin/attendance")) return [];
+    return {};
+  }
   const response = await fetch(url, { headers: { Authorization: `Bearer ${accessToken}` } });
   const data = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(data.detail || errorMessage);
@@ -256,23 +287,116 @@ export async function streamSchoolAI({
   onError,
   onDemoFlag,
   onChips,
+  onStatus,
 }) {
   const headers = { "Content-Type": "application/json" };
   if (accessToken) headers.Authorization = `Bearer ${accessToken}`;
+
+  // Non-streaming fallback (used for Cloudflare Quick Tunnels that do not support SSE streaming)
+  if (import.meta.env.VITE_CHAT_STREAMING === "false") {
+    try {
+      const response = await fetch(API_ROUTES.aiChat, {
+        method: "POST",
+        headers,
+        signal,
+        body: JSON.stringify({
+          message: message.trim(),
+          history: history.slice(-6).map((turn) => ({ role: turn.role, content: turn.content || turn.text || "" })),
+        }),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        const error = new Error(formatErrorDetail(data.detail));
+        error.status = response.status;
+        if (onError) onError(error);
+        throw error;
+      }
+      const answer = data.answer || "";
+      if (data.is_demo !== undefined && onDemoFlag) onDemoFlag(Boolean(data.is_demo));
+      if (data.chips && onChips) onChips(data.chips);
+      if (onChunk && answer) onChunk(answer, answer);
+      if (onFinish) onFinish(answer);
+      return answer;
+    } catch (err) {
+      if (signal?.aborted) return "";
+      if (onError) onError(err);
+      throw err;
+    }
+  }
+
+  const localController = new AbortController();
+  if (signal) {
+    if (signal.aborted) {
+      localController.abort();
+    } else {
+      signal.addEventListener("abort", () => localController.abort(), { once: true });
+    }
+  }
+
+  let firstTokenTimer = null;
+  let inactivityTimer = null;
+  let overallTimer = null;
+  let firstTokenReceived = false;
+
+  const clearAllTimers = () => {
+    if (firstTokenTimer) {
+      clearTimeout(firstTokenTimer);
+      firstTokenTimer = null;
+    }
+    if (inactivityTimer) {
+      clearTimeout(inactivityTimer);
+      inactivityTimer = null;
+    }
+    if (overallTimer) {
+      clearTimeout(overallTimer);
+      overallTimer = null;
+    }
+  };
+
+  const triggerTimeout = (timerType) => {
+    clearAllTimers();
+    const timeoutError = new Error("This is taking longer than expected. Please try again.");
+    timeoutError.isTimeout = true;
+    timeoutError.timerType = timerType;
+    try {
+      localController.abort(timeoutError);
+    } catch {
+      // Ignore abort errors
+    }
+    if (onError) onError(timeoutError);
+    throw timeoutError;
+  };
+
+  // 1. Overall timeout: 45s
+  overallTimer = setTimeout(() => triggerTimeout("overall"), 45000);
+
+  // 2. First-token timeout: 15s (cleared ONLY by chunk, error, or [DONE], NEVER by status)
+  firstTokenTimer = setTimeout(() => triggerTimeout("first-token"), 15000);
+
+  // 3. Inactivity timeout: 20s (resets on every incoming byte/chunk)
+  const resetInactivityTimer = () => {
+    if (inactivityTimer) clearTimeout(inactivityTimer);
+    inactivityTimer = setTimeout(() => triggerTimeout("inactivity"), 20000);
+  };
+  resetInactivityTimer();
 
   let response;
   try {
     response = await fetch(API_ROUTES.aiChatStream, {
       method: "POST",
       headers,
-      signal,
+      signal: localController.signal,
       body: JSON.stringify({
         message: message.trim(),
         history: history.slice(-6).map((turn) => ({ role: turn.role, content: turn.content || turn.text || "" })),
       }),
     });
-  } catch {
-    if (signal?.aborted) return "";
+  } catch (fetchErr) {
+    clearAllTimers();
+    if (signal?.aborted || localController.signal.aborted) {
+      if (fetchErr.isTimeout) throw fetchErr;
+      return "";
+    }
     const error = new Error("Could not connect to the school assistant. Please check your network connection.");
     error.isNetwork = true;
     if (onError) onError(error);
@@ -280,22 +404,45 @@ export async function streamSchoolAI({
   }
 
   if (!response.ok) {
+    clearAllTimers();
     const data = await response.json().catch(() => ({}));
-    const error = new Error(formatErrorDetail(data.detail));
+    let msg = formatErrorDetail(data.detail);
+    if (response.status === 429) {
+      msg = "Too many requests. Please wait 60 seconds before asking again.";
+    } else if (response.status >= 500) {
+      msg = "The Sherwood AI service is currently unavailable. Please check back shortly.";
+    }
+    const error = new Error(msg);
     error.status = response.status;
     if (onError) onError(error);
     throw error;
+  }
+
+  // Gracefully handle non-stream JSON responses (if returned by a proxy or fallback)
+  const contentType = response.headers.get("content-type") || "";
+  if (contentType.includes("application/json")) {
+    clearAllTimers();
+    const data = await response.json().catch(() => ({}));
+    const answer = data.answer || "";
+    if (data.is_demo !== undefined && onDemoFlag) onDemoFlag(Boolean(data.is_demo));
+    if (data.chips && onChips) onChips(data.chips);
+    if (onChunk && answer) onChunk(answer, answer);
+    if (onFinish) onFinish(answer);
+    return answer;
   }
 
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
   let buffer = "";
   let fullAnswer = "";
+  let doneReceived = false;
 
   try {
     while (true) {
       const { done, value } = await reader.read();
       if (done) break;
+
+      resetInactivityTimer();
       buffer += decoder.decode(value, { stream: true });
       const lines = buffer.split("\n\n");
       buffer = lines.pop() || "";
@@ -304,24 +451,48 @@ export async function streamSchoolAI({
         const line = block.trim();
         if (!line.startsWith("data:")) continue;
         const payload = line.replace(/^data:\s*/, "").trim();
+
         if (payload === "[DONE]") {
+          doneReceived = true;
+          clearAllTimers();
           if (onFinish) onFinish(fullAnswer);
           return fullAnswer;
         }
+
         try {
           const parsed = JSON.parse(payload);
+
+          // Safely ignore unknown event types or status events (e.g. {"status":"thinking"})
+          // MUST NEVER appear as text or clear the first-token timer
+          if (parsed.status) {
+            if (onStatus) onStatus(parsed.status);
+            continue;
+          }
+
           if (parsed.error) {
+            clearAllTimers();
             const err = new Error(parsed.error);
             if (onError) onError(err);
             throw err;
           }
+
           if (parsed.chunk) {
+            // First token received: clear first-token timer
+            if (!firstTokenReceived) {
+              firstTokenReceived = true;
+              if (firstTokenTimer) {
+                clearTimeout(firstTokenTimer);
+                firstTokenTimer = null;
+              }
+            }
             fullAnswer += parsed.chunk;
             if (onChunk) onChunk(parsed.chunk, fullAnswer);
           }
+
           if (parsed.is_demo !== undefined && onDemoFlag) {
             onDemoFlag(Boolean(parsed.is_demo));
           }
+
           if (parsed.chips && onChips) {
             onChips(parsed.chips);
           }
@@ -330,10 +501,28 @@ export async function streamSchoolAI({
         }
       }
     }
+
+    clearAllTimers();
+
+    // Stream finished without [DONE] or yielded no content
+    if (!doneReceived || !fullAnswer || !fullAnswer.trim()) {
+      if (!fullAnswer || !fullAnswer.trim()) {
+        const emptyErr = new Error("I couldn't fetch a response right now. Please try again.");
+        emptyErr.isEmptyResponse = true;
+        if (onError) onError(emptyErr);
+        throw emptyErr;
+      }
+    }
   } catch (streamErr) {
-    if (signal?.aborted) return fullAnswer;
+    clearAllTimers();
+    if (signal?.aborted || localController.signal.aborted) {
+      if (streamErr.isTimeout) throw streamErr;
+      return fullAnswer;
+    }
     if (onError) onError(streamErr);
     throw streamErr;
+  } finally {
+    clearAllTimers();
   }
 
   if (onFinish) onFinish(fullAnswer);

@@ -150,6 +150,7 @@ export default function ChatPanel({
     feedback,
     copiedIndex,
     sendMessage,
+    retryLastMessage,
     stopGenerating,
     clearChat,
     copyMessage,
@@ -583,6 +584,18 @@ export default function ChatPanel({
               <small className="chat-retry-timer">
                 Rate limit reset in <strong>{rateLimitTimer}s</strong>.
               </small>
+            )}
+            {error.canRetry && !loading && (
+              <div className="chat-retry-action-wrap">
+                <button
+                  type="button"
+                  className="chat-retry-btn"
+                  onClick={retryLastMessage}
+                  aria-label="Retry sending message"
+                >
+                  ↻ Retry
+                </button>
+              </div>
             )}
             <div className="chat-admissions-fallback">
               <p>Need personal admissions help or official clarification?</p>

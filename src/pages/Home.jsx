@@ -175,7 +175,7 @@ export default function Home() {
         onClick={() => setAiOpen((isOpen) => !isOpen)}
         aria-expanded={aiOpen}
         aria-haspopup="dialog"
-        aria-label="Ask Sherwood Admissions AI Assistant"
+        aria-label="Ask Sherwood AI"
       >
         <span className="sherwood-ai-launcher-icon" aria-hidden="true">
           <SherwoodAIAvatar size={34} state={aiOpen ? "speaking" : "idle"} />

@@ -7,12 +7,33 @@ import "./Teacher_Portal.css";
 import "./TeacherFeatures.css";
 
 const navigation = [["▦", "Dashboard"], ["▤", "My Classes"], ["♙", "Students"], ["✓", "Attendance"], ["▱", "Assignments"], ["▥", "Exams & Marks"], ["▣", "Study Material"], ["◷", "Timetable"], ["✉", "Messages"], ["▰", "Announcements"], ["◒", "Leave Management"], ["✦", "AI Assistant"], ["⚙", "Profile"]];
-const todayClasses = [];
-const assignedClasses = [];
-const students = [];
+const todayClasses = [
+  ["08:15", "Class 5A", "Mathematics", "Room 204", "Completed"],
+  ["09:10", "Class 5B", "Mathematics", "Room 204", "Now"],
+  ["10:30", "Class 4A", "Science", "Lab 02", "Upcoming"],
+  ["12:05", "Class 5A", "Mathematics", "Room 204", "Upcoming"],
+];
+const assignedClasses = [
+  ["Class 5A", "Mathematics", "36 students", "94% avg attendance", "Mon-Fri · 08:15"],
+  ["Class 5B", "Mathematics", "34 students", "91% avg attendance", "Mon-Fri · 09:10"],
+  ["Class 4A", "Science", "31 students", "96% avg attendance", "Mon, Wed, Fri · 10:30"],
+];
+const students = [
+  ["AS", "Aarav Sharma", "01", "Class 5A", "94%", "A (91%)", "+91 98123 45678"],
+  ["SG", "Saanvi Gupta", "02", "Class 5A", "97%", "A+ (96%)", "+91 98234 56789"],
+  ["VS", "Vivaan Singh", "03", "Class 5A", "88%", "B+ (78%)", "+91 98345 67890"],
+  ["AP", "Ananya Patel", "04", "Class 5A", "92%", "A (88%)", "+91 98456 78901"],
+  ["DK", "Devansh Kumar", "05", "Class 5A", "85%", "B (72%)", "+91 98567 89012"],
+];
 const assignments = [["Fractions practice worksheet", "Class 5A", "14 Jun", "28 / 36 submitted", "8 pending"], ["Plant life observation journal", "Class 4A", "15 Jun", "24 / 31 submitted", "7 pending"], ["Decimals revision quiz", "Class 5B", "18 Jun", "0 / 34 submitted", "New"]];
 const materials = [["Mathematics · Fractions Notes", "PDF", "Class 5A", "12 Jun 2027"], ["Plant life video lesson", "Video", "Class 4A", "10 Jun 2027"], ["Decimals practice worksheet", "Worksheet", "Class 5B", "08 Jun 2027"]];
-const attendanceStudents = [];
+const attendanceStudents = [
+  ["Aarav Sharma", "01"],
+  ["Saanvi Gupta", "02"],
+  ["Vivaan Singh", "03"],
+  ["Ananya Patel", "04"],
+  ["Devansh Kumar", "05"],
+];
 const timetable = [["08:15", "Mathematics", "Class 5A", "Room 204"], ["09:10", "Mathematics", "Class 5B", "Room 204"], ["10:30", "Science", "Class 4A", "Lab 02"], ["12:05", "Mathematics", "Class 5A", "Room 204"]];
 
 function SectionHeading({ eyebrow, title, text, action }) {
