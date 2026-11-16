@@ -197,6 +197,19 @@ async def lifespan(_: FastAPI):
     if auth_mode not in ("cognito", "local"):
         raise RuntimeError(f"Startup check failed: AUTH_MODE must be 'cognito' or 'local' (received: {auth_mode})")
 
+    # Seed persistent database on volume if it does not exist yet
+    target_db_env = os.getenv("DATABASE_PATH")
+    if target_db_env:
+        import shutil
+        target_db = Path(target_db_env)
+        if not target_db.is_absolute():
+            target_db = Path(__file__).resolve().parents[1] / target_db
+        if not target_db.exists():
+            target_db.parent.mkdir(parents=True, exist_ok=True)
+            source_db = Path(__file__).resolve().parents[1] / "sheerwood.db"
+            if source_db.exists() and source_db != target_db:
+                shutil.copyfile(source_db, target_db)
+
     initialize_database()
     try:
         from .nlp_engine import preload_nlp_engine

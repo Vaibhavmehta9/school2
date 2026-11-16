@@ -9,7 +9,9 @@ COPY requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir --upgrade pip && pip install --no-cache-dir -r requirements.txt
 
 COPY app ./app
+COPY data ./data
 COPY certs/global-bundle.pem /certs/global-bundle.pem
+COPY sheerwood.db ./sheerwood.db
 
 RUN mkdir -p /data
 
