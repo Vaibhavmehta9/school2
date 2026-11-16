@@ -5,8 +5,8 @@ services:
   - type: web
     name: sheerwood-backend
     runtime: docker
-    dockerContext: .
-    dockerfilePath: backend/Dockerfile
+    rootDir: backend
+    dockerfilePath: Dockerfile
     plan: starter # Starter plan required for Persistent Disk attachment ($7/mo)
     healthCheckPath: /api/health
     disk:
@@ -21,7 +21,7 @@ services:
       - key: DATABASE_PATH
         value: "/data/sheerwood.demo.db"
       - key: ALLOWED_ORIGINS
-        value: "https://sheerwood-portal.vercel.app,http://localhost:5173,http://localhost:4173"
+        value: "https://sheerwood-admission-portal.vercel.app,https://sheerwood-portal.vercel.app,http://localhost:5173,http://localhost:4173"
       - key: AI_RATE_LIMIT_REQUESTS
         value: "20"
       - key: AI_RATE_LIMIT_WINDOW_SECONDS
