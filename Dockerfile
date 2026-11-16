@@ -11,7 +11,6 @@ RUN pip install --no-cache-dir --upgrade pip && pip install --no-cache-dir -r re
 COPY backend/app ./app
 COPY backend/data ./data
 COPY backend/certs/global-bundle.pem /certs/global-bundle.pem
-COPY backend/sheerwood.db ./sheerwood.db
 
 RUN mkdir -p /data
 
