@@ -193,6 +193,10 @@ def missing_required_submission_upload_keys(database: Any, application_number: s
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
+    auth_mode = os.getenv("AUTH_MODE", "local").strip().lower()
+    if auth_mode not in ("cognito", "local"):
+        raise RuntimeError(f"Startup check failed: AUTH_MODE must be 'cognito' or 'local' (received: {auth_mode})")
+
     initialize_database()
     try:
         from .nlp_engine import preload_nlp_engine
