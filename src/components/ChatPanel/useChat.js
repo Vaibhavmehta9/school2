@@ -56,9 +56,16 @@ export function useChat({ accessToken = null, role = "guest", user = null } = {}
   const rateLimitIntervalRef = useRef(null);
   const isFirstRequestRef = useRef(true);
 
-  // Background server warm-up on chat mount/open
+  // Background server warm-up on chat mount/open & purge any old stored chat
   useEffect(() => {
     warmupBackend();
+    if (!shouldPersistChat()) {
+      try {
+        sessionStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem(STORAGE_KEY);
+      } catch {}
+      setMessages([]);
+    }
   }, []);
 
   // Account switch: clear chat immediately when user changes
@@ -166,9 +173,14 @@ export function useChat({ accessToken = null, role = "guest", user = null } = {}
         assistantMessageIndex = nextMessages.length;
         setMessages(nextMessages);
       } else {
+        let baseList = [...messages];
+        // If the last message was an unanswered user query, replace it rather than accumulating duplicate orphan bubbles
+        if (baseList.length > 0 && baseList[baseList.length - 1].role === "user") {
+          baseList.pop();
+        }
         const userMessage = { role: "user", text: cleanText, timestamp: Date.now() };
-        currentHistory = [...messages];
-        nextMessages = [...currentHistory, userMessage];
+        currentHistory = [...baseList];
+        nextMessages = [...baseList, userMessage];
         assistantMessageIndex = nextMessages.length;
         setMessages(nextMessages);
       }

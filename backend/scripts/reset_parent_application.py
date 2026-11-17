@@ -74,3 +74,4 @@ if __name__ == "__main__":
         print("Usage: python backend/scripts/reset_parent_application.py <parent_email_or_application_number_or_--demo-parents>")
         sys.exit(1)
     reset_application(sys.argv[1])
+
