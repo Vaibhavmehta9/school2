@@ -5,6 +5,7 @@ services:
   - type: web
     name: sheerwood-backend
     runtime: docker
+    branch: vercel-deploy
     rootDir: backend
     dockerfilePath: Dockerfile
     plan: starter # Starter plan required for Persistent Disk attachment ($7/mo)
