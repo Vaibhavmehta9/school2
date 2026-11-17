@@ -2,6 +2,7 @@ from contextlib import asynccontextmanager
 from datetime import UTC, datetime, timedelta
 from decimal import Decimal
 import hashlib
+import logging
 import os
 import json
 from pathlib import Path
@@ -191,6 +192,9 @@ def missing_required_submission_upload_keys(database: Any, application_number: s
     return sorted(required_keys - uploaded_keys)
 
 
+logger = logging.getLogger("sheerwood-api")
+
+
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     auth_mode = os.getenv("AUTH_MODE", "local").strip().lower()
@@ -215,12 +219,12 @@ async def lifespan(_: FastAPI):
         from .nlp_engine import preload_nlp_engine
         preload_nlp_engine()
     except Exception as exc:
-        pass
+        logger.warning("Startup warning: NLP engine preload error: %s", exc)
     try:
         from .llm_service import validate_gemini_model
         validate_gemini_model()
     except Exception as exc:
-        pass
+        logger.warning("Startup warning: Gemini validation error: %s", exc)
     yield
 
 

@@ -1,9 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import SchoolCrest from "../../../components/SchoolCrest";
+import { useAdmissionCta } from "../../../hooks/useAdmissionCta";
 import "./FooterSection.css";
 
 export default function FooterSection() {
+  const { targetPath, hasExistingApplication } = useAdmissionCta();
   return (
     <footer id="contact" className="sherwood-footer">
       <div className="sherwood-footer__container">
@@ -32,7 +34,7 @@ export default function FooterSection() {
             <h3>Admissions</h3>
             <ul>
               <li><a href="#admission-process">Admission Process</a></li>
-              <li><Link to="/admission-details">Online Application 2027–28</Link></li>
+              <li><Link to={targetPath}>{hasExistingApplication ? "Continue Application" : "Online Application 2027–28"}</Link></li>
               <li><Link to="/admission-details">Eligibility &amp; Age Cutoffs</Link></li>
               <li><Link to="/track-application">Track Application Status</Link></li>
             </ul>

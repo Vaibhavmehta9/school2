@@ -89,6 +89,7 @@ export default function StudentDashboard() {
       onClose={() => setAiOpen(false)}
       accessToken={session?.accessToken}
       role="student"
+      user={user}
       triggerRef={triggerRef}
     />
     <button

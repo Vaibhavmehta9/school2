@@ -1,9 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Button from "../../../components/Button/Button";
+import { useAdmissionCta } from "../../../hooks/useAdmissionCta";
 import "./AdmissionCtaSection.css";
 
 export default function AdmissionCtaSection() {
+  const { targetPath, hasExistingApplication } = useAdmissionCta();
+
   return (
     <>
       <section id="admission" className="sherwood-cta">
@@ -16,8 +19,8 @@ export default function AdmissionCtaSection() {
             Join a 150-year legacy of leadership, courage, and intellectual achievement in the serene hills of Nainital.
           </p>
           <div className="sherwood-cta__actions">
-            <Button as={Link} to="/admission-details" variant="gold" size="lg">
-              Apply for Admission <span>→</span>
+            <Button as={Link} to={targetPath} variant="gold" size="lg">
+              {hasExistingApplication ? "Continue Application" : "Apply for Admission"} <span>→</span>
             </Button>
             <Button as={Link} to="/track-application" variant="outline-gold" size="lg">
               Track Application Status

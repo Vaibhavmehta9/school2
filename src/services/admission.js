@@ -45,6 +45,21 @@ export function setAdmissionStorageOwner(identifier) {
   admissionStorageScope = normalizedIdentifier ? encodeURIComponent(normalizedIdentifier) : "anonymous";
 }
 
+export function clearAdmissionStorage(scope) {
+  try {
+    const targetScope = scope ? encodeURIComponent(String(scope).trim().toLowerCase()) : admissionStorageScope;
+    localStorage.removeItem(`${APPLICATION_ID_KEY}:${targetScope}`);
+    localStorage.removeItem(`${DOCUMENTS_KEY}:${targetScope}`);
+    sessionStorage.removeItem(`${APPLICATION_DATA_KEY}:${targetScope}`);
+    // Also remove unscoped legacy keys
+    localStorage.removeItem(APPLICATION_ID_KEY);
+    localStorage.removeItem(DOCUMENTS_KEY);
+    sessionStorage.removeItem(APPLICATION_DATA_KEY);
+  } catch {
+    // Ignore storage restrictions
+  }
+}
+
 const admissionDocumentLabels = {
   "report-card": "Report Card",
   "aadhaar-card": "Aadhaar Card",
@@ -201,7 +216,7 @@ export function syncAdmissionDataFromDatabase(data = {}) {
 export function saveAdmissionDraft(accessToken, data, status = "draft") {
   const mergedData = { ...getAdmissionData(), ...data };
   sessionStorage.setItem(scopedStorageKey(APPLICATION_DATA_KEY), JSON.stringify(mergedData));
-  if ((import.meta.env.DEV || import.meta.env.VITE_REVIEW_MODE === "true") && accessToken === "review-mock-token") {
+  if (import.meta.env.VITE_REVIEW_MODE === "true" && accessToken === "review-mock-token") {
     return Promise.resolve({ success: true, application_number: "SHER-2027-0482" });
   }
   const referral = getReferralAttribution();
@@ -303,7 +318,7 @@ export async function uploadAdmissionDocument(accessToken, documentKey, file) {
 
 export async function getAdmissionDocumentRecords(accessToken) {
   if (!accessToken) return [];
-  if ((import.meta.env.DEV || import.meta.env.VITE_REVIEW_MODE === "true") && accessToken === "review-mock-token") {
+  if (import.meta.env.VITE_REVIEW_MODE === "true" && accessToken === "review-mock-token") {
     const { REVIEW_MOCK_DATA } = await import("../auth/reviewMode");
     return REVIEW_MOCK_DATA.parentAdmissionStatus.documents;
   }
@@ -335,7 +350,7 @@ export async function getAdmissionDocumentRecords(accessToken) {
 
 export async function getAdmissionDocumentFile(accessToken, applicationNumber, documentKey) {
   if (!accessToken || !applicationNumber || !documentKey) throw new Error("Please sign in again before opening this document.");
-  if ((import.meta.env.DEV || import.meta.env.VITE_REVIEW_MODE === "true") && accessToken === "review-mock-token") {
+  if (import.meta.env.VITE_REVIEW_MODE === "true" && accessToken === "review-mock-token") {
     return {
       blob: new Blob(["Sample document preview content for review mode."], { type: "text/plain" }),
       contentType: "text/plain",
@@ -388,7 +403,7 @@ function adoptApplicationNumber(status) {
 
 export async function getCurrentAdmissionStatus(accessToken) {
   if (!accessToken) return null;
-  if ((import.meta.env.DEV || import.meta.env.VITE_REVIEW_MODE === "true") && accessToken === "review-mock-token") {
+  if (import.meta.env.VITE_REVIEW_MODE === "true" && accessToken === "review-mock-token") {
     const { REVIEW_MOCK_DATA } = await import("../auth/reviewMode");
     return REVIEW_MOCK_DATA.parentAdmissionStatus;
   }
@@ -399,7 +414,7 @@ export async function getCurrentAdmissionStatus(accessToken) {
 
 export async function getAdmissionStatus(accessToken, applicationNumber = getStoredAdmissionId()) {
   if (!accessToken) return null;
-  if ((import.meta.env.DEV || import.meta.env.VITE_REVIEW_MODE === "true") && accessToken === "review-mock-token") {
+  if (import.meta.env.VITE_REVIEW_MODE === "true" && accessToken === "review-mock-token") {
     const { REVIEW_MOCK_DATA } = await import("../auth/reviewMode");
     return REVIEW_MOCK_DATA.parentAdmissionStatus;
   }

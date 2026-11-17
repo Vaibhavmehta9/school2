@@ -27,6 +27,7 @@ export default function AIAssistant() {
           variant="page"
           accessToken={session?.accessToken}
           role={user?.role || "guest"}
+          user={user}
         />
       </section>
     </main>

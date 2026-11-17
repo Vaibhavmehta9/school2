@@ -6,11 +6,11 @@ import { ROUTES } from "../constants/routes";
 import SchoolCrest from "../components/SchoolCrest";
 import "../auth/AuthCallback.css";
 
-const isReview = Boolean(import.meta.env.DEV || import.meta.env.VITE_REVIEW_MODE === "true");
+const isReview = import.meta.env.VITE_REVIEW_MODE === "true";
 
-// Lazy-load the review picker only in development or when VITE_REVIEW_MODE=true.
-// In standard production builds, Rollup completely dead-code eliminates this branch.
-const ReviewPersonaPicker = (import.meta.env.DEV || import.meta.env.VITE_REVIEW_MODE === "true")
+// Lazy-load the review picker only when VITE_REVIEW_MODE=true.
+// In standard builds, Rollup completely dead-code eliminates this branch.
+const ReviewPersonaPicker = (import.meta.env.VITE_REVIEW_MODE === "true")
   ? React.lazy(() => import("./ReviewPersonaPicker"))
   : null;
 

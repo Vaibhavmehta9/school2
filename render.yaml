@@ -22,6 +22,12 @@ services:
         value: "/data/sheerwood.demo.db"
       - key: ALLOWED_ORIGINS
         value: "https://sheerwood-admissio.vercel.app,https://sheerwood-admission-portal.vercel.app,https://sheerwood-portal.vercel.app,http://localhost:5173,http://localhost:4173"
+      - key: CORS_ORIGIN_REGEX
+        value: "^https:\\/\\/.*\\.vercel\\.app$"
+      - key: GEMINI_API_KEY
+        sync: false # Set securely in Render dashboard
+      - key: GEMINI_MODEL
+        value: "gemini-1.5-flash"
       - key: AI_RATE_LIMIT_REQUESTS
         value: "20"
       - key: AI_RATE_LIMIT_WINDOW_SECONDS
@@ -30,5 +36,3 @@ services:
         value: "5242880"
       - key: EASEBUZZ_ENV
         value: "test"
-      - key: OPENAI_API_KEY
-        sync: false # Set securely in Render dashboard

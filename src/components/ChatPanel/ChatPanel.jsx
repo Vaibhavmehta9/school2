@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import SafeMarkdown from "./SafeMarkdown";
 import SherwoodAIAvatar from "./SherwoodAIAvatar";
 import { FOLLOW_UP_SUGGESTIONS, INITIAL_QUICK_CHIPS, useChat } from "./useChat";
+import { useAdmissionCta } from "../../hooks/useAdmissionCta";
 import "./ChatPanel.css";
 
 // Clean inline SVG Icons
@@ -137,6 +138,7 @@ export default function ChatPanel({
   onClose = () => {},
   accessToken = null,
   role = "guest",
+  user = null,
   triggerRef = null,
 }) {
   const {
@@ -145,6 +147,7 @@ export default function ChatPanel({
     setInput,
     loading,
     isStreaming,
+    isWarmingUp,
     error,
     rateLimitTimer,
     feedback,
@@ -155,7 +158,8 @@ export default function ChatPanel({
     clearChat,
     copyMessage,
     rateMessage,
-  } = useChat({ accessToken, role });
+  } = useChat({ accessToken, role, user });
+  const { targetPath: admissionTarget, ctaLabel: admissionCtaLabel } = useAdmissionCta();
 
   const messagesEndRef = useRef(null);
   const messagesContainerRef = useRef(null);
@@ -566,11 +570,17 @@ export default function ChatPanel({
               <SherwoodAIAvatar size={28} state="thinking" />
               <div className="chat-bubble chat-typing-bubble">
                 <span className="chat-bubble-sender">Sherwood AI</span>
-                <div className="chat-typing-dots" aria-hidden="true">
-                  <span />
-                  <span />
-                  <span />
-                </div>
+                {isWarmingUp ? (
+                  <p className="chat-warming-up-text" style={{ fontSize: "0.82rem", color: "#64748b", margin: "4px 0", lineHeight: "1.4" }}>
+                    Waking up the server, this can take up to a minute on the first message...
+                  </p>
+                ) : (
+                  <div className="chat-typing-dots" aria-hidden="true">
+                    <span />
+                    <span />
+                    <span />
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -603,8 +613,8 @@ export default function ChatPanel({
                 <a href="/#contact" className="chat-fallback-btn">
                   Contact Admissions Desk
                 </a>
-                <Link to="/admission-details" className="chat-fallback-btn secondary">
-                  Start Application
+                <Link to={admissionTarget} className="chat-fallback-btn secondary">
+                  {admissionCtaLabel}
                 </Link>
               </div>
             </div>

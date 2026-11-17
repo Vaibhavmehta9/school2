@@ -6,7 +6,7 @@
  */
 
 export const isReviewModeEnabled = () => {
-  return Boolean(import.meta.env.DEV || import.meta.env.VITE_REVIEW_MODE === "true");
+  return import.meta.env.VITE_REVIEW_MODE === "true";
 };
 
 export const REVIEW_SESSION_KEY = "sheerwood.review.session";

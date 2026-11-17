@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Button from "../Button/Button";
+import { useAdmissionCta } from "../../hooks/useAdmissionCta";
 import "./MobileApplyBar.css";
 
 export default function MobileApplyBar() {
+  const { targetPath, hasExistingApplication } = useAdmissionCta();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -36,12 +38,12 @@ export default function MobileApplyBar() {
 
         <Button
           as={Link}
-          to="/admission-details"
+          to={targetPath}
           variant="gold"
           size="sm"
           className="sherwood-mobile-apply-bar__btn"
         >
-          Apply 2027–28 <span>→</span>
+          {hasExistingApplication ? "Continue Application" : "Apply 2027–28"} <span>→</span>
         </Button>
       </div>
     </aside>

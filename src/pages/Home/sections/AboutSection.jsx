@@ -2,10 +2,12 @@ import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import aboutCampus from "../../../assets/about-campus.webp";
 import Button from "../../../components/Button/Button";
+import { useAdmissionCta } from "../../../hooks/useAdmissionCta";
 import { isReducedMotion, gsap } from "../../../utils/motion";
 import "./AboutSection.css";
 
 export default function AboutSection() {
+  const { targetPath, hasExistingApplication } = useAdmissionCta();
   const sectionRef = useRef(null);
   const imageFrameRef = useRef(null);
   const badgeRef = useRef(null);
@@ -145,8 +147,8 @@ export default function AboutSection() {
             </p>
 
             <div className="sherwood-about__cta sherwood-about__narrative-item">
-              <Button as={Link} to="/admission-details" variant="primary" size="md">
-                Discover Sherwood College <span>→</span>
+              <Button as={Link} to={targetPath} variant="primary" size="md">
+                {hasExistingApplication ? "Continue Application" : "Discover Sherwood College"} <span>→</span>
               </Button>
             </div>
           </div>

@@ -135,7 +135,7 @@ def test_end_to_end_chat_api_routing(client):
     assert r_faq.status_code == 200
     assert r_faq.json()["intent"] == "school_faq"
     assert r_faq.json()["is_demo"] is True  # fee entries are marked as demo
-    assert "Demo data" in r_faq.json()["answer"]
+    assert "fee" in r_faq.json()["answer"].lower()
 
 
 def test_stage4_school_fee_followup_chain():

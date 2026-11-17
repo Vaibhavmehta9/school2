@@ -165,6 +165,7 @@ export default function Home() {
         onClose={() => setAiOpen(false)}
         accessToken={session?.accessToken}
         role={user?.role || "guest"}
+        user={user}
         triggerRef={launcherRef}
       />
 

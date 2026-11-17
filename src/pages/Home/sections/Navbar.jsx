@@ -5,9 +5,11 @@ import SchoolCrest from "../../../components/SchoolCrest";
 import ThemeToggle from "../../../components/ThemeToggle";
 import Button from "../../../components/Button/Button";
 import { getDefaultRouteForRole } from "../../../auth/cognito";
+import { useAdmissionCta } from "../../../hooks/useAdmissionCta";
 import "./Navbar.css";
 
 export default function Navbar({ user, signOut }) {
+  const { targetPath, hasExistingApplication } = useAdmissionCta();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
@@ -115,12 +117,12 @@ export default function Navbar({ user, signOut }) {
               )}
               <Button
                 as={Link}
-                to="/admission-details"
+                to={targetPath}
                 variant="gold"
                 size="sm"
                 onClick={() => setMenuOpen(false)}
               >
-                Apply 2027–28
+                {hasExistingApplication ? "Continue Application" : "Apply 2027–28"}
               </Button>
             </div>
           </nav>
@@ -189,12 +191,12 @@ export default function Navbar({ user, signOut }) {
 
             <Button
               as={Link}
-              to="/admission-details"
+              to={targetPath}
               variant="gold"
               size="sm"
               className="sherwood-navbar__apply-btn"
             >
-              Apply 2027–28
+              {hasExistingApplication ? "Continue Application" : "Apply 2027–28"}
             </Button>
           </div>
 

@@ -30,9 +30,9 @@ export function CognitoAuthProvider({ children }) {
   const [countdownSeconds, setCountdownSeconds] = useState(60);
   const staySignedInBtnRef = useRef(null);
 
-  // Review mode session - stored in sessionStorage only, active only in dev or VITE_REVIEW_MODE
+  // Review mode session - stored in sessionStorage only, active only when VITE_REVIEW_MODE is explicitly "true"
   const [reviewSession, setReviewSessionState] = useState(() => {
-    if (import.meta.env.DEV || import.meta.env.VITE_REVIEW_MODE === "true") {
+    if (import.meta.env.VITE_REVIEW_MODE === "true") {
       try {
         const raw = window.sessionStorage?.getItem("sheerwood.review.session");
         if (!raw) return null;
@@ -46,7 +46,7 @@ export function CognitoAuthProvider({ children }) {
   });
 
   const startReviewPersona = useCallback((persona) => {
-    if (import.meta.env.DEV || import.meta.env.VITE_REVIEW_MODE === "true") {
+    if (import.meta.env.VITE_REVIEW_MODE === "true") {
       const session = {
         isReview: true,
         accessToken: "review-mock-token",
@@ -74,7 +74,7 @@ export function CognitoAuthProvider({ children }) {
   }, []);
 
   const exitReviewMode = useCallback(() => {
-    if (import.meta.env.DEV || import.meta.env.VITE_REVIEW_MODE === "true") {
+    if (import.meta.env.VITE_REVIEW_MODE === "true") {
       try {
         window.sessionStorage?.removeItem("sheerwood.review.session");
       } catch {}
@@ -82,9 +82,9 @@ export function CognitoAuthProvider({ children }) {
     }
   }, []);
 
-  // In DEV mode, allow instant persona selection via query param ?review_role=<role>
+  // When VITE_REVIEW_MODE is explicitly enabled, allow instant persona selection via query param ?review_role=<role>
   useEffect(() => {
-    if (import.meta.env.DEV || import.meta.env.VITE_REVIEW_MODE === "true") {
+    if (import.meta.env.VITE_REVIEW_MODE === "true") {
       if (typeof window !== "undefined") {
         const params = new URLSearchParams(window.location.search);
         const roleParam = params.get("review_role");
@@ -123,7 +123,7 @@ export function CognitoAuthProvider({ children }) {
       };
     }
 
-    if (import.meta.env.DEV || import.meta.env.VITE_REVIEW_MODE === "true") {
+    if (import.meta.env.VITE_REVIEW_MODE === "true") {
       if (reviewSession) {
         return reviewSession;
       }
@@ -144,13 +144,16 @@ export function CognitoAuthProvider({ children }) {
     // 2. Broadcast logout to other tabs
     broadcastLogout();
 
-    // 3. Purge review session and auth items
-    if (import.meta.env.DEV || import.meta.env.VITE_REVIEW_MODE === "true") {
+    // 3. Purge review session, chat, and auth items
+    if (import.meta.env.VITE_REVIEW_MODE === "true") {
       try {
         window.sessionStorage?.removeItem("sheerwood.review.session");
       } catch {}
       setReviewSessionState(null);
     }
+    try {
+      window.sessionStorage?.removeItem("sherwood_chat_session_messages");
+    } catch {}
     clearBrowserAuthStorage();
     setAdmissionStorageOwner("");
 
@@ -170,12 +173,15 @@ export function CognitoAuthProvider({ children }) {
   // Listen for logout triggered in other browser tabs
   useEffect(() => {
     const cleanup = initCrossTabLogout(() => {
-      if (import.meta.env.DEV || import.meta.env.VITE_REVIEW_MODE === "true") {
+      if (import.meta.env.VITE_REVIEW_MODE === "true") {
         try {
           window.sessionStorage?.removeItem("sheerwood.review.session");
         } catch {}
         setReviewSessionState(null);
       }
+      try {
+        window.sessionStorage?.removeItem("sherwood_chat_session_messages");
+      } catch {}
       const origin = typeof window !== "undefined" ? window.location.origin : "";
       const logoutUri = import.meta.env.VITE_COGNITO_LOGOUT_URI?.trim() || `${origin}/signed-out`;
       window.location.replace(logoutUri);

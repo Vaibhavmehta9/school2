@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import Button from "../../../components/Button/Button";
+import { useAdmissionCta } from "../../../hooks/useAdmissionCta";
 import { isReducedMotion, gsap } from "../../../utils/motion";
 import "./AdmissionTimelineSection.css";
 
@@ -33,6 +34,7 @@ const steps = [
 ];
 
 export default function AdmissionTimelineSection() {
+  const { targetPath, hasExistingApplication } = useAdmissionCta();
   const sectionRef = useRef(null);
   const trackRef = useRef(null);
   const progressBarRef = useRef(null);
@@ -132,8 +134,8 @@ export default function AdmissionTimelineSection() {
         </div>
 
         <div className="sherwood-timeline__footer">
-          <Button as={Link} to="/admission-details" variant="gold" size="md">
-            Begin Application Process <span>→</span>
+          <Button as={Link} to={targetPath} variant="gold" size="md">
+            {hasExistingApplication ? "Continue Application" : "Begin Application Process"} <span>→</span>
           </Button>
           <Button as={Link} to="/admission-details" variant="outline" size="md">
             View Eligibility &amp; Age Cutoffs

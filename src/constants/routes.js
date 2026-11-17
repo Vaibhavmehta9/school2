@@ -1,4 +1,11 @@
-const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "/api").replace(/\/$/, "");
+const rawApiBaseUrl = import.meta.env.VITE_API_BASE_URL || "/api";
+if (import.meta.env.PROD && !import.meta.env.VITE_API_BASE_URL) {
+  console.warn(
+    "[Sherwood Portal] VITE_API_BASE_URL is not set in production. " +
+    "Defaulting to relative '/api'. Ensure your host (Vercel) proxies /api/* to the backend."
+  );
+}
+const API_BASE_URL = rawApiBaseUrl.replace(/\/$/, "");
 
 export const ROUTES = {
   home: "/",

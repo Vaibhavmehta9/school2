@@ -4,7 +4,7 @@
 import { API_ROUTES } from "../constants/routes";
 
 export async function getAdminUsers(accessToken) {
-  if ((import.meta.env.DEV || import.meta.env.VITE_REVIEW_MODE === "true") && accessToken === "review-mock-token") {
+  if (import.meta.env.VITE_REVIEW_MODE === "true" && accessToken === "review-mock-token") {
     const { REVIEW_MOCK_DATA } = await import("../auth/reviewMode");
     return REVIEW_MOCK_DATA.adminUsers;
   }
@@ -106,7 +106,7 @@ export function getVendorDashboard(accessToken) {
 }
 
 export async function getAdminDocuments(accessToken) {
-  if ((import.meta.env.DEV || import.meta.env.VITE_REVIEW_MODE === "true") && accessToken === "review-mock-token") {
+  if (import.meta.env.VITE_REVIEW_MODE === "true" && accessToken === "review-mock-token") {
     const { REVIEW_MOCK_DATA } = await import("../auth/reviewMode");
     return REVIEW_MOCK_DATA.adminDocuments;
   }
@@ -128,7 +128,7 @@ export async function reviewAdminDocument(accessToken, documentId, decision, rea
 }
 
 export async function downloadAdminDocument(accessToken, documentId, fallbackFileName = "admission-document") {
-  if ((import.meta.env.DEV || import.meta.env.VITE_REVIEW_MODE === "true") && accessToken === "review-mock-token") {
+  if (import.meta.env.VITE_REVIEW_MODE === "true" && accessToken === "review-mock-token") {
     return {
       blob: new Blob(["Sample downloaded document for review mode."], { type: "text/plain" }),
       fileName: `${fallbackFileName}.txt`,
@@ -159,7 +159,7 @@ export async function deleteAdminDocument(accessToken, documentId) {
 }
 
 export async function getAdminAdmissions(accessToken) {
-  if ((import.meta.env.DEV || import.meta.env.VITE_REVIEW_MODE === "true") && accessToken === "review-mock-token") {
+  if (import.meta.env.VITE_REVIEW_MODE === "true" && accessToken === "review-mock-token") {
     const { REVIEW_MOCK_DATA } = await import("../auth/reviewMode");
     return REVIEW_MOCK_DATA.adminAdmissions;
   }
@@ -194,7 +194,7 @@ export function getAdminAdmissionFunnel(accessToken) {
 }
 
 async function getAdminData(url, accessToken, errorMessage) {
-  if ((import.meta.env.DEV || import.meta.env.VITE_REVIEW_MODE === "true") && accessToken === "review-mock-token") {
+  if (import.meta.env.VITE_REVIEW_MODE === "true" && accessToken === "review-mock-token") {
     const { REVIEW_MOCK_DATA } = await import("../auth/reviewMode");
     if (url.includes("/admin/settings")) return REVIEW_MOCK_DATA.adminSettings;
     if (url.includes("/admin/syllabus")) return REVIEW_MOCK_DATA.adminSyllabus;
@@ -277,11 +277,22 @@ export async function askSchoolAI(input, options = {}) {
   return data.answer;
 }
 
+export async function warmupBackend() {
+  try {
+    const healthUrl = `${API_BASE_URL}/health`;
+    await fetch(healthUrl, { method: "GET", cache: "no-store" });
+  } catch {
+    // Non-blocking background warmup
+  }
+}
+
 export async function streamSchoolAI({
   message,
   history = [],
   accessToken = null,
   signal,
+  isFirstRequest = false,
+  onWarmingUp,
   onChunk,
   onFinish,
   onError,
@@ -336,6 +347,7 @@ export async function streamSchoolAI({
   let firstTokenTimer = null;
   let inactivityTimer = null;
   let overallTimer = null;
+  let warmUpTimer = null;
   let firstTokenReceived = false;
 
   const clearAllTimers = () => {
@@ -350,6 +362,10 @@ export async function streamSchoolAI({
     if (overallTimer) {
       clearTimeout(overallTimer);
       overallTimer = null;
+    }
+    if (warmUpTimer) {
+      clearTimeout(warmUpTimer);
+      warmUpTimer = null;
     }
   };
 
@@ -367,13 +383,22 @@ export async function streamSchoolAI({
     throw timeoutError;
   };
 
-  // 1. Overall timeout: 60s
-  overallTimer = setTimeout(() => triggerTimeout("overall"), 60000);
+  // 1. Overall timeout: 90s for first request (cold start), 45s for subsequent requests
+  const overallLimit = isFirstRequest ? 90000 : 45000;
+  overallTimer = setTimeout(() => triggerTimeout("overall"), overallLimit);
 
-  // 2. First-token timeout: 30s (gives cloud host and LLM ample warmup time)
-  firstTokenTimer = setTimeout(() => triggerTimeout("first-token"), 30000);
+  // 2. First-token timeout: 60s for first request (cold start), 15s for subsequent requests
+  const firstTokenLimit = isFirstRequest ? 60000 : 15000;
+  firstTokenTimer = setTimeout(() => triggerTimeout("first-token"), firstTokenLimit);
 
-  // 3. Inactivity timeout: 20s (resets on every incoming byte/chunk)
+  // 3. Warm-up notification timer: 8s
+  warmUpTimer = setTimeout(() => {
+    if (!firstTokenReceived && onWarmingUp) {
+      onWarmingUp();
+    }
+  }, 8000);
+
+  // 4. Inactivity timeout: 20s (resets on every incoming byte/chunk)
   const resetInactivityTimer = () => {
     if (inactivityTimer) clearTimeout(inactivityTimer);
     inactivityTimer = setTimeout(() => triggerTimeout("inactivity"), 20000);

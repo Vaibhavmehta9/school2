@@ -3,12 +3,14 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import SchoolCrest from "../../../components/SchoolCrest";
 import Button from "../../../components/Button/Button";
+import { useAdmissionCta } from "../../../hooks/useAdmissionCta";
 import homeHeroVideo from "../../../assets/home-hero-background.mp4";
 import schoolCampusAerial from "../../../assets/sheerwood-campus-aerial-web.jpg";
 import { isReducedMotion, gsap } from "../../../utils/motion";
 import "./HeroSection.css";
 
 export default function HeroSection({ onOpenCampusFilm, onOpenAdmissionCode }) {
+  const { targetPath, hasExistingApplication } = useAdmissionCta();
   const heroRef = useRef(null);
   const copyRef = useRef(null);
   const ctaWrapRef = useRef(null);
@@ -250,11 +252,11 @@ export default function HeroSection({ onOpenCampusFilm, onOpenAdmissionCode }) {
             >
               <Button
                 as={Link}
-                to="/admission-details"
+                to={targetPath}
                 variant="gold"
                 size="lg"
               >
-                Start Admission <span>→</span>
+                {hasExistingApplication ? "Continue Application" : "Start Admission"} <span>→</span>
               </Button>
             </div>
 

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
+  clearAdmissionStorage,
   getAdmissionData,
   getCurrentAdmissionStatus,
   getStoredAdmissionId,
@@ -98,6 +99,11 @@ export default function AdmissionDetails() {
         const savedAdmissionDetails = savedData.admissionDetails && typeof savedData.admissionDetails === "object" ? savedData.admissionDetails : {};
         setForm((current) => ({ ...current, ...initialForm, ...savedAdmissionDetails, date: getLocalDate() }));
         hydratedApplicationRef.current = savedApplication.application_number;
+      } else if (!savedApplication && !hasEditedRef.current && !hydratedApplicationRef.current) {
+        // Fresh parent with no application in DB: start with clean blank form
+        clearAdmissionStorage();
+        setForm({ ...initialForm, date: getLocalDate() });
+        hydratedApplicationRef.current = "fresh-new";
       }
     } catch {
       // The form remains usable with locally saved values if the application

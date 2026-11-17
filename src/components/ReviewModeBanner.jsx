@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useCognitoAuth } from "../auth/useCognitoAuth";
 
-const isReviewEnabled = Boolean(import.meta.env.DEV || import.meta.env.VITE_REVIEW_MODE === "true");
+const isReviewEnabled = import.meta.env.VITE_REVIEW_MODE === "true";
 
 export default function ReviewModeBanner() {
   const navigate = useNavigate();

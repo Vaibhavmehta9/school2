@@ -1,7 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { streamSchoolAI } from "../../services/api";
+import { streamSchoolAI, warmupBackend } from "../../services/api";
 
 const STORAGE_KEY = "sherwood_chat_session_messages";
+
+const shouldPersistChat = () => {
+  return import.meta.env.VITE_CHAT_PERSIST === "session";
+};
 
 export const INITIAL_QUICK_CHIPS = [
   "Fees",
@@ -18,19 +22,23 @@ export const FOLLOW_UP_SUGGESTIONS = [
   "Healthcare facilities",
 ];
 
-export function useChat({ accessToken = null, role = "guest" } = {}) {
+export function useChat({ accessToken = null, role = "guest", user = null } = {}) {
   const [messages, setMessages] = useState(() => {
-    try {
-      const stored = sessionStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed)) {
-          // Filter out any incomplete trailing assistant bubbles with empty text to ensure a refresh is never stuck
-          return parsed.filter((m) => m && (m.role !== "assistant" || (m.text && m.text.trim().length > 0)));
+    if (shouldPersistChat()) {
+      try {
+        const stored = sessionStorage.getItem(STORAGE_KEY);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed)) {
+            // Never restore error or pending messages
+            return parsed.filter(
+              (m) => m && !m.error && !m.isPending && (m.role !== "assistant" || (m.text && m.text.trim().length > 0))
+            );
+          }
         }
+      } catch {
+        // Ignore storage read errors
       }
-    } catch {
-      // Ignore storage read errors
     }
     return [];
   });
@@ -38,6 +46,7 @@ export function useChat({ accessToken = null, role = "guest" } = {}) {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
+  const [isWarmingUp, setIsWarmingUp] = useState(false);
   const [error, setError] = useState(null);
   const [rateLimitTimer, setRateLimitTimer] = useState(0);
   const [feedback, setFeedback] = useState({}); // { [messageIndex]: "up" | "down" }
@@ -45,11 +54,39 @@ export function useChat({ accessToken = null, role = "guest" } = {}) {
 
   const abortControllerRef = useRef(null);
   const rateLimitIntervalRef = useRef(null);
+  const isFirstRequestRef = useRef(true);
 
-  // Persist conversation to sessionStorage for the session only
+  // Background server warm-up on chat mount/open
   useEffect(() => {
+    warmupBackend();
+  }, []);
+
+  // Account switch: clear chat immediately when user changes
+  const userIdentifier = user?.id || user?.email || null;
+  const lastUserRef = useRef(userIdentifier);
+  useEffect(() => {
+    if (lastUserRef.current !== userIdentifier) {
+      lastUserRef.current = userIdentifier;
+      clearChat();
+    }
+  }, [userIdentifier, clearChat]);
+
+  // Persist conversation to sessionStorage only if explicitly enabled
+  useEffect(() => {
+    if (!shouldPersistChat()) {
+      try {
+        sessionStorage.removeItem(STORAGE_KEY);
+      } catch {
+        // Ignore
+      }
+      return;
+    }
     try {
-      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+      // Never persist error, pending, or empty assistant bubbles
+      const validMessages = messages.filter(
+        (m) => m && !m.error && !m.isPending && (m.role !== "assistant" || (m.text && m.text.trim().length > 0))
+      );
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(validMessages));
     } catch {
       // Storage quota or private browsing restriction
     }
@@ -155,6 +192,8 @@ export function useChat({ accessToken = null, role = "guest" } = {}) {
           })),
           accessToken,
           signal: controller.signal,
+          isFirstRequest: isFirstRequestRef.current,
+          onWarmingUp: () => setIsWarmingUp(true),
           onDemoFlag: (flag) => {
             isDemoMessage = Boolean(flag);
           },
@@ -164,6 +203,7 @@ export function useChat({ accessToken = null, role = "guest" } = {}) {
             }
           },
           onChunk: (chunk) => {
+            setIsWarmingUp(false);
             setIsStreaming(true);
             assistantText += chunk;
             setMessages((prev) => {
@@ -179,6 +219,8 @@ export function useChat({ accessToken = null, role = "guest" } = {}) {
             });
           },
           onFinish: (finalText) => {
+            isFirstRequestRef.current = false;
+            setIsWarmingUp(false);
             setLoading(false);
             setIsStreaming(false);
             abortControllerRef.current = null;
@@ -197,6 +239,7 @@ export function useChat({ accessToken = null, role = "guest" } = {}) {
             }
           },
           onError: (err) => {
+            setIsWarmingUp(false);
             setLoading(false);
             setIsStreaming(false);
             abortControllerRef.current = null;
@@ -226,6 +269,7 @@ export function useChat({ accessToken = null, role = "guest" } = {}) {
           },
         });
       } catch (err) {
+        setIsWarmingUp(false);
         if (!controller.signal.aborted || err.isTimeout) {
           const friendlyMessage = err.isTimeout
             ? "This is taking longer than expected. Please try again."
@@ -274,6 +318,7 @@ export function useChat({ accessToken = null, role = "guest" } = {}) {
     setInput,
     loading,
     isStreaming,
+    isWarmingUp,
     error,
     rateLimitTimer,
     feedback,

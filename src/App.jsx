@@ -6,8 +6,8 @@ import RouteTitleTracker from "./components/RouteTitleTracker";
 import { captureReferralAttribution } from "./services/admission";
 import "./pages/AdmissionMobile.css";
 
-// Lazy-loaded banner only included in DEV or when VITE_REVIEW_MODE=true.
-const ReviewModeBanner = (import.meta.env.DEV || import.meta.env.VITE_REVIEW_MODE === "true")
+// Lazy-loaded banner only included when VITE_REVIEW_MODE is explicitly "true".
+const ReviewModeBanner = (import.meta.env.VITE_REVIEW_MODE === "true")
   ? React.lazy(() => import("./components/ReviewModeBanner"))
   : () => null;
 
