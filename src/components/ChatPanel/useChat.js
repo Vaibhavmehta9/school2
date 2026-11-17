@@ -56,17 +56,30 @@ export function useChat({ accessToken = null, role = "guest", user = null } = {}
   const rateLimitIntervalRef = useRef(null);
   const isFirstRequestRef = useRef(true);
 
+  const clearChat = useCallback(() => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    setMessages([]);
+    setError(null);
+    setLoading(false);
+    setIsStreaming(false);
+    setIsWarmingUp(false);
+    try {
+      sessionStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(STORAGE_KEY);
+    } catch {
+      // Ignore
+    }
+  }, []);
+
   // Background server warm-up on chat mount/open & purge any old stored chat
   useEffect(() => {
     warmupBackend();
     if (!shouldPersistChat()) {
-      try {
-        sessionStorage.removeItem(STORAGE_KEY);
-        localStorage.removeItem(STORAGE_KEY);
-      } catch {}
-      setMessages([]);
+      clearChat();
     }
-  }, []);
+  }, [clearChat]);
 
   // Account switch: clear chat immediately when user changes
   const userIdentifier = user?.id || user?.email || null;
@@ -115,21 +128,6 @@ export function useChat({ accessToken = null, role = "guest", user = null } = {}
     }
     return () => clearInterval(rateLimitIntervalRef.current);
   }, [rateLimitTimer]);
-
-  const clearChat = useCallback(() => {
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
-    }
-    setMessages([]);
-    setError(null);
-    setLoading(false);
-    setIsStreaming(false);
-    try {
-      sessionStorage.removeItem(STORAGE_KEY);
-    } catch {
-      // Ignore
-    }
-  }, []);
 
   const stopGenerating = useCallback(() => {
     if (abortControllerRef.current) {
