@@ -71,8 +71,11 @@ def is_math_query(text: str) -> bool:
     if re.search(r"\b(calculate|compute|solve)\b\s+[\d\(\.\-\+]", clean, re.IGNORECASE):
         return True
 
+    # Discard common idioms like 24/7 or 24x7
+    clean_no_idioms = re.sub(r"\b24\s*[/xX]\s*7\b", "", clean, flags=re.IGNORECASE)
+
     # Check for math operators between numbers
-    if re.search(r"\d+\s*[\+\-\*\/xX\^\%]\s*\d+", clean):
+    if re.search(r"\d+\s*[\+\-\*\/xX\^\%]\s*\d+", clean_no_idioms):
         # Discard phone numbers or dates (e.g., 2026-11-15 or +91-5942-236361)
         if re.search(r"\b\d{4}-\d{2}-\d{2}\b", clean) or re.search(r"\+91[-\s]?\d+", clean):
             return False

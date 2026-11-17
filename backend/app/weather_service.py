@@ -83,11 +83,10 @@ WEATHER_KEYWORDS = [
 def is_weather_query(text: str) -> bool:
     """Detect whether a visitor query is asking about weather or temperature."""
     clean = re.sub(r"[^\w\s]", "", text.strip().lower())
-    words = set(clean.split())
-    if words.intersection({"weather", "temperature", "temp", "climate", "forecast", "mausam", "thand", "garmi", "sardi", "barish", "baarish"}):
-        return True
-
-    return any(keyword in clean for keyword in WEATHER_KEYWORDS)
+    for kw in WEATHER_KEYWORDS:
+        if re.search(r"\b" + re.escape(kw) + r"\b", clean):
+            return True
+    return False
 
 
 def geocode_city(city_name: str) -> tuple[float, float, str] | None:

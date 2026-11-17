@@ -17,6 +17,9 @@
         "Tell me about Sherwood College",
         "Where is the school located?",
         "What is the history and background of Sherwood College?",
+        "What values and motto does Sherwood uphold?",
+        "What is the school motto and values?",
+        "What does Sherwood's motto mean?",
         "Sherwood College ke baare mein batayein",
         "School kahan situated hai?",
         "Kaisa school hai Sherwood?"
@@ -229,6 +232,8 @@
         "How do I apply for admission?",
         "What is the step-by-step admission process?",
         "How to register online?",
+        "Is admission 100% guaranteed if we pay advance registration fees?",
+        "Guaranteed admission",
         "Admission lene ka process kya hai?",
         "Application kaise submit karein?",
         "Admission workflow"
@@ -777,6 +782,8 @@
         "What are the healthcare and hospital facilities?",
         "Is there a resident doctor?",
         "What happens in a medical emergency?",
+        "Medical emergency me kya arrangement hai?",
+        "Medical emergency me kya suvidha hai?",
         "Medical suvidha kaisi hai school mein?",
         "Doctor campus mein rehte hain kya?",
         "Emergency hospital tie-up"
@@ -912,6 +919,7 @@
       "questions": [
         "What is the anti-ragging policy?",
         "How safe is the campus for children?",
+        "Is campus security monitored 24/7?",
         "Disciplinary actions for bullying",
         "Ragging aur bullying ke khilaf kya rules hain?",
         "Campus kitna safe hai bacchon ke liye?"
@@ -1053,6 +1061,10 @@
         "What academic streams and subjects are offered in Classes 11 and 12?",
         "What is the curriculum pattern for ICSE and ISC?",
         "Which subjects can students choose in ISC?",
+        "Will my child get 100% marks in ICSE board exam?",
+        "Do you guarantee 100% board pass results?",
+        "Board exam marks guarantee",
+        "ICSE board exam results",
         "Class 11 aur 12 mein kaunse subjects aur streams hote hain?",
         "Sherwood mein ICSE aur ISC curriculum kaisa hai?"
       ],
@@ -1079,6 +1091,8 @@
         "What makes Sherwood unique?",
         "Sherwood College kyu choose kare?",
         "Why choose Sherwood over other schools?",
+        "Sherwood doosre schoolo se alag kaise hai?",
+        "Sherwood dusre school se alag kaise hai?",
         "Sherwood me admission lene ke kya fayde hain?",
         "What are the benefits of studying at Sherwood?"
       ],
@@ -1103,6 +1117,9 @@
         "What kind of student fits here?",
         "Who thrives at Sherwood?",
         "Is Sherwood suitable for shy children?",
+        "Is Sherwood good for a shy child?",
+        "My child is shy and introverted, will they fit in at Sherwood?",
+        "Will a shy and introverted child adjust at Sherwood?",
         "Kya mera baccha yaha adjust ho payega?",
         "Will a quiet child do well at Sherwood?",
         "What personality fits Sherwood boarding?"
@@ -1153,6 +1170,9 @@
         "Daily schedule kya hai?",
         "Weekends par students kya karte hain?",
         "How are weekends spent?",
+        "How do students spend weekends at Sherwood?",
+        "What do students do on weekends?",
+        "Weekends at Sherwood",
         "Boarding school day schedule",
         "Roj ka timetable kaisa hota hai?"
       ],
@@ -1223,6 +1243,9 @@
       "questions": [
         "How safe is the campus?",
         "What healthcare facilities are available?",
+        "Is campus security monitored 24/7?",
+        "What happens if a student falls ill at night?",
+        "What if my child falls sick at night?",
         "Campus safety aur medical care kaisa hai?",
         "Emergency mein doctor available hai?",
         "Is Sherwood secure for girls and young boys?",
@@ -1368,6 +1391,11 @@
         "Sherwood vs Doon School?",
         "Sherwood vs Welham or Woodstock?",
         "How does Sherwood compare to other schools?",
+        "Rank Sherwood among top boarding schools in India",
+        "Which is the number one boarding school in Uttarakhand?",
+        "What is Sherwood's rank?",
+        "Are you the best boarding school in Asia?",
+        "Is Sherwood College ranked no 1 in India?",
         "Kya Sherwood best boarding school hai?",
         "Sherwood ya Doon school me se koun sa accha hai?",
         "Is Sherwood the best school in India?"
@@ -1390,6 +1418,10 @@
       "category": "Boarding/hostel",
       "questions": [
         "How do I choose a boarding school?",
+        "How do I choose the right boarding school for my child?",
+        "What factors should parents look for in a boarding school?",
+        "At what age should a child start boarding school?",
+        "How to prepare a child emotionally for residential boarding?",
         "How to select the right residential school?",
         "Boarding school kaise choose kare?",
         "What should parents look for in a boarding school?",

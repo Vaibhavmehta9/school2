@@ -126,7 +126,15 @@ def test_sample_questions_dataset_comprehensive(sample_questions):
         elif expected_type == "general_knowledge":
             assert intent == "general_knowledge", f"Failed GK intent for: {q}"
         elif expected_type in ("faq", "fallback"):
-            assert intent in ("school_faq", "off_topic"), f"Expected school_faq or off_topic for {q}, got {intent}"
+            assert intent in (
+                "school_faq",
+                "off_topic",
+                "school_value",
+                "school_fit",
+                "school_compare",
+                "parent_concerns",
+                "general_education",
+            ), f"Expected school inquiry or off_topic for {q}, got {intent}"
 
         # 2. Query routing resolution
         res = route_and_resolve_query(q)
@@ -136,7 +144,14 @@ def test_sample_questions_dataset_comprehensive(sample_questions):
         assert "[FILL" not in answer, f"Leaked [FILL] placeholder in answer for query: '{q}'"
 
         # 4. If an exact expected FAQ id is configured, verify retrieval matched it
-        if expected_id and res.get("intent") == "school_faq":
+        if expected_id and res.get("intent") in (
+            "school_faq",
+            "school_value",
+            "school_fit",
+            "school_compare",
+            "parent_concerns",
+            "general_education",
+        ):
             assert res.get("matched_faq_id") == expected_id, (
                 f"Query '{q}' matched {res.get('matched_faq_id')}, expected {expected_id}"
             )
