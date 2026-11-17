@@ -2,7 +2,7 @@ const APPLICATION_ID_KEY = "sheerwood-new-admission-id";
 const DOCUMENTS_KEY = "sheerwood-new-admission-documents";
 const APPLICATION_DATA_KEY = "sheerwood-admission-data";
 const REFERRAL_ATTRIBUTION_KEY = "sheerwood-admission-referral";
-const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "/api").replace(/\/$/, "");
+import { API_BASE_URL } from "../constants/routes";
 
 let admissionStorageScope = "anonymous";
 // Form pages save automatically and also save when a parent continues,

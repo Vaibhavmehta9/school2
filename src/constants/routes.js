@@ -1,11 +1,22 @@
-const rawApiBaseUrl = import.meta.env.VITE_API_BASE_URL || "/api";
-if (import.meta.env.PROD && !import.meta.env.VITE_API_BASE_URL) {
-  console.warn(
-    "[Sherwood Portal] VITE_API_BASE_URL is not set in production. " +
-    "Defaulting to relative '/api'. Ensure your host (Vercel) proxies /api/* to the backend."
-  );
+function resolveApiBaseUrl() {
+  // If running in the browser on Vercel, always use the local relative '/api' proxy.
+  // This routes through Vercel's vercel.json rewrite to Render, completely eliminating
+  // cross-origin CORS issues and avoiding any hardcoded environment variable mismatch.
+  if (typeof window !== "undefined" && window.location.hostname.endsWith(".vercel.app")) {
+    return "/api";
+  }
+
+  const raw = import.meta.env.VITE_API_BASE_URL;
+  if (!raw) {
+    return "/api";
+  }
+
+  const cleaned = raw.replace(/\/$/, "");
+  // Ensure the base URL includes /api so all API_ROUTES map cleanly to FastAPI routers
+  return cleaned.endsWith("/api") ? cleaned : `${cleaned}/api`;
 }
-const API_BASE_URL = rawApiBaseUrl.replace(/\/$/, "");
+
+const API_BASE_URL = resolveApiBaseUrl();
 
 export const ROUTES = {
   home: "/",
