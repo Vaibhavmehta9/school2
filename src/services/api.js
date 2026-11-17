@@ -310,6 +310,7 @@ export async function streamSchoolAI({
   onError,
   onDemoFlag,
   onChips,
+  onMetadata,
   onStatus,
 }) {
   const headers = { "Content-Type": "application/json" };
@@ -337,6 +338,9 @@ export async function streamSchoolAI({
       const answer = data.answer || "";
       if (data.is_demo !== undefined && onDemoFlag) onDemoFlag(Boolean(data.is_demo));
       if (data.chips && onChips) onChips(data.chips);
+      if ((data.show_actions !== undefined || data.intent !== undefined) && onMetadata) {
+        onMetadata({ showActions: Boolean(data.show_actions), intent: data.intent });
+      }
       if (onChunk && answer) onChunk(answer, answer);
       if (onFinish) onFinish(answer);
       return answer;
@@ -463,6 +467,9 @@ export async function streamSchoolAI({
     const answer = data.answer || "";
     if (data.is_demo !== undefined && onDemoFlag) onDemoFlag(Boolean(data.is_demo));
     if (data.chips && onChips) onChips(data.chips);
+    if ((data.show_actions !== undefined || data.intent !== undefined) && onMetadata) {
+      onMetadata({ showActions: Boolean(data.show_actions), intent: data.intent });
+    }
     if (onChunk && answer) onChunk(answer, answer);
     if (onFinish) onFinish(answer);
     return answer;
@@ -532,6 +539,10 @@ export async function streamSchoolAI({
 
           if (parsed.chips && onChips) {
             onChips(parsed.chips);
+          }
+
+          if ((parsed.show_actions !== undefined || parsed.intent !== undefined) && onMetadata) {
+            onMetadata({ showActions: Boolean(parsed.show_actions), intent: parsed.intent });
           }
         } catch (parseErr) {
           if (payload.includes("error")) throw parseErr;

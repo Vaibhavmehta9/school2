@@ -81,10 +81,29 @@ function formatMessageTime(timestamp) {
   }
 }
 
+function CompassIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="10" />
+      <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
+    </svg>
+  );
+}
+
+function SparklesIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8z" />
+    </svg>
+  );
+}
+
 function getChipIcon(chipText) {
   const lower = (chipText || "").toLowerCase();
+  if (lower.includes("why") || lower.includes("choose")) return <CompassIcon />;
+  if (lower.includes("different") || lower.includes("special")) return <SparklesIcon />;
   if (lower.includes("fee")) return <RupeeIcon />;
-  if (lower.includes("apply") || lower.includes("admission")) return <GraduationCapIcon />;
+  if (lower.includes("apply") || lower.includes("admission") || lower.includes("entrance")) return <GraduationCapIcon />;
   if (lower.includes("document")) return <DocumentIcon />;
   if (lower.includes("board") || lower.includes("hostel")) return <BedIcon />;
   if (lower.includes("weather") || lower.includes("campus") || lower.includes("climate")) return <CloudSunIcon />;
@@ -167,6 +186,31 @@ export default function ChatPanel({
   const panelRef = useRef(null);
   const userScrolledUpRef = useRef(false);
   const [showJumpToBottom, setShowJumpToBottom] = useState(false);
+
+  // Set of questions asked by the user in this session (normalized for filtering)
+  const userAskedSet = new Set(
+    messages
+      .filter((m) => m && m.role === "user" && typeof m.text === "string")
+      .map((m) => m.text.trim().toLowerCase().replace(/[^\w\s]/g, ""))
+  );
+
+  const filterUnaskedChips = (chipsList) => {
+    if (!Array.isArray(chipsList)) return [];
+    return chipsList
+      .filter((chip) => {
+        if (!chip || typeof chip !== "string") return false;
+        const norm = chip.trim().toLowerCase().replace(/[^\w\s]/g, "");
+        if (!norm) return false;
+        if (userAskedSet.has(norm)) return false;
+        for (const asked of userAskedSet) {
+          if (norm === asked || (norm.length >= 8 && (norm.includes(asked) || asked.includes(norm)))) {
+            return false;
+          }
+        }
+        return true;
+      })
+      .slice(0, 3);
+  };
 
   // Auto-scroll to newest message only if near bottom; otherwise show jump button
   useEffect(() => {
@@ -482,6 +526,54 @@ export default function ChatPanel({
                       ⚠️ Demo data: please confirm details with the admissions office.
                     </div>
                   )}
+                  {/* Admissions action buttons shown for value, fit, and comparison answers */}
+                  {Boolean(
+                    message.role === "assistant" &&
+                    (
+                      message.showActions ||
+                      ["school_value", "school_fit", "school_compare"].includes(message.intent) ||
+                      (typeof message.text === "string" && (
+                        message.text.includes("Why Choose Sherwood") ||
+                        message.text.includes("What Makes Sherwood Different") ||
+                        message.text.includes("Who Thrives at Sherwood") ||
+                        message.text.includes("Why Boarding at Sherwood") ||
+                        message.text.includes("Comparing Schools with Sherwood") ||
+                        message.text.includes("Heritage & Legacy") ||
+                        message.text.includes("70-Acre Himalayan Campus") ||
+                        message.text.includes("Holistic Education") ||
+                        message.text.includes("House System & Brotherhood")
+                      ))
+                    )
+                  ) && (
+                    <div className="chat-value-actions" role="region" aria-label="Admissions next steps">
+                      <div className="chat-value-actions-header">
+                        <span className="chat-value-actions-prompt">Explore next steps:</span>
+                      </div>
+                      <div className="chat-value-actions-btns">
+                        <a
+                          href="/#contact"
+                          className="chat-value-action-btn chat-value-action-btn--contact"
+                          onClick={(e) => {
+                            const contactEl = document.getElementById("contact");
+                            if (contactEl) {
+                              e.preventDefault();
+                              contactEl.scrollIntoView({ behavior: "smooth" });
+                            }
+                          }}
+                        >
+                          <span className="chat-value-action-icon" aria-hidden="true">📅</span>
+                          <span>Book Visit / Contact</span>
+                        </a>
+                        <Link
+                          to={admissionTarget}
+                          className="chat-value-action-btn chat-value-action-btn--apply"
+                        >
+                          <span className="chat-value-action-icon" aria-hidden="true">📝</span>
+                          <span>{admissionCtaLabel}</span>
+                        </Link>
+                      </div>
+                    </div>
+                  )}
                   {Boolean(
                     message.role === "assistant" &&
                     typeof message.text === "string" &&
@@ -503,7 +595,7 @@ export default function ChatPanel({
                   )}
                   {Array.isArray(message.chips) && message.chips.length > 0 && (
                     <div className="chat-inline-chips">
-                      {message.chips.map((chip) => (
+                      {filterUnaskedChips(message.chips).map((chip) => (
                         <button
                           key={chip}
                           type="button"
@@ -641,28 +733,33 @@ export default function ChatPanel({
       )}
 
       {/* Suggested Follow-up Reply Chips (during active conversation) */}
-      {showFollowUpChips && (
-        <div className="chat-chips-tray" aria-label="Suggested follow-up questions">
-          <div className="chat-chips-scroll">
-            {(
-              (messages[messages.length - 1]?.chips && messages[messages.length - 1].chips.length > 0)
-                ? messages[messages.length - 1].chips
-                : FOLLOW_UP_SUGGESTIONS
-            ).map((chip, idx) => (
-              <button
-                key={chip}
-                type="button"
-                className="chat-chip follow-up"
-                style={{ "--chip-idx": idx }}
-                onClick={() => sendMessage(chip)}
-                disabled={loading || rateLimitTimer > 0}
-              >
-                {chip}
-              </button>
-            ))}
+      {showFollowUpChips && (() => {
+        const lastMsg = messages[messages.length - 1];
+        const sourceChips = (lastMsg?.chips && lastMsg.chips.length > 0)
+          ? lastMsg.chips
+          : FOLLOW_UP_SUGGESTIONS;
+        const validChips = filterUnaskedChips(sourceChips);
+        if (validChips.length === 0) return null;
+
+        return (
+          <div className="chat-chips-tray" aria-label="Suggested follow-up questions">
+            <div className="chat-chips-scroll">
+              {validChips.map((chip, idx) => (
+                <button
+                  key={chip}
+                  type="button"
+                  className="chat-chip follow-up"
+                  style={{ "--chip-idx": idx }}
+                  onClick={() => sendMessage(chip)}
+                  disabled={loading || rateLimitTimer > 0}
+                >
+                  {chip}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
 
       {/* Input and Controls */}
       <footer className="chat-footer">

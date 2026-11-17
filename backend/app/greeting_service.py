@@ -83,6 +83,10 @@ def is_pure_greeting(message: str) -> bool:
     return get_canned_greeting_reply(message) is not None
 
 
+def _matches_phrase_list(text: str, phrases: list[str]) -> bool:
+    return any(bool(re.search(rf"\b{re.escape(p)}\b", text)) for p in phrases)
+
+
 def get_canned_greeting_reply(
     message: str,
     history: list[dict[str, Any]] | None = None,
@@ -124,7 +128,7 @@ def get_canned_greeting_reply(
         return reply, DEFAULT_SUGGESTION_CHIPS
 
     # 2. How are you
-    if any(phrase in clean for phrase in HOW_ARE_YOU_PHRASES):
+    if _matches_phrase_list(clean, HOW_ARE_YOU_PHRASES):
         reply = (
             "I am doing very well, thank you for asking! I'm ready to help you explore everything "
             "about Sherwood College admissions, academic programs, and boarding facilities.\n\n"
@@ -133,7 +137,7 @@ def get_canned_greeting_reply(
         return reply, DEFAULT_SUGGESTION_CHIPS
 
     # 3. Who are you / What can you do
-    if any(phrase in clean for phrase in WHO_ARE_YOU_PHRASES):
+    if _matches_phrase_list(clean, WHO_ARE_YOU_PHRASES):
         reply = (
             "I am **Sherwood AI**, the official virtual admissions desk for **Sherwood College, Nainital**.\n\n"
             "I can assist you with:\n"
@@ -147,7 +151,7 @@ def get_canned_greeting_reply(
         return reply, ["Fee Structure", "Age Criteria", "How to Apply"]
 
     # 4. Thank you
-    if any(phrase in clean for phrase in THANKS_PHRASES):
+    if _matches_phrase_list(clean, THANKS_PHRASES):
         reply = (
             "You are most welcome! Please feel free to ask whenever you need further details about "
             "Sherwood College. Wishing your child the very best in their educational journey!"
@@ -163,7 +167,7 @@ def get_canned_greeting_reply(
         return reply, DEFAULT_SUGGESTION_CHIPS
 
     # 6. Farewells
-    if any(phrase in clean for phrase in FAREWELL_PHRASES):
+    if _matches_phrase_list(clean, FAREWELL_PHRASES):
         reply = (
             "Goodbye! Thank you for connecting with Sherwood College, Nainital. "
             "Please visit our admissions portal anytime or contact the admissions office if you need further guidance. Have a wonderful day!"

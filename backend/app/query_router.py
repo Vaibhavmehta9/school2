@@ -22,11 +22,12 @@ from .conversation_manager import (
     resolve_contextual_query,
     sanitize_history,
 )
-from .faq_service import get_safe_answer
+from .faq_service import get_entry_by_id, get_related_question_chips, get_safe_answer
 from .greeting_service import get_canned_greeting_reply
 from .intent_classifier import classify_intent, extract_entities
 from .llm_service import (
     CONTACT_FALLBACK_TEXT,
+    build_general_education_prompt,
     build_general_knowledge_prompt,
     build_school_phrasing_prompt,
     generate_gemini_reply,
@@ -87,6 +88,16 @@ def route_and_resolve_query(
 
     # 1. Contextual pronoun and follow-up resolution ("and for boarding?", "how is it paid?", "there")
     contextual_query, context_meta = resolve_contextual_query(clean_raw, sanitized_history)
+
+    # Extract conversation history user queries to avoid repeating questions in chips
+    asked_questions: list[str] = []
+    if sanitized_history:
+        for h in sanitized_history:
+            if isinstance(h, dict) and h.get("role") == "user":
+                c = h.get("content", "")
+                if c:
+                    asked_questions.append(c)
+    asked_questions.append(clean_raw)
 
     # 2. Intent Classification
     intent = classify_intent(contextual_query)
@@ -157,22 +168,33 @@ def route_and_resolve_query(
             "chips": ["What are the fees?", "How do I apply?", "Campus tour"],
         }
 
-    # Path 5: School FAQ Retrieval
-    if intent == "school_faq":
+    # Path 5: School FAQ & Specialized School Inquiries (Value, Fit, Comparison, Concerns)
+    if intent in ("school_faq", "school_value", "school_fit", "school_compare", "parent_concerns"):
+        candidates = retrieve_faq_candidates(contextual_query, top_k=5)
         matched_entry, score, level = get_best_faq_match(contextual_query)
 
-        # Check if match was found
+        # Check if match was found with adequate confidence
         if matched_entry and level in ("HIGH", "MEDIUM"):
             is_demo = bool(matched_entry.get("demo", False) or matched_entry.get("source") == "demo")
             raw_answer = get_safe_answer(matched_entry)
+            chips = get_related_question_chips(matched_entry, asked_questions=asked_questions, max_chips=3)
+            show_actions = intent in ("school_value", "school_fit", "school_compare") or matched_entry.get("id") in (
+                "why_choose_sherwood",
+                "what_makes_sherwood_different",
+                "who_thrives_fit",
+                "why_boarding_benefits",
+                "school_comparison_guidance",
+                "how_to_choose_boarding_school",
+            )
 
-            # If Gemini is configured, use it for phrasing while strictly grounded in the FAQ
+            # If Gemini is configured, synthesize a grounded response combining top 4-6 facts
             if is_gemini_configured():
                 try:
-                    candidates = retrieve_faq_candidates(contextual_query, top_k=3)
+                    # Include top relevant candidates (score >= 0.35) for multi-topic/compound questions
+                    relevant_candidates = [c for c in candidates if c["score"] >= 0.35 or c == candidates[0]]
                     faq_block = "\n\n".join(
                         f"### [{c['entry'].get('category')}] ({c['entry'].get('id')})\n{get_safe_answer(c['entry'])}"
-                        for c in candidates
+                        for c in relevant_candidates
                     )
                     prompt = build_school_phrasing_prompt(faq_block, clean_raw)
                     phrased = generate_gemini_reply(prompt, stream=False)
@@ -180,28 +202,34 @@ def route_and_resolve_query(
                         return {
                             "answer": phrased,
                             "model": "gemini-phrased",
-                            "intent": "school_faq",
+                            "intent": intent,
                             "matched_faq_id": matched_entry["id"],
                             "confidence_level": level,
                             "is_demo": is_demo,
-                            "chips": DEFAULT_SUGGESTED_CHIPS[:4],
+                            "chips": chips,
+                            "show_actions": show_actions,
                         }
                 except Exception as exc:
                     logger.warning("Gemini phrasing fallback to canonical FAQ: %s", exc)
 
             # Direct Canonical FAQ reply (Deterministic, ultra-fast)
             final_answer = raw_answer
-            if level == "MEDIUM":
+            # For compound queries with 2 strong matches (e.g. "Why Sherwood and what are the fees?"), merge them
+            if len(candidates) > 1 and candidates[1]["score"] >= 0.65 and candidates[1]["entry"]["id"] != matched_entry["id"]:
+                second_ans = get_safe_answer(candidates[1]["entry"])
+                final_answer = f"{raw_answer}\n\n---\n\n{second_ans}"
+            elif level == "MEDIUM":
                 final_answer += _format_clarifying_followup(matched_entry.get("category", ""))
 
             return {
                 "answer": final_answer,
                 "model": "faq-canonical",
-                "intent": "school_faq",
+                "intent": intent,
                 "matched_faq_id": matched_entry["id"],
                 "confidence_level": level,
                 "is_demo": is_demo,
-                "chips": DEFAULT_SUGGESTED_CHIPS[:4],
+                "chips": chips,
+                "show_actions": show_actions,
             }
 
         # LOW confidence: Never hallucinate or answer school inquiries from external LLM weights
@@ -213,14 +241,63 @@ def route_and_resolve_query(
         return {
             "answer": fallback_msg,
             "model": "faq-fallback",
-            "intent": "school_faq",
+            "intent": intent,
             "matched_faq_id": None,
             "confidence_level": "LOW",
             "is_demo": False,
-            "chips": ["What are the fees?", "How do I apply?", "Documents required"],
+            "chips": get_related_question_chips(None, asked_questions=asked_questions, max_chips=3),
+            "show_actions": False,
         }
 
-    # Path 6: General Knowledge (via Gemini if configured, or polite educational decline)
+    # Path 6: General Education / Parenting Guidance
+    if intent == "general_education":
+        matched_entry, score, level = get_best_faq_match(contextual_query)
+        if matched_entry and level == "HIGH":
+            chips = get_related_question_chips(matched_entry, asked_questions=asked_questions, max_chips=3)
+            return {
+                "answer": get_safe_answer(matched_entry),
+                "model": "faq-canonical",
+                "intent": "general_education",
+                "matched_faq_id": matched_entry["id"],
+                "confidence_level": level,
+                "is_demo": bool(matched_entry.get("demo", False)),
+                "chips": chips,
+                "show_actions": True,
+            }
+
+        if is_gemini_configured():
+            try:
+                ge_prompt = build_general_education_prompt(clean_raw)
+                ge_reply = generate_gemini_reply(ge_prompt, stream=False)
+                if isinstance(ge_reply, str) and ge_reply.strip():
+                    return {
+                        "answer": ge_reply,
+                        "model": "gemini-general-education",
+                        "intent": "general_education",
+                        "matched_faq_id": None,
+                        "confidence_level": "HIGH",
+                        "is_demo": False,
+                        "chips": get_related_question_chips(None, asked_questions=asked_questions, max_chips=3),
+                        "show_actions": True,
+                    }
+            except Exception as exc:
+                logger.warning("Gemini general education guidance call failed: %s", exc)
+
+        # Fallback to general guidance entry if available
+        guidance_entry = get_entry_by_id("how_to_choose_boarding_school") or get_entry_by_id("why_choose_boarding_school")
+        if guidance_entry:
+            return {
+                "answer": get_safe_answer(guidance_entry),
+                "model": "faq-canonical",
+                "intent": "general_education",
+                "matched_faq_id": guidance_entry["id"],
+                "confidence_level": "MEDIUM",
+                "is_demo": False,
+                "chips": get_related_question_chips(guidance_entry, asked_questions=asked_questions, max_chips=3),
+                "show_actions": True,
+            }
+
+    # Path 7: General Knowledge (via Gemini if configured, or polite educational decline)
     if intent == "general_knowledge":
         if is_gemini_configured():
             try:

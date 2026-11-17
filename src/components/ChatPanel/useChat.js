@@ -8,11 +8,12 @@ const shouldPersistChat = () => {
 };
 
 export const INITIAL_QUICK_CHIPS = [
+  "Why choose Sherwood?",
+  "What makes Sherwood different?",
   "Fees",
   "How to apply",
-  "Documents required",
   "Boarding",
-  "Weather at campus",
+  "Documents required",
 ];
 
 export const FOLLOW_UP_SUGGESTIONS = [
@@ -189,6 +190,8 @@ export function useChat({ accessToken = null, role = "guest", user = null } = {}
       let assistantText = "";
       let isDemoMessage = false;
       let assistantChips = [];
+      let assistantIntent = null;
+      let showActions = false;
 
       const controller = new AbortController();
       abortControllerRef.current = controller;
@@ -212,6 +215,10 @@ export function useChat({ accessToken = null, role = "guest", user = null } = {}
               assistantChips = chips;
             }
           },
+          onMetadata: (meta) => {
+            if (meta?.intent) assistantIntent = meta.intent;
+            if (meta?.showActions !== undefined) showActions = Boolean(meta.showActions);
+          },
           onChunk: (chunk) => {
             setIsWarmingUp(false);
             setIsStreaming(true);
@@ -223,6 +230,8 @@ export function useChat({ accessToken = null, role = "guest", user = null } = {}
                 text: assistantText,
                 isDemo: isDemoMessage,
                 chips: assistantChips,
+                intent: assistantIntent,
+                showActions: Boolean(showActions || ["school_value", "school_fit", "school_compare"].includes(assistantIntent)),
                 timestamp: Date.now(),
               };
               return updated;
@@ -242,6 +251,8 @@ export function useChat({ accessToken = null, role = "guest", user = null } = {}
                   text: finalText,
                   isDemo: isDemoMessage,
                   chips: assistantChips,
+                  intent: assistantIntent,
+                  showActions: Boolean(showActions || ["school_value", "school_fit", "school_compare"].includes(assistantIntent)),
                   timestamp: Date.now(),
                 };
                 return updated;

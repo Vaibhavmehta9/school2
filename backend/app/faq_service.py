@@ -119,6 +119,89 @@ def get_all_entries() -> list[dict[str, Any]]:
     return data.get("entries", [])
 
 
+def get_entry_by_id(entry_id: str) -> dict[str, Any] | None:
+    """Return a single FAQ entry by its unique identifier."""
+    for entry in get_all_entries():
+        if entry.get("id") == entry_id:
+            return entry
+    return None
+
+
+def get_related_question_chips(
+    entry: dict[str, Any] | None,
+    asked_questions: list[str] | None = None,
+    max_chips: int = 3,
+) -> list[str]:
+    """Extract clean, short (<40 chars) follow-up questions from the entry's related field.
+
+    Filters out questions already asked in the chat session so questions do not repeat.
+    """
+    asked_set: set[str] = set()
+    if asked_questions:
+        for q in asked_questions:
+            if isinstance(q, str):
+                norm = "".join(ch for ch in q.lower() if ch.isalnum() or ch.isspace()).strip()
+                if norm:
+                    asked_set.add(norm)
+
+    def is_already_asked(cand: str) -> bool:
+        norm = "".join(ch for ch in cand.lower() if ch.isalnum() or ch.isspace()).strip()
+        if not norm:
+            return False
+        if norm in asked_set:
+            return True
+        for a in asked_set:
+            if norm == a or (len(norm) >= 10 and (norm in a or a in norm)):
+                return True
+        return False
+
+    chips: list[str] = []
+
+    if entry:
+        related_ids = entry.get("related", [])
+        for rid in related_ids:
+            rel_entry = get_entry_by_id(rid)
+            if not rel_entry:
+                continue
+            questions = rel_entry.get("questions", [])
+            chosen: str | None = None
+            for q in questions:
+                clean_q = q.strip()
+                if len(clean_q) <= 38 and clean_q.endswith("?") and not is_already_asked(clean_q):
+                    chosen = clean_q
+                    break
+            if not chosen and questions:
+                candidate = questions[0].strip()
+                if not is_already_asked(candidate):
+                    chosen = candidate if len(candidate) <= 38 else candidate[:35] + "..."
+            if chosen and chosen not in chips and not is_already_asked(chosen):
+                chips.append(chosen)
+            if len(chips) >= max_chips:
+                break
+
+    # If fewer than max_chips, supplement with high-value unasked evergreen queries
+    if len(chips) < max_chips:
+        fallback_candidates = [
+            "Why choose Sherwood?",
+            "What makes Sherwood different?",
+            "What are the fees?",
+            "How do I apply?",
+            "Daily boarding routine?",
+            "What is the entrance test format?",
+            "Are mobile phones allowed?",
+            "Healthcare on campus?",
+            "Scholarships available?",
+            "Sports facilities offered?",
+        ]
+        for candidate in fallback_candidates:
+            if candidate not in chips and not is_already_asked(candidate):
+                chips.append(candidate)
+            if len(chips) >= max_chips:
+                break
+
+    return chips[:max_chips]
+
+
 def is_fill_answer(answer: str) -> bool:
     """Check if an answer contains an unconfirmed [FILL] placeholder."""
     return "[FILL" in answer
