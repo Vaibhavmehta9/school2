@@ -252,6 +252,18 @@ export function formatErrorDetail(detail, fallback = "AI service is temporarily 
   return String(detail);
 }
 
+function sanitizeHistoryForApi(history) {
+  if (!Array.isArray(history)) return [];
+  return history
+    .slice(-6)
+    .map((turn) => ({
+      role: turn.role === "user" ? "user" : "assistant",
+      // Cap at 1000 chars so long assistant answers (e.g. fee tables) never trip backend max_length validation
+      content: String(turn.content || turn.text || "").trim().slice(0, 1000),
+    }))
+    .filter((turn) => turn.content.length > 0);
+}
+
 export async function askSchoolAI(input, options = {}) {
   const message = typeof input === "string" ? input : input?.message || input?.prompt || "";
   const history = (typeof input === "object" ? input?.history : options?.history) || [];
@@ -265,7 +277,7 @@ export async function askSchoolAI(input, options = {}) {
     headers,
     body: JSON.stringify({
       message: message.trim(),
-      history: history.slice(-6).map((turn) => ({ role: turn.role, content: turn.content || turn.text || "" })),
+      history: sanitizeHistoryForApi(history),
     }),
   });
   const data = await response.json().catch(() => ({}));
@@ -312,7 +324,7 @@ export async function streamSchoolAI({
         signal,
         body: JSON.stringify({
           message: message.trim(),
-          history: history.slice(-6).map((turn) => ({ role: turn.role, content: turn.content || turn.text || "" })),
+          history: sanitizeHistoryForApi(history),
         }),
       });
       const data = await response.json().catch(() => ({}));
@@ -413,7 +425,7 @@ export async function streamSchoolAI({
       signal: localController.signal,
       body: JSON.stringify({
         message: message.trim(),
-        history: history.slice(-6).map((turn) => ({ role: turn.role, content: turn.content || turn.text || "" })),
+        history: sanitizeHistoryForApi(history),
       }),
     });
   } catch (fetchErr) {
