@@ -89,6 +89,16 @@ def route_and_resolve_query(
     # 1. Contextual pronoun and follow-up resolution ("and for boarding?", "how is it paid?", "there")
     contextual_query, context_meta = resolve_contextual_query(clean_raw, sanitized_history)
 
+    # Extract conversation history user queries to avoid repeating questions in chips
+    asked_questions: list[str] = []
+    if sanitized_history:
+        for h in sanitized_history:
+            if isinstance(h, dict) and h.get("role") == "user":
+                c = h.get("content", "")
+                if c:
+                    asked_questions.append(c)
+    asked_questions.append(clean_raw)
+
     # 2. Intent Classification
     intent = classify_intent(contextual_query)
 
@@ -167,7 +177,15 @@ def route_and_resolve_query(
         if matched_entry and level in ("HIGH", "MEDIUM"):
             is_demo = bool(matched_entry.get("demo", False) or matched_entry.get("source") == "demo")
             raw_answer = get_safe_answer(matched_entry)
-            chips = get_related_question_chips(matched_entry, max_chips=3)
+            chips = get_related_question_chips(matched_entry, asked_questions=asked_questions, max_chips=3)
+            show_actions = intent in ("school_value", "school_fit", "school_compare") or matched_entry.get("id") in (
+                "why_choose_sherwood",
+                "what_makes_sherwood_different",
+                "who_thrives_fit",
+                "why_boarding_benefits",
+                "school_comparison_guidance",
+                "how_to_choose_boarding_school",
+            )
 
             # If Gemini is configured, synthesize a grounded response combining top 4-6 facts
             if is_gemini_configured():
@@ -189,6 +207,7 @@ def route_and_resolve_query(
                             "confidence_level": level,
                             "is_demo": is_demo,
                             "chips": chips,
+                            "show_actions": show_actions,
                         }
                 except Exception as exc:
                     logger.warning("Gemini phrasing fallback to canonical FAQ: %s", exc)
@@ -210,6 +229,7 @@ def route_and_resolve_query(
                 "confidence_level": level,
                 "is_demo": is_demo,
                 "chips": chips,
+                "show_actions": show_actions,
             }
 
         # LOW confidence: Never hallucinate or answer school inquiries from external LLM weights
@@ -225,14 +245,15 @@ def route_and_resolve_query(
             "matched_faq_id": None,
             "confidence_level": "LOW",
             "is_demo": False,
-            "chips": ["Why choose Sherwood?", "What are the fees?", "How do I apply?"],
+            "chips": get_related_question_chips(None, asked_questions=asked_questions, max_chips=3),
+            "show_actions": False,
         }
 
     # Path 6: General Education / Parenting Guidance
     if intent == "general_education":
         matched_entry, score, level = get_best_faq_match(contextual_query)
         if matched_entry and level == "HIGH":
-            chips = get_related_question_chips(matched_entry, max_chips=3)
+            chips = get_related_question_chips(matched_entry, asked_questions=asked_questions, max_chips=3)
             return {
                 "answer": get_safe_answer(matched_entry),
                 "model": "faq-canonical",
@@ -241,6 +262,7 @@ def route_and_resolve_query(
                 "confidence_level": level,
                 "is_demo": bool(matched_entry.get("demo", False)),
                 "chips": chips,
+                "show_actions": True,
             }
 
         if is_gemini_configured():
@@ -255,7 +277,8 @@ def route_and_resolve_query(
                         "matched_faq_id": None,
                         "confidence_level": "HIGH",
                         "is_demo": False,
-                        "chips": ["Why choose Sherwood?", "What are the fees?", "How do I apply?"],
+                        "chips": get_related_question_chips(None, asked_questions=asked_questions, max_chips=3),
+                        "show_actions": True,
                     }
             except Exception as exc:
                 logger.warning("Gemini general education guidance call failed: %s", exc)
@@ -270,7 +293,8 @@ def route_and_resolve_query(
                 "matched_faq_id": guidance_entry["id"],
                 "confidence_level": "MEDIUM",
                 "is_demo": False,
-                "chips": get_related_question_chips(guidance_entry, max_chips=3),
+                "chips": get_related_question_chips(guidance_entry, asked_questions=asked_questions, max_chips=3),
+                "show_actions": True,
             }
 
     # Path 7: General Knowledge (via Gemini if configured, or polite educational decline)

@@ -168,6 +168,7 @@ def chat(
             "intent": result.get("intent"),
             "matched_faq_id": result.get("matched_faq_id"),
             "confidence_level": result.get("confidence_level"),
+            "show_actions": result.get("show_actions", False),
         }
     except (AIConfigurationError, AIProviderRateLimitError, AIProviderUnavailableError) as error:
         error_type = error.__class__.__name__
@@ -208,7 +209,13 @@ async def chat_stream(
         done_sent = False
 
         # Helper to stream pre-computed or offline text chunk by chunk
-        async def stream_words(text: str, is_demo_flag: bool = False, chips: list[str] | None = None) -> AsyncGenerator[str, None]:
+        async def stream_words(
+            text: str,
+            is_demo_flag: bool = False,
+            chips: list[str] | None = None,
+            show_actions_flag: bool = False,
+            intent_name: str | None = None,
+        ) -> AsyncGenerator[str, None]:
             nonlocal done_sent
             words = text.split(" ")
             for i in range(0, len(words), 3):
@@ -222,6 +229,10 @@ async def chat_stream(
                 yield f"data: {json.dumps({'chips': chips})}\n\n"
             if is_demo_flag:
                 yield f"data: {json.dumps({'is_demo': True})}\n\n"
+            if show_actions_flag:
+                yield f"data: {json.dumps({'show_actions': True})}\n\n"
+            if intent_name:
+                yield f"data: {json.dumps({'intent': intent_name})}\n\n"
             done_sent = True
             yield "data: [DONE]\n\n"
 
@@ -264,7 +275,14 @@ async def chat_stream(
                 if route_res.get("matched_faq_id"):
                     matched_faq_ids = [route_res["matched_faq_id"]]
 
-                async for chunk in stream_words(answer_text, is_demo_flag=is_demo, chips=chips):
+                show_actions = bool(route_res.get("show_actions", False))
+                async for chunk in stream_words(
+                    answer_text,
+                    is_demo_flag=is_demo,
+                    chips=chips,
+                    show_actions_flag=show_actions,
+                    intent_name=source,
+                ):
                     yield chunk
                 return
 
