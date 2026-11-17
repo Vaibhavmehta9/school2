@@ -119,6 +119,47 @@ def get_all_entries() -> list[dict[str, Any]]:
     return data.get("entries", [])
 
 
+def get_entry_by_id(entry_id: str) -> dict[str, Any] | None:
+    """Return a single FAQ entry by its unique identifier."""
+    for entry in get_all_entries():
+        if entry.get("id") == entry_id:
+            return entry
+    return None
+
+
+def get_related_question_chips(entry: dict[str, Any] | None, max_chips: int = 3) -> list[str]:
+    """Extract clean, short (<40 chars) follow-up questions from the entry's related field."""
+    if not entry:
+        return ["Why choose Sherwood?", "What are the fees?", "How do I apply?"]
+
+    related_ids = entry.get("related", [])
+    chips: list[str] = []
+
+    for rid in related_ids:
+        rel_entry = get_entry_by_id(rid)
+        if not rel_entry:
+            continue
+        questions = rel_entry.get("questions", [])
+        chosen: str | None = None
+        for q in questions:
+            clean_q = q.strip()
+            if len(clean_q) <= 38 and clean_q.endswith("?"):
+                chosen = clean_q
+                break
+        if not chosen and questions:
+            candidate = questions[0].strip()
+            chosen = candidate if len(candidate) <= 38 else candidate[:35] + "..."
+        if chosen and chosen not in chips:
+            chips.append(chosen)
+        if len(chips) >= max_chips:
+            break
+
+    if not chips:
+        chips = ["Why choose Sherwood?", "What are the fees?", "How do I apply?"]
+
+    return chips[:max_chips]
+
+
 def is_fill_answer(answer: str) -> bool:
     """Check if an answer contains an unconfirmed [FILL] placeholder."""
     return "[FILL" in answer
