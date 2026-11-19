@@ -15,7 +15,7 @@ import "./GallerySection.css";
 const galleryItems = [
   {
     image: schoolCampusAerial,
-    alt: "Aerial view of the sprawling 70-acre Sherwood College campus in Nainital",
+    alt: "Aerial view of the historic 45-acre Sherwood College campus in Nainital",
     title: "Our Historic Campus Quad",
     tag: "Campus Heritage",
     type: "photo",
@@ -23,7 +23,7 @@ const galleryItems = [
   },
   {
     image: galleryAcademics,
-    alt: "Students engaging in collaborative scientific inquiry in the ICSE lab",
+    alt: "Academic infrastructure and learning blocks at Sherwood College",
     title: "STEM & Discovery",
     tag: "Academics",
     type: "photo",
@@ -31,7 +31,7 @@ const galleryItems = [
   },
   {
     image: gallerySports,
-    alt: "Athletes competing on the Sherwood College mountain sports grounds",
+    alt: "Outdoor swimming pool and sports facilities on the Sherwood mountain campus",
     title: "Athletics & Character",
     tag: "Sports",
     type: "photo",
@@ -39,7 +39,7 @@ const galleryItems = [
   },
   {
     image: galleryCulture,
-    alt: "Students performing theatrical arts and music at the college concert",
+    alt: "Students and faculty gathered in the outdoor quadrangle for college events",
     title: "The Arts & Cultural Legacy",
     tag: "Milman Hall",
     type: "photo",
@@ -47,7 +47,7 @@ const galleryItems = [
   },
   {
     image: galleryCampus,
-    alt: "The colonial cloisters and library reading rooms at Sherwood College",
+    alt: "Colonial stone cloisters corridor overlooking the courtyard",
     title: "Library & Courtyards",
     tag: "Quiet Study",
     type: "photo",
@@ -55,7 +55,7 @@ const galleryItems = [
   },
   {
     image: galleryHostel,
-    alt: "The heritage stone residential houses and dormitories",
+    alt: "Main historic Gothic school building and residential campus",
     title: "Boarding Life",
     tag: "Pastoral Care",
     type: "photo",
