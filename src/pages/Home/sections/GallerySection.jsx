@@ -39,7 +39,7 @@ const galleryItems = [
   },
   {
     image: galleryCulture,
-    alt: "Students and faculty gathered in the outdoor quadrangle for college events",
+    alt: "The Sherwood College sports pavilion and estate grounds amidst Nainital pine hills",
     title: "The Arts & Cultural Legacy",
     tag: "Milman Hall",
     type: "photo",
@@ -55,7 +55,7 @@ const galleryItems = [
   },
   {
     image: galleryHostel,
-    alt: "Main historic Gothic school building and residential campus",
+    alt: "Historic colonial stone facade and estate grounds at Sherwood College",
     title: "Boarding Life",
     tag: "Pastoral Care",
     type: "photo",
@@ -63,7 +63,7 @@ const galleryItems = [
   },
   {
     image: galleryAuditorium,
-    alt: "Gatherings in the historic Sherwood College auditorium",
+    alt: "Main historic school building with Gothic windows and assembly hall",
     title: "College Assemblies",
     tag: "Tradition",
     type: "photo",
