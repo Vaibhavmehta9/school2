@@ -6,7 +6,7 @@ import gallerySports from "../../../assets/gallery-sports.webp";
 import galleryCulture from "../../../assets/gallery-culture.webp";
 import galleryCampus from "../../../assets/gallery-campus-library.webp";
 import galleryHostel from "../../../assets/gallery-hostel-building.webp";
-import galleryAuditorium from "../../../assets/sheerwood-auditorium-web.jpg";
+import galleryLeadership from "../../../assets/sheerwood-student-group-web.jpg";
 import Button from "../../../components/Button/Button";
 import SchoolCrest from "../../../components/SchoolCrest";
 import { isReducedMotion, gsap } from "../../../utils/motion";
@@ -15,7 +15,7 @@ import "./GallerySection.css";
 const galleryItems = [
   {
     image: schoolCampusAerial,
-    alt: "Aerial view of the historic 45-acre Sherwood College campus in Nainital",
+    alt: "Aerial view of the historic campus quadrangle and playing field at Sherwood College, Nainital",
     title: "Our Historic Campus Quad",
     tag: "Campus Heritage",
     type: "photo",
@@ -23,32 +23,32 @@ const galleryItems = [
   },
   {
     image: galleryAcademics,
-    alt: "Academic infrastructure and learning blocks at Sherwood College",
-    title: "STEM & Discovery",
+    alt: "Sherwood College academic infrastructure and learning facilities",
+    title: "Academic Infrastructure",
     tag: "Academics",
     type: "photo",
     className: "sherwood-gallery__item--sm",
   },
   {
     image: gallerySports,
-    alt: "Outdoor swimming pool and sports facilities on the Sherwood mountain campus",
-    title: "Athletics & Character",
-    tag: "Sports",
+    alt: "Outdoor heated swimming pool and sports facilities at Sherwood College",
+    title: "Heated Swimming Pool",
+    tag: "Athletics",
     type: "photo",
     className: "sherwood-gallery__item--sm",
   },
   {
     image: galleryCulture,
     alt: "The Sherwood College sports pavilion and estate grounds amidst Nainital pine hills",
-    title: "The Arts & Cultural Legacy",
-    tag: "Milman Hall",
+    title: "Sports Pavilion & Valley",
+    tag: "Mountain Grounds",
     type: "photo",
     className: "sherwood-gallery__item--wide",
   },
   {
     image: galleryCampus,
     alt: "Colonial stone cloisters corridor overlooking the courtyard",
-    title: "Library & Courtyards",
+    title: "Heritage Cloisters",
     tag: "Quiet Study",
     type: "photo",
     className: "sherwood-gallery__item--sm",
@@ -56,16 +56,16 @@ const galleryItems = [
   {
     image: galleryHostel,
     alt: "Historic colonial stone facade and estate grounds at Sherwood College",
-    title: "Boarding Life",
+    title: "Boarding Life & Grounds",
     tag: "Pastoral Care",
     type: "photo",
     className: "sherwood-gallery__item--sm",
   },
   {
-    image: galleryAuditorium,
-    alt: "Main historic school building with Gothic windows and assembly hall",
-    title: "College Assemblies",
-    tag: "Tradition",
+    image: galleryLeadership,
+    alt: "Sherwood College senior prefects and school leadership gathered outside the chapel with the Principal",
+    title: "Prefects & Principal",
+    tag: "College Leadership",
     type: "photo",
     className: "sherwood-gallery__item--sm",
   },
