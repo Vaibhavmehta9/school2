@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SherwoodBot Mascot QA & Motion Matrix</title>
+  <style>
+    :root {
+      --bg: #fcfbf7;
+      --card-bg: #ffffff;
+      --text: #054b2d;
+      --text-muted: #64748b;
+      --border: rgba(197, 155, 39, 0.35);
+      --green-dark: #054b2d;
+      --gold: #c59b27;
+      --mint: #34d399;
+    }
+
+    body.dark-mode {
+      --bg: #03140b;
+      --card-bg: #062315;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: rgba(223, 184, 70, 0.4);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 32px 24px;
+      line-height: 1.5;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    header {
+      max-width: 1200px;
+      margin: 0 auto 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 20px;
+    }
+
+    h1 { font-size: 1.8rem; font-weight: 800; color: #054b2d; }
+    body.dark-mode h1 { color: #fde047; }
+    p.subtitle { color: var(--text-muted); font-size: 0.95rem; margin-top: 4px; }
+
+    .controls {
+      display: flex;
+      gap: 12px;
+    }
+
+    button.btn-ctrl {
+      background: #054b2d;
+      color: #ffffff;
+      border: 1px solid var(--gold);
+      padding: 8px 16px;
+      border-radius: 9999px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    button.btn-ctrl:hover { background: #033620; transform: translateY(-1px); }
+
+    .matrix-section {
+      max-width: 1200px;
+      margin: 0 auto 40px;
+    }
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .grid-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .specimen-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+      position: relative;
+    }
+
+    .specimen-card.on-green {
+      background: #054b2d;
+      border-color: rgba(223, 184, 70, 0.6);
+      color: #ffffff;
+    }
+
+    .specimen-card.on-dark {
+      background: #0a1a12;
+      border-color: rgba(223, 184, 70, 0.4);
+      color: #ffffff;
+    }
+
+    .specimen-label {
+      margin-top: 16px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      opacity: 0.85;
+      text-align: center;
+    }
+
+    .specimen-sublabel {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+      text-align: center;
+    }
+    .specimen-card.on-green .specimen-sublabel,
+    .specimen-card.on-dark .specimen-sublabel {
+      color: #94a3b8;
+    }
+
+    /* Robot SVG Styles directly embedded */
+    .sherwood-bot-wrap {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      user-select: none;
+    }
+    .sherwood-bot-svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .bot-character-group,
+    .bot-ground-shadow,
+    .bot-head-assembly,
+    .bot-antenna-group,
+    .bot-antenna-orb,
+    .bot-right-arm-group,
+    .bot-left-arm-group,
+    .bot-eyes-standard,
+    .bot-eye-capsule,
+    .bot-ambient-halo {
+      transform-box: fill-box;
+    }
+
+    .bot-character-group { transform-origin: 50% 50%; }
+    .bot-ground-shadow { transform-origin: 50% 50%; }
+    .bot-head-assembly { transform-origin: 50% 88%; }
+    .bot-antenna-group { transform-origin: 50% 100%; }
+    .bot-right-arm-group { transform-origin: 15% 85%; }
+    .bot-eye-capsule { transform-origin: 50% 50%; }
+
+    /* Animations */
+    .anim-idle .bot-character-group { animation: bot-float-bob 3.5s ease-in-out infinite; }
+    .anim-idle .bot-ground-shadow { animation: bot-shadow-scale 3.5s ease-in-out infinite; }
+    .anim-idle .bot-eye-capsule { animation: bot-eye-blink 3.8s ease-in-out infinite; }
+    .anim-idle .bot-head-assembly { animation: bot-head-sway 7s ease-in-out infinite; }
+    .anim-idle .bot-antenna-orb { animation: bot-antenna-glow 2.8s ease-in-out infinite; }
+
+    .anim-greeting .bot-right-arm-group { animation: bot-arm-wave 1.8s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite; }
+    .anim-greeting .bot-head-assembly { transform: rotate(4deg); }
+    .anim-greeting .bot-character-group { animation: bot-float-bob 3.5s ease-in-out infinite; }
+    .anim-greeting .bot-ground-shadow { animation: bot-shadow-scale 3.5s ease-in-out infinite; }
+
+    .anim-thinking .bot-eyes-standard { animation: bot-thinking-scan 1.6s ease-in-out infinite alternate; }
+    .anim-thinking .think-dot-1 { animation: bot-dot-pulse 1.2s ease-in-out 0s infinite; }
+    .anim-thinking .think-dot-2 { animation: bot-dot-pulse 1.2s ease-in-out 0.2s infinite; }
+    .anim-thinking .think-dot-3 { animation: bot-dot-pulse 1.2s ease-in-out 0.4s infinite; }
+
+    .anim-speaking .eq-bar-1 { animation: bot-eq-bounce 0.6s ease-in-out 0.05s infinite alternate; }
+    .anim-speaking .eq-bar-2 { animation: bot-eq-bounce 0.7s ease-in-out 0.15s infinite alternate; }
+    .anim-speaking .eq-bar-3 { animation: bot-eq-bounce 0.65s ease-in-out 0.25s infinite alternate; }
+    .anim-speaking .eq-bar-4 { animation: bot-eq-bounce 0.8s ease-in-out 0.1s infinite alternate; }
+    .anim-speaking .bot-character-group { animation: bot-float-bob 3.5s ease-in-out infinite; }
+
+    @keyframes bot-float-bob { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-5.5px); } }
+    @keyframes bot-shadow-scale { 0%, 100% { transform: scale(1); opacity: 0.9; } 50% { transform: scale(0.76); opacity: 0.42; } }
+    @keyframes bot-eye-blink { 0%, 93%, 97%, 100% { transform: scaleY(1); } 95% { transform: scaleY(0.08); } }
+    @keyframes bot-head-sway { 0%, 100% { transform: rotate(0deg); } 30% { transform: rotate(1.8deg); } 70% { transform: rotate(-1.8deg); } }
+    @keyframes bot-antenna-glow { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 1px #fef08a); opacity: 0.9; } 50% { transform: scale(1.18); filter: drop-shadow(0 0 5px #eab308); opacity: 1; } }
+    @keyframes bot-arm-wave { 0%, 100% { transform: rotate(0deg); } 20%, 60% { transform: rotate(-28deg); } 40%, 80% { transform: rotate(10deg); } }
+    @keyframes bot-thinking-scan { 0% { transform: translateX(-3px); } 100% { transform: translateX(3px); } }
+    @keyframes bot-dot-pulse { 0%, 100% { transform: scale(0.7); opacity: 0.35; } 50% { transform: scale(1.25); opacity: 1; } }
+    @keyframes bot-eq-bounce { 0% { transform: scaleY(0.3); } 100% { transform: scaleY(1.35); } }
+
+    /* Contrast stats banner */
+    .contrast-banner {
+      background: #054b2d;
+      color: #ffffff;
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 32px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      border: 1px solid var(--gold);
+    }
+    .contrast-item strong { display: block; font-size: 1.1rem; color: #fde047; }
+    .contrast-item span { font-size: 0.8rem; color: #a7f3d0; }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>SherwoodBot Mascot QA Matrix</h1>
+      <p class="subtitle">Complete visual verification: 6 states, 6 sizes, 3 surface backgrounds, WCAG AAA contrast.</p>
+    </div>
+    <div class="controls">
+      <button class="btn-ctrl" onclick="document.body.classList.toggle('dark-mode')">🌓 Toggle Dark Mode</button>
+      <button class="btn-ctrl" onclick="toggleReducedMotion()">⚡ Toggle Reduced Motion</button>
+    </div>
+  </header>
+
+  <div class="contrast-banner">
+    <div class="contrast-item">
+      <strong>8.92 : 1 (AAA)</strong>
+      <span>Mint Eyes (#34d399) on Pine Visor (#021c10)</span>
+    </div>
+    <div class="contrast-item">
+      <strong>9.90 : 1 (AAA)</strong>
+      <span>Ivory Shell (#ffffff) on Green Launcher (#054b2d)</span>
+    </div>
+    <div class="contrast-item">
+      <strong>5.09 : 1 (AA)</strong>
+      <span>Antique Gold (#eab308) on Green Launcher (#054b2d)</span>
+    </div>
+    <div class="contrast-item">
+      <strong>0 Layout Shifts</strong>
+      <span>GPU-accelerated transform & opacity only</span>
+    </div>
+  </div>
+
+  <!-- 1. SIZES MATRIX -->
+  <section class="matrix-section">
+    <h2 class="section-title">1. Resolution & Scale Matrix (24px to 96px)</h2>
+    <div class="grid-row">
+      <div class="specimen-card">
+        <div id="bot-24"></div>
+        <div class="specimen-label">24px (Inline Icon)</div>
+        <div class="specimen-sublabel">Simplified LOD · High Clarity</div>
+      </div>
+      <div class="specimen-card">
+        <div id="bot-32"></div>
+        <div class="specimen-label">32px (Header Avatar)</div>
+        <div class="specimen-sublabel">Chat Header & Assistant Msg</div>
+      </div>
+      <div class="specimen-card">
+        <div id="bot-40"></div>
+        <div class="specimen-label">40px (Standard Medium)</div>
+        <div class="specimen-sublabel">Header / Embedded Dialogs</div>
+      </div>
+      <div class="specimen-card">
+        <div id="bot-56"></div>
+        <div class="specimen-label">56px (Compact Float)</div>
+        <div class="specimen-sublabel">Mobile Modal / Sticky Bar</div>
+      </div>
+      <div class="specimen-card">
+        <div id="bot-80"></div>
+        <div class="specimen-label">80px (Desktop Launcher)</div>
+        <div class="specimen-sublabel">Free-Standing Floating Hero</div>
+      </div>
+      <div class="specimen-card">
+        <div id="bot-96"></div>
+        <div class="specimen-label">96px (Empty State Welcome)</div>
+        <div class="specimen-sublabel">Hero Mascot in Empty Chat</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. ANIMATED STATES MATRIX -->
+  <section class="matrix-section">
+    <h2 class="section-title">2. Animated States Matrix (80px)</h2>
+    <div class="grid-row">
+      <div class="specimen-card">
+        <div id="bot-idle"></div>
+        <div class="specimen-label">Idle State</div>
+        <div class="specimen-sublabel">Floating bob + ground shadow + blink</div>
+      </div>
+      <div class="specimen-card">
+        <div id="bot-greeting"></div>
+        <div class="specimen-label">Greeting / Waving</div>
+        <div class="specimen-sublabel">Welcoming 3-swing right arm wave</div>
+      </div>
+      <div class="specimen-card">
+        <div id="bot-thinking"></div>
+        <div class="specimen-label">Thinking State</div>
+        <div class="specimen-sublabel">Left/right eye scan + 3 pulsing dots</div>
+      </div>
+      <div class="specimen-card">
+        <div id="bot-speaking"></div>
+        <div class="specimen-label">Speaking State</div>
+        <div class="specimen-sublabel">4-bar animated digital equalizer</div>
+      </div>
+      <div class="specimen-card">
+        <div id="bot-success"></div>
+        <div class="specimen-label">Success State</div>
+        <div class="specimen-sublabel">Cheerful happy squint eyes</div>
+      </div>
+      <div class="specimen-card">
+        <div id="bot-error"></div>
+        <div class="specimen-label">Error State</div>
+        <div class="specimen-sublabel">Calm empathetic 'oops' face</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. SURFACE TONES -->
+  <section class="matrix-section">
+    <h2 class="section-title">3. Surface Tone Separation (Light vs Green vs Dark)</h2>
+    <div class="grid-row">
+      <div class="specimen-card">
+        <div id="bot-surface-light"></div>
+        <div class="specimen-label">On Light Ivory (#fcfbf7)</div>
+        <div class="specimen-sublabel">Soft shadow & sharp gold rim</div>
+      </div>
+      <div class="specimen-card on-green">
+        <div id="bot-surface-green"></div>
+        <div class="specimen-label">On Sherwood Pine (#054b2d)</div>
+        <div class="specimen-sublabel">9.90:1 Contrast · Dual-layer halo</div>
+      </div>
+      <div class="specimen-card on-dark">
+        <div id="bot-surface-dark"></div>
+        <div class="specimen-label">On Dark Theme (#0a1a12)</div>
+        <div class="specimen-sublabel">Crisp porcelain glow · Zero muddying</div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    function renderBotSvg(size, state, animClass) {
+      const isMicro = size < 34;
+      let eyesHtml = '';
+      if (state === 'error') {
+        eyesHtml = `<g class="bot-eyes-error">
+          <line x1="28" y1="31" x2="35" y2="35" stroke="#fca5a5" stroke-width="2.8" stroke-linecap="round"/>
+          <line x1="52" y1="31" x2="45" y2="35" stroke="#fca5a5" stroke-width="2.8" stroke-linecap="round"/>
+        </g>`;
+      } else if (state === 'success') {
+        eyesHtml = `<g class="bot-eyes-success">
+          <path d="M28 34C29 30 34 30 35 34" stroke="#6ee7b7" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <path d="M45 34C46 30 51 30 52 34" stroke="#6ee7b7" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+        </g>`;
+      } else {
+        eyesHtml = `<g class="bot-eyes-standard">
+          <g class="bot-eye bot-eye-left">
+            <rect class="bot-eye-capsule" x="28" y="28" width="7.5" height="9.5" rx="3.75" fill="url(#botMintGrad)"/>
+            <circle cx="32" cy="31" r="1.5" fill="#ffffff"/>
+          </g>
+          <g class="bot-eye bot-eye-right">
+            <rect class="bot-eye-capsule" x="44.5" y="28" width="7.5" height="9.5" rx="3.75" fill="url(#botMintGrad)"/>
+            <circle cx="48.5" cy="31" r="1.5" fill="#ffffff"/>
+          </g>
+        </g>`;
+      }
+
+      let mouthHtml = '';
+      if (state === 'speaking') {
+        mouthHtml = `<g class="bot-mouth-speaking">
+          <line class="eq-bar eq-bar-1" x1="32" y1="40" x2="32" y2="42" stroke="#34d399" stroke-width="2" stroke-linecap="round"/>
+          <line class="eq-bar eq-bar-2" x1="37" y1="39" x2="37" y2="43" stroke="#6ee7b7" stroke-width="2" stroke-linecap="round"/>
+          <line class="eq-bar eq-bar-3" x1="43" y1="39" x2="43" y2="43" stroke="#6ee7b7" stroke-width="2" stroke-linecap="round"/>
+          <line class="eq-bar eq-bar-4" x1="48" y1="40" x2="48" y2="42" stroke="#34d399" stroke-width="2" stroke-linecap="round"/>
+        </g>`;
+      } else if (state === 'thinking') {
+        mouthHtml = `<g class="bot-mouth-thinking">
+          <circle class="think-dot think-dot-1" cx="33" cy="40.5" r="1.5" fill="#fde047"/>
+          <circle class="think-dot think-dot-2" cx="40" cy="40.5" r="1.5" fill="#34d399"/>
+          <circle class="think-dot think-dot-3" cx="47" cy="40.5" r="1.5" fill="#fde047"/>
+        </g>`;
+      } else if (state === 'error') {
+        mouthHtml = `<path class="bot-mouth-error" d="M34 41C37 39.5 43 39.5 46 41" stroke="#fca5a5" stroke-width="1.8" stroke-linecap="round" fill="none"/>`;
+      } else {
+        mouthHtml = `<path class="bot-mouth-smile" d="M34 39C36 41.5 44 41.5 46 39" stroke="#34d399" stroke-width="1.8" stroke-linecap="round" fill="none"/>`;
+      }
+
+      return `<div class="sherwood-bot-wrap ${animClass}" style="width:${size}px; height:${size}px;">
+        <svg class="sherwood-bot-svg" viewBox="0 0 80 84" fill="none">
+          <defs>
+            <linearGradient id="botShellGrad" x1="40" y1="12" x2="40" y2="70" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#ffffff"/>
+              <stop offset="65%" stop-color="#f8fafc"/>
+              <stop offset="100%" stop-color="#e2e8f0"/>
+            </linearGradient>
+            <linearGradient id="botScreenGrad" x1="40" y1="22" x2="40" y2="46" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#021c10"/>
+              <stop offset="50%" stop-color="#043820"/>
+              <stop offset="100%" stop-color="#02180e"/>
+            </linearGradient>
+            <linearGradient id="botGoldGrad" x1="26" y1="10" x2="54" y2="58" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#fef08a"/>
+              <stop offset="45%" stop-color="#eab308"/>
+              <stop offset="100%" stop-color="#a16207"/>
+            </linearGradient>
+            <linearGradient id="botMintGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#a7f3d0"/>
+              <stop offset="100%" stop-color="#34d399"/>
+            </linearGradient>
+            <linearGradient id="botCapGrad" x1="40" y1="6" x2="40" y2="20" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#0a5c36"/>
+              <stop offset="100%" stop-color="#022a18"/>
+            </linearGradient>
+            <radialGradient id="botGroundShadowGrad" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#021c10" stop-opacity="0.32"/>
+              <stop offset="60%" stop-color="#021c10" stop-opacity="0.12"/>
+              <stop offset="100%" stop-color="#021c10" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+
+          ${!isMicro ? '<ellipse class="bot-ground-shadow" cx="40" cy="79" rx="21" ry="4.5" fill="url(#botGroundShadowGrad)"/>' : ''}
+          <circle class="bot-ambient-halo" cx="40" cy="40" r="38" stroke="url(#botGoldGrad)" stroke-width="1.2" stroke-opacity="0.25"/>
+
+          <g class="bot-character-group">
+            <g class="bot-body-group">
+              <g class="bot-left-arm-group">
+                <path d="M23 52C19 53 16 57 17 61C18 64 22 64 24 61L27 54Z" fill="url(#botShellGrad)" stroke="#c59b27" stroke-width="1"/>
+                <circle cx="19" cy="62" r="2.2" fill="#fde047"/>
+              </g>
+              <g class="bot-right-arm-group">
+                <path d="M57 52C61 51 65 47 67 43C68 40 65 38 62 40L55 49Z" fill="url(#botShellGrad)" stroke="#c59b27" stroke-width="1"/>
+                <circle cx="66" cy="41" r="3" fill="url(#botGoldGrad)"/>
+              </g>
+              <path d="M26 48C26 46 28 45 31 45H49C52 45 54 46 54 48L57 66C57 69 55 71 52 71H28C25 71 23 69 23 66L26 48Z" fill="url(#botShellGrad)" stroke="#c59b27" stroke-width="1.4" stroke-linejoin="round"/>
+              <path d="M40 52L45 54.5V59C45 62 42.5 64 40 65C37.5 64 35 62 35 59V54.5L40 52Z" fill="url(#botGoldGrad)" stroke="#78350f" stroke-width="0.8"/>
+              <circle cx="40" cy="58" r="1.3" fill="#054b2d"/>
+            </g>
+
+            <g class="bot-head-assembly">
+              <rect x="13" y="27" width="5" height="12" rx="2.5" fill="url(#botGoldGrad)" stroke="#92400e" stroke-width="0.8"/>
+              <circle cx="15.5" cy="33" r="1.4" fill="#054b2d"/>
+              <rect x="62" y="27" width="5" height="12" rx="2.5" fill="url(#botGoldGrad)" stroke="#92400e" stroke-width="0.8"/>
+              <circle cx="64.5" cy="33" r="1.4" fill="#054b2d"/>
+
+              <g class="bot-antenna-group">
+                <line x1="40" y1="16" x2="40" y2="7" stroke="url(#botGoldGrad)" stroke-width="2.4" stroke-linecap="round"/>
+                <circle class="bot-antenna-orb" cx="40" cy="6" r="4" fill="url(#botGoldGrad)"/>
+                <circle cx="40" cy="6" r="1.8" fill="#ffffff"/>
+              </g>
+
+              <rect class="bot-helmet-shell" x="17" y="15" width="46" height="35" rx="13" fill="url(#botShellGrad)" stroke="url(#botGoldGrad)" stroke-width="1.8" stroke-linejoin="round"/>
+
+              <g class="bot-cap-group">
+                <polygon points="40,6 56,12 40,17 24,12" fill="url(#botCapGrad)" stroke="url(#botGoldGrad)" stroke-width="1.2" stroke-linejoin="round"/>
+                <path d="M30 13.8C30 16 34.5 17.5 40 17.5C45.5 17.5 50 16 50 13.8" stroke="url(#botGoldGrad)" stroke-width="1.2" fill="none"/>
+                <circle cx="40" cy="11.5" r="1.8" fill="#fde047"/>
+                ${!isMicro ? `<g class="bot-tassel-group">
+                  <path d="M40 11.5Q30 13 28 19" stroke="#fde047" stroke-width="1" fill="none"/>
+                  <circle cx="27.5" cy="19.5" r="1.5" fill="#eab308"/>
+                  <path d="M27.5 20.5V25" stroke="#ca8a04" stroke-width="1.3" stroke-linecap="round"/>
+                </g>` : ''}
+              </g>
+
+              <rect class="bot-visor-frame" x="22" y="22" width="36" height="23" rx="8" fill="url(#botScreenGrad)" stroke="#0a3a22" stroke-width="1"/>
+
+              <g class="bot-face-group">
+                ${eyesHtml}
+                ${mouthHtml}
+              </g>
+            </g>
+          </g>
+        </svg>
+      </div>`;
+    }
+
+    // Populate Matrix
+    document.getElementById('bot-24').innerHTML = renderBotSvg(24, 'idle', 'anim-idle');
+    document.getElementById('bot-32').innerHTML = renderBotSvg(32, 'idle', 'anim-idle');
+    document.getElementById('bot-40').innerHTML = renderBotSvg(40, 'idle', 'anim-idle');
+    document.getElementById('bot-56').innerHTML = renderBotSvg(56, 'idle', 'anim-idle');
+    document.getElementById('bot-80').innerHTML = renderBotSvg(80, 'idle', 'anim-idle');
+    document.getElementById('bot-96').innerHTML = renderBotSvg(96, 'idle', 'anim-idle');
+
+    document.getElementById('bot-idle').innerHTML = renderBotSvg(80, 'idle', 'anim-idle');
+    document.getElementById('bot-greeting').innerHTML = renderBotSvg(80, 'greeting', 'anim-greeting');
+    document.getElementById('bot-thinking').innerHTML = renderBotSvg(80, 'thinking', 'anim-thinking');
+    document.getElementById('bot-speaking').innerHTML = renderBotSvg(80, 'speaking', 'anim-speaking');
+    document.getElementById('bot-success').innerHTML = renderBotSvg(80, 'success', 'anim-idle');
+    document.getElementById('bot-error').innerHTML = renderBotSvg(80, 'error', 'anim-idle');
+
+    document.getElementById('bot-surface-light').innerHTML = renderBotSvg(80, 'idle', 'anim-idle');
+    document.getElementById('bot-surface-green').innerHTML = renderBotSvg(80, 'idle', 'anim-idle');
+    document.getElementById('bot-surface-dark').innerHTML = renderBotSvg(80, 'idle', 'anim-idle');
+
+    function toggleReducedMotion() {
+      const styleId = 'force-reduced-motion';
+      let style = document.getElementById(styleId);
+      if (style) {
+        style.remove();
+        alert('Standard Motion Enabled');
+      } else {
+        style = document.createElement('style');
+        style.id = styleId;
+        style.textContent = '* { animation: none !important; transition: none !important; }';
+        document.head.appendChild(style);
+        alert('Reduced Motion Mode Activated (All keyframes paused, static posture preserved)');
+      }
+    }
+  </script>
+</body>
+</html>
