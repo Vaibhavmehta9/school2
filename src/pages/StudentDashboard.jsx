@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useCognitoAuth } from "../auth/useCognitoAuth";
 import SchoolCrest from "../components/SchoolCrest";
 import ChatPanel from "../components/ChatPanel/ChatPanel";
+import SherwoodBot from "../components/ChatPanel/SherwoodBot";
 import "./StudentDashboard.css";
 import "./StudentAuth.css";
 import StudentPortalModule from "./StudentPortalModule";
@@ -94,21 +95,25 @@ export default function StudentDashboard() {
     />
     <button
       ref={triggerRef}
-      className="sherwood-ai-launcher"
+      className="sherwood-bot-launcher-btn"
       onClick={() => setAiOpen((open) => !open)}
       aria-expanded={aiOpen}
       aria-haspopup="dialog"
+      aria-label="Ask Sherwood AI - open chat assistant"
+      title="Ask Sherwood AI - open chat assistant"
+      style={{
+        position: "fixed",
+        right: "24px",
+        bottom: "24px",
+        zIndex: 900,
+      }}
     >
-      <span className="sherwood-ai-launcher-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M12 2v3M4.93 4.93l2.12 2.12M2 12h3M19.07 4.93l-2.12 2.12M22 12h-3" />
-          <rect x="5" y="8" width="14" height="12" rx="3" />
-          <circle cx="9.5" cy="13.5" r="1.2" fill="currentColor" />
-          <circle cx="14.5" cy="13.5" r="1.2" fill="currentColor" />
-          <path d="M9 17h6" />
-        </svg>
-      </span>
-      Ask Study AI
+      <SherwoodBot
+        size={72}
+        state={aiOpen ? "speaking" : "idle"}
+        showOnline={true}
+        showShadow={true}
+      />
     </button>
   </main>;
 }

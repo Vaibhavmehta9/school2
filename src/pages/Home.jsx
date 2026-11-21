@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ChatPanel from "../components/ChatPanel/ChatPanel";
-import SherwoodAIAvatar from "../components/ChatPanel/SherwoodAIAvatar";
+import SherwoodBot from "../components/ChatPanel/SherwoodBot";
+import { useSherwoodBotMotion } from "../hooks/useSherwoodBotMotion";
 import { useCognitoAuth } from "../auth/useCognitoAuth";
 import { initSmoothScrolling, ScrollTrigger } from "../utils/motion";
 
@@ -33,11 +34,18 @@ export default function Home() {
   const [campusFilmOpen, setCampusFilmOpen] = useState(false);
   const [admissionCodeOpen, setAdmissionCodeOpen] = useState(false);
   const [aiOpen, setAiOpen] = useState(false);
-  const [hasAttentionPulse, setHasAttentionPulse] = useState(false);
-  const [isScrolledCompact, setIsScrolledCompact] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
-  const idleTimerRef = useRef(null);
-  const scrollTimerRef = useRef(null);
+
+  // Mascot Motion & Lifecycle Hook
+  const {
+    botState,
+    showSpeechBubble,
+    dismissSpeechBubble,
+    notificationCount,
+    isScrolling,
+    pupilOffset,
+    isWaving,
+  } = useSherwoodBotMotion({ isOpen: aiOpen, launcherRef });
 
   // Track global scroll progress for top gold progress bar
   useEffect(() => {
@@ -60,45 +68,7 @@ export default function Home() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Soft attention pulse after 8 seconds (once per session)
-  useEffect(() => {
-    try {
-      const alreadyPulsed = sessionStorage.getItem("sherwood_ai_pulsed");
-      if (!alreadyPulsed) {
-        const timer = setTimeout(() => {
-          setHasAttentionPulse(true);
-          sessionStorage.setItem("sherwood_ai_pulsed", "true");
-          setTimeout(() => setHasAttentionPulse(false), 2600);
-        }, 8000);
-        return () => clearTimeout(timer);
-      }
-    } catch {
-      // Storage unavailable in restricted mode
-    }
-    return undefined;
-  }, []);
 
-  // Collapse launcher to 56px icon-only circle during scroll; re-expand after 2s of idleness
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolledCompact(true);
-      if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
-      if (scrollTimerRef.current) clearTimeout(scrollTimerRef.current);
-
-      scrollTimerRef.current = setTimeout(() => {
-        idleTimerRef.current = setTimeout(() => {
-          setIsScrolledCompact(false);
-        }, 2000);
-      }, 150);
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
-      if (scrollTimerRef.current) clearTimeout(scrollTimerRef.current);
-    };
-  }, []);
 
   // Smooth inertial scrolling setup
   useEffect(() => {
@@ -158,7 +128,7 @@ export default function Home() {
         onClose={() => setAdmissionCodeOpen(false)}
       />
 
-      {/* 5. Sherwood AI Assistant Panel & Accessible Floating Launcher */}
+      {/* 5. Free-Standing SherwoodBot Mascot Launcher & Interactive Speech Bubble */}
       <ChatPanel
         variant="popup"
         isOpen={aiOpen}
@@ -169,20 +139,61 @@ export default function Home() {
         triggerRef={launcherRef}
       />
 
-      <button
-        ref={launcherRef}
-        type="button"
-        className={`sherwood-ai-launcher ${hasAttentionPulse ? "attention-pulse" : ""} ${isScrolledCompact ? "compact-circle" : ""}`.trim()}
-        onClick={() => setAiOpen((isOpen) => !isOpen)}
-        aria-expanded={aiOpen}
-        aria-haspopup="dialog"
-        aria-label="Ask Sherwood AI"
+      <div
+        className={`sherwood-bot-launcher-container ${aiOpen ? "is-chat-open" : ""} ${
+          isScrolling ? "is-scrolling" : ""
+        }`.trim()}
       >
-        <span className="sherwood-ai-launcher-icon" aria-hidden="true">
-          <SherwoodAIAvatar size={34} state={aiOpen ? "speaking" : "idle"} />
-        </span>
-        <span className="sherwood-ai-launcher-text">Ask Sherwood AI</span>
-      </button>
+        {/* Interactive Speech Bubble */}
+        {showSpeechBubble && !aiOpen && (
+          <aside
+            className="sherwood-bot-speech-bubble"
+            role="status"
+            aria-live="polite"
+          >
+            <div className="sherwood-bot-bubble-content">
+              <strong>Hi! I'm Sherwood AI.</strong>
+              <span>Ask me about admissions.</span>
+            </div>
+            <button
+              type="button"
+              className="sherwood-bot-bubble-close"
+              onClick={dismissSpeechBubble}
+              aria-label="Close message"
+            >
+              ×
+            </button>
+            <div className="sherwood-bot-bubble-tail" aria-hidden="true" />
+          </aside>
+        )}
+
+        {/* Free-Standing Mascot Button */}
+        <button
+          ref={launcherRef}
+          type="button"
+          className="sherwood-bot-launcher-btn"
+          onClick={() => setAiOpen((isOpen) => !isOpen)}
+          aria-expanded={aiOpen}
+          aria-haspopup="dialog"
+          aria-label="Ask Sherwood AI - open chat assistant"
+          title="Ask Sherwood AI - open chat assistant"
+        >
+          <SherwoodBot
+            size={80}
+            state={botState}
+            isWaving={isWaving}
+            pupilOffset={pupilOffset}
+            showOnline={true}
+            showShadow={true}
+            tone="onLight"
+          />
+          {notificationCount > 0 && !aiOpen && (
+            <span className="sherwood-bot-badge" aria-label="1 unread suggestion">
+              {notificationCount}
+            </span>
+          )}
+        </button>
+      </div>
 
       {/* 6. Mobile-only Sticky Apply Bar (Appears after hero, never overlaps chat) */}
       <MobileApplyBar />

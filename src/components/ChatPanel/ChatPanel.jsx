@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Link } from "react-router-dom";
 import SafeMarkdown from "./SafeMarkdown";
-import SherwoodAIAvatar from "./SherwoodAIAvatar";
+import SherwoodBot from "./SherwoodBot";
 import { FOLLOW_UP_SUGGESTIONS, INITIAL_QUICK_CHIPS, useChat } from "./useChat";
 import { useAdmissionCta } from "../../hooks/useAdmissionCta";
 import "./ChatPanel.css";
@@ -398,10 +398,11 @@ export default function ChatPanel({
         {variant === "popup" && <div className="chat-mobile-drag-handle" aria-hidden="true" />}
         <div className="chat-header-main">
           <div className="chat-header-identity">
-            <SherwoodAIAvatar
-              size={34}
+            <SherwoodBot
+              size={36}
               state={isStreaming ? "speaking" : loading ? "thinking" : "idle"}
               showOnline={false}
+              showShadow={false}
             />
             <div className="chat-title-wrap">
               <h2 id="chat-panel-title" className="chat-title">
@@ -468,7 +469,7 @@ export default function ChatPanel({
         {messages.length === 0 && (
           <div className="chat-welcome-state">
             <div className="chat-welcome-icon-wrap" aria-hidden="true">
-              <SherwoodAIAvatar size={56} state="idle" showOnline={false} />
+              <SherwoodBot size={84} state="idle" isWaving={true} showOnline={false} showShadow={true} />
             </div>
             <h3 className="chat-welcome-heading">Hi, I'm Sherwood AI</h3>
             <p className="chat-welcome-desc">
@@ -506,6 +507,15 @@ export default function ChatPanel({
             key={`msg-${index}-${message.timestamp || index}`}
             className={`chat-message chat-message-${message.role}`}
           >
+            {message.role === "assistant" && (
+              <div className="chat-message-avatar-wrap" aria-hidden="true">
+                <SherwoodBot
+                  size={28}
+                  state={isStreaming && index === messages.length - 1 ? "speaking" : "idle"}
+                  showShadow={false}
+                />
+              </div>
+            )}
             <div className={`chat-bubble chat-bubble-${message.role}`}>
               <div className="chat-bubble-header">
                 <span className="chat-bubble-sender">
@@ -659,7 +669,7 @@ export default function ChatPanel({
         {loading && !isStreaming && (
           <div className="chat-message chat-message-assistant" aria-label="Sherwood AI is thinking">
             <div className="chat-typing-container">
-              <SherwoodAIAvatar size={28} state="thinking" />
+              <SherwoodBot size={28} state="thinking" showShadow={false} />
               <div className="chat-bubble chat-typing-bubble">
                 <span className="chat-bubble-sender">Sherwood AI</span>
                 {isWarmingUp ? (
