@@ -22,6 +22,7 @@ export default function SherwoodBot({
   animated = true,
   showOnline = false,
   showShadow = true,
+  isWaving = false,
   pupilOffset = { x: 0, y: 0 },
   className = "",
   onClick = undefined,
@@ -156,7 +157,7 @@ export default function SherwoodBot({
             </g>
 
             {/* Right Arm (Waving Arm: Isolated group with shoulder pivot at x=56, y=52) */}
-            <g className="bot-right-arm-group">
+            <g className={`bot-right-arm-group ${isWaving ? "is-waving" : ""}`.trim()}>
               <path
                 className="bot-arm-right"
                 d="M57 52C61 51 65 47 67 43C68 40 65 38 62 40L55 49Z"
@@ -418,3 +419,4 @@ export default function SherwoodBot({
     </div>
   );
 }
+
