@@ -1,0 +1,193 @@
+/**
+ * SherwoodBot Mascot Stylesheet
+ * 
+ * Free-standing 100% vector character with GPU-accelerated motion.
+ * Compliant with WCAG AAA contrast and prefers-reduced-motion.
+ */
+
+:root {
+  --bot-color-gold-light: #fef08a;
+  --bot-color-gold-mid: #eab308;
+  --bot-color-gold-dark: #a16207;
+  --bot-color-mint-light: #a7f3d0;
+  --bot-color-mint-mid: #34d399;
+  --bot-color-pine-dark: #021c10;
+  --bot-color-shell-light: #ffffff;
+  --bot-color-shell-shadow: #cbd5e1;
+}
+
+/* Container Wrap */
+.sherwood-bot-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  flex-shrink: 0;
+  line-height: 0;
+  background: transparent;
+  border: none;
+  padding: 0;
+  outline: none;
+}
+
+.sherwood-bot-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+/* Transform setup for individual articulated sub-assemblies */
+.bot-character-group,
+.bot-ground-shadow,
+.bot-head-assembly,
+.bot-antenna-group,
+.bot-antenna-orb,
+.bot-right-arm-group,
+.bot-left-arm-group,
+.bot-eyes-standard,
+.bot-eye-capsule,
+.bot-cap-group,
+.bot-tassel-group,
+.bot-face-group,
+.bot-ambient-halo {
+  transform-box: fill-box;
+}
+
+/* Pivot points */
+.bot-character-group {
+  transform-origin: 50% 50%;
+}
+
+.bot-ground-shadow {
+  transform-origin: 50% 50%;
+}
+
+.bot-head-assembly {
+  transform-origin: 50% 88%;
+}
+
+.bot-antenna-group {
+  transform-origin: 50% 100%;
+}
+
+.bot-right-arm-group {
+  transform-origin: 15% 85%;
+}
+
+.bot-left-arm-group {
+  transform-origin: 85% 20%;
+}
+
+.bot-eye-capsule {
+  transform-origin: 50% 50%;
+}
+
+/* ============================================================ */
+/* TONE MODES                                                   */
+/* ============================================================ */
+
+/* On Green Background */
+.sherwood-bot-tone-onGreen .bot-helmet-shell {
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+}
+
+.sherwood-bot-tone-onGreen .bot-ambient-halo {
+  stroke-opacity: 0.5;
+}
+
+/* On Light Background */
+.sherwood-bot-tone-onLight .bot-helmet-shell {
+  filter: drop-shadow(0 4px 10px rgba(5, 75, 45, 0.15));
+}
+
+.sherwood-bot-tone-onLight .bot-ambient-halo {
+  stroke-opacity: 0.2;
+}
+
+/* Dark Mode Theme Adjustment */
+[data-theme="dark"] .bot-helmet-shell {
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.6));
+}
+
+[data-theme="dark"] .bot-ambient-halo {
+  stroke-opacity: 0.45;
+}
+
+/* ============================================================ */
+/* BASE GLOW & AMBIENT ANIMATIONS                               */
+/* ============================================================ */
+
+.sherwood-bot-animated .bot-antenna-orb {
+  animation: bot-antenna-glow 2.6s ease-in-out infinite;
+}
+
+@keyframes bot-antenna-glow {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.9;
+    filter: drop-shadow(0 0 1px #fef08a);
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+    filter: drop-shadow(0 0 5px #eab308);
+  }
+}
+
+/* ============================================================ */
+/* ONLINE PRESENCE BADGE                                        */
+/* ============================================================ */
+.sherwood-bot-online-dot {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  width: 14px;
+  height: 14px;
+  background-color: #22c55e;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  pointer-events: none;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  z-index: 2;
+}
+
+[data-theme="dark"] .sherwood-bot-online-dot {
+  border-color: #052e16;
+}
+
+.bot-online-pulse {
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  background-color: #22c55e;
+  opacity: 0.6;
+  animation: bot-pulse-ring 2s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+}
+
+@keyframes bot-pulse-ring {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+  70% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+/* ============================================================ */
+/* ACCESSIBILITY & PREFERS-REDUCED-MOTION                       */
+/* ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .sherwood-bot-animated *,
+  .sherwood-bot-wrap * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
