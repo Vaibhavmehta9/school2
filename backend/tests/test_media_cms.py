@@ -93,11 +93,14 @@ def test_public_events_endpoint_ordering(client):
 
 
 def test_public_tour_by_slug(client):
-    res = client.get("/api/tour/campus-walkthrough-152-years")
+    tour_data = client.get("/api/tour").json()
+    assert "items" in tour_data and len(tour_data["items"]) >= 1
+    slug = tour_data["items"][0]["slug"]
+    res = client.get(f"/api/tour/{slug}")
     assert res.status_code == 200
     item = res.json()
-    assert item["slug"] == "campus-walkthrough-152-years"
-    assert item["video_id"] == "mi2hVA7Gxt8"
+    assert item["slug"] == slug
+    assert item["video_id"] == tour_data["items"][0]["video_id"]
 
 
 def test_public_tour_slug_not_found(client):

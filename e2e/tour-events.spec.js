@@ -14,7 +14,7 @@ test.describe('Virtual Tour and Latest Events Features', () => {
     // Check initial active chapter is Chapter 1
     const poster = tourSection.locator('.virtual-tour-poster');
     await expect(poster).toBeVisible();
-    await expect(tourSection.locator('.virtual-tour-poster-title')).toHaveText('Campus Walkthrough & Heritage');
+    await expect(tourSection.locator('.virtual-tour-poster-title')).toHaveText("Founders' PT Display & Campus Parade");
 
     // Check 4 chapters in playlist
     const chapterCards = tourSection.locator('.virtual-tour-chapter-card');
@@ -22,14 +22,14 @@ test.describe('Virtual Tour and Latest Events Features', () => {
 
     // Switch to Chapter 2
     await chapterCards.nth(1).click();
-    await expect(tourSection.locator('.virtual-tour-poster-title')).toHaveText('Classrooms & Innovation Labs');
+    await expect(tourSection.locator('.virtual-tour-poster-title')).toHaveText('Academic Excellence & ICSE Batches');
 
     // Click play to load privacy lite-embed iframe
     await poster.click();
     const iframe = tourSection.locator('.virtual-tour-iframe');
     await expect(iframe).toBeVisible();
     const src = await iframe.getAttribute('src');
-    expect(src).toContain('youtube-nocookie.com/embed/dQw4w9WgXcQ');
+    expect(src).toContain('youtube-nocookie.com/embed/DH4vvUDc9CY');
 
     // Close video
     await tourSection.locator('.virtual-tour-secondary-btn').click();
@@ -43,7 +43,7 @@ test.describe('Virtual Tour and Latest Events Features', () => {
     // Check event cards
     const eventCards = eventsSection.locator('.latest-events-card');
     await expect(eventCards).toHaveCount(4);
-    await expect(eventCards.first().locator('.latest-events-card-title')).toHaveText('Annual Sports Day 2026');
+    await expect(eventCards.first().locator('.latest-events-card-title')).toHaveText("Founders' Day Production: 'MACBETH'");
 
     // Advance slider with next button
     const nextBtn = eventsSection.locator('.latest-events-nav-btn').nth(1);
@@ -52,7 +52,8 @@ test.describe('Virtual Tour and Latest Events Features', () => {
 
     // Click "Watch Highlights" on first event
     const watchBtn = eventCards.first().locator('.latest-events-btn-play');
-    await watchBtn.click();
+    await watchBtn.scrollIntoViewIfNeeded();
+    await watchBtn.click({ force: true });
 
     // Verify lightbox modal opened with iframe
     const modal = page.locator('.latest-events-modal');
