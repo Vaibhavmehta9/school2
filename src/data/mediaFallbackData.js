@@ -203,3 +203,4 @@ export const FALLBACK_CAMPUS_EVENTS = [
     consent_confirmed: true,
   },
 ];
+

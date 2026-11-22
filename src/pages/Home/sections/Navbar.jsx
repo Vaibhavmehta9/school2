@@ -70,7 +70,9 @@ export default function Navbar({ user, signOut }) {
             <a href="#home" onClick={() => setMenuOpen(false)}>Home</a>
             <a href="#about" onClick={() => setMenuOpen(false)}>About</a>
             <a href="#features" onClick={() => setMenuOpen(false)}>Academics</a>
+            <a href="#virtual-tour" onClick={() => setMenuOpen(false)}>Virtual Tour</a>
             <a href="#gallery" onClick={() => setMenuOpen(false)}>Gallery</a>
+            <a href="#events" onClick={() => setMenuOpen(false)}>Events</a>
             <a href="#admission" onClick={() => setMenuOpen(false)}>Admissions</a>
             <a href="#contact" onClick={() => setMenuOpen(false)}>Contact</a>
 

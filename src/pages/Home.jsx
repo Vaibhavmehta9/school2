@@ -12,11 +12,12 @@ import HeroSection from "./Home/sections/HeroSection";
 import MarqueeBanner from "./Home/sections/MarqueeBanner";
 import AboutSection from "./Home/sections/AboutSection";
 import FeaturesSection from "./Home/sections/FeaturesSection";
+import VirtualTourSection from "./Home/sections/VirtualTourSection";
 import AdmissionTimelineSection from "./Home/sections/AdmissionTimelineSection";
 import PrincipalSection from "./Home/sections/PrincipalSection";
 import TestimonialSection from "./Home/sections/TestimonialSection";
 import GallerySection from "./Home/sections/GallerySection";
-import EventsSection from "./Home/sections/EventsSection";
+import LatestEventsSlider from "./Home/sections/LatestEventsSlider";
 import AdmissionCtaSection from "./Home/sections/AdmissionCtaSection";
 import FooterSection from "./Home/sections/FooterSection";
 import CampusFilmModal from "./Home/sections/CampusFilmModal";
@@ -106,11 +107,12 @@ export default function Home() {
         <MarqueeBanner />
         <AboutSection />
         <FeaturesSection />
+        <VirtualTourSection />
         <AdmissionTimelineSection />
         <PrincipalSection />
         <TestimonialSection />
         <GallerySection />
-        <EventsSection />
+        <LatestEventsSlider />
         <AdmissionCtaSection />
       </main>
 
