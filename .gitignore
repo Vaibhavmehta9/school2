@@ -15,4 +15,7 @@ backend/.venv/
 backend/**/__pycache__/
 .openai/
 backend/data/source_snapshot/
+backend/backups/
+backend/uploads/
+
 

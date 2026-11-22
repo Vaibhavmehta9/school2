@@ -16,6 +16,7 @@ from fastapi import BackgroundTasks, Depends, FastAPI, File, Header, HTTPExcepti
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, RedirectResponse
+from fastapi.staticfiles import StaticFiles
 from starlette.concurrency import run_in_threadpool
 
 # Local development settings live in backend/.env. Server environment variables
@@ -30,7 +31,7 @@ from .otp import OTPConfigurationError, normalize_phone_number, verify_otp
 from .referrals import resolve_referral
 from .schemas import AdmissionDecisionRequest, CognitoTokenExchangeRequest, CreateApplicationRequest, LoginRequest, ParentalConsentRequest, ParentalConsentWithdrawalRequest, RegisterRequest, SaveApplicationDraftRequest
 from .security import hash_password, new_session_token, session_expiry, verify_password
-from .routers import admin, ai, otp, parent, teacher
+from .routers import admin, admin_media, ai, media, otp, parent, teacher
 
 
 MAX_ADMISSION_DOCUMENT_BYTES = max(1, int(os.getenv("MAX_ADMISSION_DOCUMENT_BYTES", str(5 * 1024 * 1024))))
@@ -269,6 +270,13 @@ app.include_router(teacher.router)
 app.include_router(admin.router)
 app.include_router(ai.router)
 app.include_router(otp.router)
+app.include_router(media.router)
+app.include_router(admin_media.router)
+
+# Mount local uploads directory for media cover images
+_media_uploads_dir = Path("/data/uploads/media") if os.getenv("DATABASE_PATH", "").startswith("/data") else Path(__file__).resolve().parents[1] / "uploads" / "media"
+_media_uploads_dir.mkdir(parents=True, exist_ok=True)
+app.mount("/api/uploads/media", StaticFiles(directory=str(_media_uploads_dir)), name="media_uploads")
 
 
 @app.exception_handler(RequestValidationError)
