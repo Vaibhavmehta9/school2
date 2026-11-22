@@ -8,6 +8,7 @@ import AdminVendors from "./AdminVendors";
 import AdminSettings from "./AdminSettings";
 import AdminDashboard from "./AdminDashboard";
 import NewAdmissionTable from "./NewAdmissionTable";
+import AdminMedia from "./AdminMedia";
 import DocumentPreviewModal from "../DocumentPreviewModal";
 import "./Admin_Portal.css";
 import "./NewAdmissionTable.css";
@@ -15,6 +16,7 @@ import "./NewAdmissionTable.css";
 const screens = [
   ["▦", "Dashboard", "dashboard"],
   ["▤", "Admissions", "admissions"],
+  ["▶", "Media & Events", "media"],
   ["♙", "Teachers", "teachers"],
   ["◉", "Students", "students"],
   ["◈", "Vendors", "vendors"],
@@ -175,19 +177,22 @@ export default function AdminPortal() {
   const currentScreen = screens.some(([, , value]) => value === screen) ? screen : "dashboard";
   const content = currentScreen === "documents"
     ? <DocumentQueue setNotice={setNotice} />
-    : currentScreen === "users"
-      ? <AdminUsers setNotice={setNotice} />
-      : currentScreen === "vendors"
-        ? <AdminVendors setNotice={setNotice} />
-        : currentScreen === "settings"
-          ? <AdminSettings setNotice={setNotice} />
-      : currentScreen === "admissions"
-        ? <NewAdmissionTable setNotice={setNotice} />
-        : <AdminDashboard view={currentScreen === "dashboard" ? "overview" : currentScreen} onNavigate={(target) => navigate(`/admin/${target}`)} />;
+    : currentScreen === "media"
+      ? <AdminMedia setNotice={setNotice} />
+      : currentScreen === "users"
+        ? <AdminUsers setNotice={setNotice} />
+        : currentScreen === "vendors"
+          ? <AdminVendors setNotice={setNotice} />
+          : currentScreen === "settings"
+            ? <AdminSettings setNotice={setNotice} />
+        : currentScreen === "admissions"
+          ? <NewAdmissionTable setNotice={setNotice} />
+          : <AdminDashboard view={currentScreen === "dashboard" ? "overview" : currentScreen} onNavigate={(target) => navigate(`/admin/${target}`)} />;
 
   const headings = {
     dashboard: ["SCHOOL OPERATIONS", "Admin Dashboard", "Live overview of admissions, teachers, students and activity."],
     admissions: ["ADMISSION OPERATIONS", "New Admission Dashboard", "Manage verification and admission approvals using live application data."],
+    media: ["CONTENT MANAGEMENT", "Media & Events", "Manage campus virtual tour chapters and events carousel."],
     teachers: ["SCHOOL OPERATIONS", "Teacher Dashboard", "Review staff availability, subject allocation and attendance."],
     students: ["SCHOOL OPERATIONS", "Student Dashboard", "Review student enrollment, class allocation and attendance."],
     vendors: ["VENDOR ACCESS", "Vendor Logins", "Create vendor access, distribute referral links, and block accounts when required."],

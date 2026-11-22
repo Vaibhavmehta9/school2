@@ -529,3 +529,4 @@ def upload_cover_image(
     result = storage.save_image(content, file.filename)
     logger.info("Admin %s uploaded media cover '%s' -> %s", admin["id"], file.filename, result["path"])
     return result
+

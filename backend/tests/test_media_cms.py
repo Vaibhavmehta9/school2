@@ -377,3 +377,4 @@ def test_upload_cover_image_rejects_zero_bytes(client, users_and_tokens):
     files = {"file": ("empty.png", b"", "image/png")}
     res = client.post("/api/admin/media/upload-cover", headers=headers, files=files)
     assert res.status_code == 400
+

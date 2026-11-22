@@ -166,3 +166,4 @@ def get_public_event(slug: str, response: Response) -> dict[str, Any]:
 
     response.headers["Cache-Control"] = "public, max-age=60, stale-while-revalidate=300"
     return dict(row)
+

@@ -76,6 +76,179 @@ export async function deleteAdminSyllabus(accessToken, syllabusId) {
   }
 }
 
+export async function getAdminMedia(accessToken, params = {}) {
+  const query = new URLSearchParams();
+  if (params.kind) query.set("kind", params.kind);
+  if (params.status) query.set("status", params.status);
+  if (params.category) query.set("category", params.category);
+  if (params.search) query.set("search", params.search);
+  if (params.include_deleted) query.set("include_deleted", "true");
+  if (params.limit) query.set("limit", String(params.limit));
+  if (params.offset) query.set("offset", String(params.offset));
+
+  const qs = query.toString();
+  const url = `${API_ROUTES.adminMedia}${qs ? `?${qs}` : ""}`;
+
+  if (import.meta.env.VITE_REVIEW_MODE === "true" && accessToken === "review-mock-token") {
+    const { REVIEW_MOCK_DATA } = await import("../auth/reviewMode");
+    const all = REVIEW_MOCK_DATA.adminMedia || [];
+    let filtered = [...all];
+    if (params.include_deleted) {
+      filtered = filtered.filter((i) => Boolean(i.deleted_at));
+    } else {
+      filtered = filtered.filter((i) => !i.deleted_at);
+      if (params.kind) filtered = filtered.filter((i) => i.kind === params.kind);
+      if (params.status) filtered = filtered.filter((i) => i.status === params.status);
+      if (params.category) filtered = filtered.filter((i) => i.category === params.category);
+      if (params.search) {
+        const q = params.search.toLowerCase();
+        filtered = filtered.filter((i) => (i.title || "").toLowerCase().includes(q) || (i.summary || "").toLowerCase().includes(q) || (i.location || "").toLowerCase().includes(q));
+      }
+    }
+    return {
+      items: filtered,
+      total: filtered.length,
+      stats: {
+        total_active: all.filter((i) => !i.deleted_at).length,
+        published_count: all.filter((i) => i.status === "published" && !i.deleted_at).length,
+        draft_count: all.filter((i) => i.status === "draft" && !i.deleted_at).length,
+        archived_count: all.filter((i) => i.status === "archived" && !i.deleted_at).length,
+        deleted_count: all.filter((i) => Boolean(i.deleted_at)).length,
+        tour_count: all.filter((i) => i.kind === "tour" && !i.deleted_at).length,
+        event_count: all.filter((i) => i.kind === "event" && !i.deleted_at).length,
+      },
+    };
+  }
+
+  const response = await fetch(url, { headers: { Authorization: `Bearer ${accessToken}` } });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.detail || "Media items could not be loaded.");
+  return data;
+}
+
+export async function createAdminMedia(accessToken, payload) {
+  const response = await fetch(API_ROUTES.adminMedia, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
+    body: JSON.stringify(payload),
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.detail || "Media item could not be created.");
+  return data;
+}
+
+export async function updateAdminMedia(accessToken, id, payload) {
+  const response = await fetch(API_ROUTES.adminMediaItem(id), {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
+    body: JSON.stringify(payload),
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.detail || "Media item could not be updated.");
+  return data;
+}
+
+export async function deleteAdminMedia(accessToken, id) {
+  const response = await fetch(API_ROUTES.adminMediaItem(id), {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.detail || "Media item could not be deleted.");
+  return data;
+}
+
+export async function restoreAdminMedia(accessToken, id) {
+  const response = await fetch(API_ROUTES.adminMediaRestore(id), {
+    method: "POST",
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.detail || "Media item could not be restored.");
+  return data;
+}
+
+export async function publishAdminMedia(accessToken, id) {
+  const response = await fetch(API_ROUTES.adminMediaPublish(id), {
+    method: "POST",
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.detail || "Media item could not be published.");
+  return data;
+}
+
+export async function unpublishAdminMedia(accessToken, id) {
+  const response = await fetch(API_ROUTES.adminMediaUnpublish(id), {
+    method: "POST",
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.detail || "Media item could not be unpublished.");
+  return data;
+}
+
+export async function reorderAdminMedia(accessToken, items) {
+  const response = await fetch(API_ROUTES.adminMediaReorder, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
+    body: JSON.stringify({ items }),
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.detail || "Media items could not be reordered.");
+  return data;
+}
+
+export async function validateVideoUrl(accessToken, videoUrl) {
+  const response = await fetch(API_ROUTES.adminMediaValidateVideo, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
+    body: JSON.stringify({ video_url: videoUrl }),
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.detail || "Video URL could not be validated.");
+  return data;
+}
+
+export async function uploadMediaCover(accessToken, file) {
+  const formData = new FormData();
+  formData.append("file", file);
+  const response = await fetch(API_ROUTES.adminMediaUploadCover, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${accessToken}` },
+    body: formData,
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.detail || "Cover image could not be uploaded.");
+  return data;
+}
+
+export async function getPublicTourChapters() {
+  const response = await fetch(API_ROUTES.publicTour);
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.detail || "Tour chapters could not be loaded.");
+  return data;
+}
+
+export async function getPublicEvents(params = {}) {
+  const query = new URLSearchParams();
+  if (params.category) query.set("category", params.category);
+  if (params.featured) query.set("featured", "true");
+  const qs = query.toString();
+  const url = `${API_ROUTES.publicEvents}${qs ? `?${qs}` : ""}`;
+  const response = await fetch(url);
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.detail || "Events could not be loaded.");
+  return data;
+}
+
+export async function getPublicEvent(slug) {
+  const response = await fetch(API_ROUTES.publicEvent(slug));
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.detail || "Event details could not be loaded.");
+  return data;
+}
+
 export function getAdminVendors(accessToken) {
   return getAdminData(API_ROUTES.adminVendors, accessToken, "Vendor accounts could not be loaded.");
 }
