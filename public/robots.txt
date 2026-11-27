@@ -5,7 +5,6 @@ User-agent: *
 Allow: /
 Allow: /gallery
 Allow: /calendar
-Allow: /virtual-tour
 Allow: /apply
 Allow: /register
 Allow: /track-application

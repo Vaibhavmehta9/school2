@@ -165,7 +165,7 @@ def route_and_resolve_query(
             "matched_faq_id": "live_weather_service",
             "confidence_level": "HIGH",
             "is_demo": False,
-            "chips": ["What are the fees?", "How do I apply?", "Campus tour"],
+            "chips": ["What are the fees?", "How do I apply?", "Campus visit"],
         }
 
     # Path 5: School FAQ & Specialized School Inquiries (Value, Fit, Comparison, Concerns)

@@ -12,7 +12,6 @@ import HeroSection from "./Home/sections/HeroSection";
 import MarqueeBanner from "./Home/sections/MarqueeBanner";
 import AboutSection from "./Home/sections/AboutSection";
 import FeaturesSection from "./Home/sections/FeaturesSection";
-import VirtualTourSection from "./Home/sections/VirtualTourSection";
 import AdmissionTimelineSection from "./Home/sections/AdmissionTimelineSection";
 import PrincipalSection from "./Home/sections/PrincipalSection";
 import TestimonialSection from "./Home/sections/TestimonialSection";
@@ -107,7 +106,6 @@ export default function Home() {
         <MarqueeBanner />
         <AboutSection />
         <FeaturesSection />
-        <VirtualTourSection />
         <AdmissionTimelineSection />
         <PrincipalSection />
         <TestimonialSection />

@@ -192,7 +192,7 @@ export default function AdminPortal() {
   const headings = {
     dashboard: ["SCHOOL OPERATIONS", "Admin Dashboard", "Live overview of admissions, teachers, students and activity."],
     admissions: ["ADMISSION OPERATIONS", "New Admission Dashboard", "Manage verification and admission approvals using live application data."],
-    media: ["CONTENT MANAGEMENT", "Media & Events", "Manage campus virtual tour chapters and events carousel."],
+    media: ["CONTENT MANAGEMENT", "Media & Events", "Manage campus events and highlights carousel."],
     teachers: ["SCHOOL OPERATIONS", "Teacher Dashboard", "Review staff availability, subject allocation and attendance."],
     students: ["SCHOOL OPERATIONS", "Student Dashboard", "Review student enrollment, class allocation and attendance."],
     vendors: ["VENDOR ACCESS", "Vendor Logins", "Create vendor access, distribute referral links, and block accounts when required."],

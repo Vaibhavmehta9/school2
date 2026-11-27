@@ -83,7 +83,7 @@ export default function AdminMedia({ setNotice }) {
   const { session } = useCognitoAuth();
   const token = session?.accessToken;
 
-  const [activeTab, setActiveTab] = useState("tour"); // 'tour' | 'event'
+  const [activeTab, setActiveTab] = useState("event"); // 'tour' | 'event'
   const [viewDeleted, setViewDeleted] = useState(false);
   const [items, setItems] = useState([]);
   const [stats, setStats] = useState({
@@ -480,19 +480,7 @@ export default function AdminMedia({ setNotice }) {
       {/* Top Header & Tab Controls */}
       <div className="admin-media-header-bar">
         <div className="admin-media-tabs" role="tablist">
-          <button
-            type="button"
-            role="tab"
-            aria-selected={!viewDeleted && activeTab === "tour"}
-            className={`admin-media-tab-btn ${!viewDeleted && activeTab === "tour" ? "active" : ""}`}
-            onClick={() => {
-              setViewDeleted(false);
-              setActiveTab("tour");
-            }}
-          >
-            <span>▶</span> Virtual Tour
-            <span className="badge">{stats.tour_count}</span>
-          </button>
+          {/* Virtual Tour tab hidden per task requirements; activeTab defaults to event */}
           <button
             type="button"
             role="tab"

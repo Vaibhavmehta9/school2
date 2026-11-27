@@ -5,7 +5,6 @@ const ROUTE_TITLE_MAP = {
   "/": { title: "Sherwood College, Nainital | Admissions 2027-28", noIndex: false },
   "/gallery": { title: "Campus Gallery | Sherwood College", noIndex: false },
   "/calendar": { title: "Academic Calendar | Sherwood College", noIndex: false },
-  "/virtual-tour": { title: "Virtual Campus Tour | Sherwood College", noIndex: false },
   "/apply": { title: "Apply for Admission | Sherwood College", noIndex: false },
   "/register": { title: "Apply for Admission | Sherwood College", noIndex: false },
   "/track-application": { title: "Track Application Status | Sherwood College", noIndex: false },

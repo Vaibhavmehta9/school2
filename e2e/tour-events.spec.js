@@ -1,41 +1,29 @@
 import { test, expect } from '@playwright/test';
 import path from 'path';
 
-test.describe('Virtual Tour and Latest Events Features', () => {
-  test('Desktop (1440x900): Tour and Events interaction and privacy embeds', async ({ page }) => {
+test.describe('Website Clean Rhythm and Latest Events Features', () => {
+  test('Desktop (1440x900): Verify Tour section removed and Events interaction works', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
-    await page.goto('http://127.0.0.1:5173/');
+    await page.goto('/');
 
-    // 1. Verify Virtual Tour section
+    // 1. Verify Virtual Tour section is completely removed from the page
     const tourSection = page.locator('#virtual-tour');
-    await expect(tourSection).toBeVisible();
-    await expect(tourSection.locator('.virtual-tour-title')).toHaveText('Walk the Historic Ayarpatta Estate');
+    await expect(tourSection).toHaveCount(0);
 
-    // Check initial active chapter is Chapter 1
-    const poster = tourSection.locator('.virtual-tour-poster');
-    await expect(poster).toBeVisible();
-    await expect(tourSection.locator('.virtual-tour-poster-title')).toHaveText("Founders' PT Display & Campus Parade");
+    // Verify navbar has NO link to #virtual-tour
+    const tourNav = page.locator('.sherwood-navbar__nav a[href="#virtual-tour"]');
+    await expect(tourNav).toHaveCount(0);
 
-    // Check 4 chapters in playlist
-    const chapterCards = tourSection.locator('.virtual-tour-chapter-card');
-    await expect(chapterCards).toHaveCount(4);
+    // Verify old route /virtual-tour redirects gracefully to /
+    await page.goto('/virtual-tour');
+    await expect(page).toHaveURL('http://localhost:5173/');
 
-    // Switch to Chapter 2
-    await chapterCards.nth(1).click();
-    await expect(tourSection.locator('.virtual-tour-poster-title')).toHaveText('Academic Excellence & ICSE Batches');
+    // Verify "Schedule a Campus Visit" CTA exists in the admission CTA section
+    const campusVisitBtn = page.locator('.sherwood-cta__actions a[href="#contact"]');
+    await expect(campusVisitBtn).toBeVisible();
+    await expect(campusVisitBtn).toHaveText(/Schedule a Campus Visit/i);
 
-    // Click play to load privacy lite-embed iframe
-    await poster.click();
-    const iframe = tourSection.locator('.virtual-tour-iframe');
-    await expect(iframe).toBeVisible();
-    const src = await iframe.getAttribute('src');
-    expect(src).toContain('youtube-nocookie.com/embed/DH4vvUDc9CY');
-
-    // Close video
-    await tourSection.locator('.virtual-tour-secondary-btn').click();
-    await expect(poster).toBeVisible();
-
-    // 2. Verify Latest Events section
+    // 2. Verify Latest Events section is intact and functional
     const eventsSection = page.locator('#events');
     await expect(eventsSection).toBeVisible();
     await expect(eventsSection.locator('.latest-events-title')).toHaveText('Life at Sherwood: Recent & Upcoming');
@@ -67,35 +55,33 @@ test.describe('Virtual Tour and Latest Events Features', () => {
     await page.locator('.latest-events-modal-close').click();
     await expect(modal).not.toBeVisible();
 
-    // Take screenshots
-    await tourSection.screenshot({ path: path.resolve('screenshots/tour-desktop-1440.png') });
+    // Take screenshot of events section
     await eventsSection.screenshot({ path: path.resolve('screenshots/events-desktop-1440.png') });
   });
 
-  test('Tablet (768x1024): Responsiveness & Layout', async ({ page }) => {
+  test('Tablet (768x1024): Responsiveness & Layout without Tour section', async ({ page }) => {
     await page.setViewportSize({ width: 768, height: 1024 });
-    await page.goto('http://127.0.0.1:5173/');
+    await page.goto('/');
 
     const tourSection = page.locator('#virtual-tour');
-    await expect(tourSection).toBeVisible();
+    await expect(tourSection).toHaveCount(0);
 
     const eventsSection = page.locator('#events');
     await expect(eventsSection).toBeVisible();
 
-    await tourSection.screenshot({ path: path.resolve('screenshots/tour-tablet-768.png') });
     await eventsSection.screenshot({ path: path.resolve('screenshots/events-tablet-768.png') });
   });
 
   test('Mobile (375x812): Scroll-snap, Mobile drawer, and Sticky apply bar', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 812 });
-    await page.goto('http://127.0.0.1:5173/');
+    await page.goto('/');
 
     // Check navbar hamburger toggle and mobile menu links
     const menuBtn = page.locator('.sherwood-navbar__toggle');
     await menuBtn.click();
     const tourNav = page.locator('.sherwood-navbar__nav a[href="#virtual-tour"]');
     const eventsNav = page.locator('.sherwood-navbar__nav a[href="#events"]');
-    await expect(tourNav).toBeVisible();
+    await expect(tourNav).toHaveCount(0);
     await expect(eventsNav).toBeVisible();
     await menuBtn.click(); // close menu
 
@@ -109,9 +95,9 @@ test.describe('Virtual Tour and Latest Events Features', () => {
     const goldBtn = mobileBar.locator('.sherwood-mobile-apply-bar__btn');
     await expect(goldBtn).toBeVisible();
 
-    // Verify Virtual Tour section on mobile
+    // Verify Virtual Tour section is NOT on mobile
     const tourSection = page.locator('#virtual-tour');
-    await expect(tourSection).toBeVisible();
+    await expect(tourSection).toHaveCount(0);
 
     // Verify Events section on mobile
     const eventsSection = page.locator('#events');

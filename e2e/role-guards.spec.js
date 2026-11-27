@@ -24,11 +24,14 @@ test.describe('Role Guards and Route Protection', () => {
   });
 
   test('TC-SEC-02: Public routes remain accessible without auth', async ({ page }) => {
-    const publicRoutes = ['/', '/gallery', '/calendar', '/virtual-tour', '/track-application', '/ai-assistant'];
+    const publicRoutes = ['/', '/gallery', '/calendar', '/apply', '/track-application', '/ai-assistant'];
     for (const route of publicRoutes) {
       await page.goto(route);
       expect(page.url()).toContain(route);
     }
+    // Decommissioned tour route lands gracefully on homepage
+    await page.goto('/virtual-tour');
+    await expect(page).toHaveURL('http://localhost:5173/');
   });
 
   test('TC-SEC-03: Parent persona blocked from accessing Admin and Teacher dashboards', async ({ page }) => {

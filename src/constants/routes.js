@@ -24,7 +24,6 @@ export const ROUTES = {
   register: "/register",
   gallery: "/gallery",
   calendar: "/calendar",
-  virtualTour: "/virtual-tour",
   dashboard: "/dashboard",
   newUserDashboard: "/new-user-dashboard",
   studentDashboard: "/student/dashboard",

@@ -224,10 +224,7 @@ export async function uploadMediaCover(accessToken, file) {
 }
 
 export async function getPublicTourChapters() {
-  const response = await fetch(API_ROUTES.publicTour);
-  const data = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(data.detail || "Tour chapters could not be loaded.");
-  return data;
+  return { items: [], total: 0 };
 }
 
 export async function getPublicEvents(params = {}) {

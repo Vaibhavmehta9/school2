@@ -25,6 +25,9 @@ export default function AdmissionCtaSection() {
             <Button as={Link} to="/track-application" variant="outline-gold" size="lg">
               Track Application Status
             </Button>
+            <Button as="a" href="#contact" variant="outline-gold" size="lg">
+              Schedule a Campus Visit
+            </Button>
           </div>
         </div>
       </section>

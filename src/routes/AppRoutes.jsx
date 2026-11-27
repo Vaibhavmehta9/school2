@@ -18,7 +18,6 @@ import NewUserDashboard from "../pages/NewUserDashboard";
 import Register from "../pages/Register";
 import SchoolCalendar from "../pages/SchoolCalendar";
 import StudentDashboard from "../pages/StudentDashboard";
-import VirtualTour from "../pages/VirtualTour";
 import VendorDashboard from "../pages/VendorDashboard";
 import SignedOut from "../pages/SignedOut";
 import { ROUTES } from "../constants/routes";
@@ -38,7 +37,7 @@ export default function AppRoutes() {
       <Route path={ROUTES.register} element={<Register />} />
       <Route path={ROUTES.gallery} element={<Gallery />} />
       <Route path={ROUTES.calendar} element={<SchoolCalendar />} />
-      <Route path={ROUTES.virtualTour} element={<VirtualTour />} />
+      <Route path="/virtual-tour" element={<Navigate to="/" replace />} />
       <Route path={ROUTES.trackApplication} element={<TrackApplication />} />
       <Route path={ROUTES.aiAssistant} element={<AIAssistant />} />
 

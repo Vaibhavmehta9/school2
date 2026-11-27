@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
 import campusFilm from "../../../assets/campus-film.mp4";
 import "./CampusFilmModal.css";
 
@@ -68,13 +67,13 @@ export default function CampusFilmModal({ isOpen, onClose }) {
         </div>
 
         <footer className="sherwood-modal-footer">
-          <Link
+          <a
             className="sherwood-modal-tour-link"
-            to="/virtual-tour"
+            href="#contact"
             onClick={onClose}
           >
-            Explore the 360° virtual school tour <span>→</span>
-          </Link>
+            Arrange an in-person campus visit <span>→</span>
+          </a>
         </footer>
       </section>
     </div>
